@@ -10,5 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Product {
+  id         Int        @id @default(autoincrement())
+  externalId String     @unique
+  WishList   WishList[]
+}
 
+model WishList {
+  id       Int       @id @default(autoincrement())
+  title    String    @db.VarChar(255)
+  products Product[]
+  user     User      @relation(fields: [userId], references: [id])
+  userId   Int
+}
 
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  auth0Id   String     @unique @default("")
+  name      String?
+  wishlists WishList[]
+}
