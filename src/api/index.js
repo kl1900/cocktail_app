@@ -2,6 +2,7 @@ import express from "express";
 import pkg from "@prisma/client";
 import morgan from "morgan";
 import cors from "cors";
+import fetch from 'node-fetch';
 
 const app = express();
 
@@ -33,10 +34,10 @@ app.get("/getRandomFoodJoke", async (req, res) => {
       "X-RapidAPI-Key": "1036296666msh16c21f173447dcep15a330jsnb0778316d442",
     },
   };
-  fetch(url, options)
+  const response = await fetch(url, options)
     .then((res) => res.json())
-    .then((json) => console.log(json))
     .catch((err) => console.error("error:" + err));
+  res.json(response)
 });
 
 app.post("/home", async (req, res) => {});
