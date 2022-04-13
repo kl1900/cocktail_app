@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# file that stores passwords
+secret.js
+
 # dependencies
 **/node_modules
 /.pnp
@@ -49,3 +52,6 @@ yarn-error.log*
 
 # prisma stuff
 **/migrations
+
+# JetBrains IDE stuff
+/.idea
