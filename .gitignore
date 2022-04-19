@@ -53,5 +53,6 @@ yarn-error.log*
 # prisma stuff
 **/migrations
 
-# JetBrains IDE stuff
+# IDE stuff
 /.idea
+**/.swp
