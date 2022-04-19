@@ -1,5 +1,13 @@
 import React from "react";
 
-export default function Home() {
-  return <div>Home</div>;
+function App() {
+  
+  return (
+    <div className="home">
+
+      <p>hello </p>
+    </div>
+  );
 }
+
+export default App;
