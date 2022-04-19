@@ -8,8 +8,7 @@ datasource db {
 }
 
 model product {
-  id          Int        @id @default(autoincrement())
-  externalId  String     @unique(map: "Product_externalId_key")
+  externalId  Int        @id @unique(map: "Product_externalId_key")
   productName String     @db.VarChar(255) @default("")
   imageURL    String     @db.VarChar(255) @default("")
   review      review[]
@@ -22,7 +21,7 @@ model review {
   userId    Int
   content   String  @default("") @db.VarChar(10000)
   rating    Int
-  product   product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Review_productId_fkey")
+  product   product @relation(fields: [productId], references: [externalId], onDelete: Cascade, onUpdate: Cascade, map: "Review_productId_fkey")
   user      user    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Review_userId_fkey")
 
   @@index([productId], map: "Review_productId_fkey")

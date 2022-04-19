@@ -202,7 +202,7 @@ app.get("/recipe/:id", async(req, res) => {
     try {
         const recipe = await prisma.product.findUnique({
             where: {
-                id: id,
+                externalId: id,
             },
             include: {
                 review: true,
@@ -256,6 +256,24 @@ app.get("/wishlist/:id", async(req, res) => {
     }
 });
 
+app.put("/wishlist/:id", async(req, res) => {
+    const { title } = req.body;
+    const id = parseInt(req.params.id);
+    try {
+        const wishlist = await prisma.wishlist.update({
+            where: {
+                id: id,
+            },
+            data: {
+                title: title,
+            },
+        });
+        res.json(wishlist);
+    } catch (e) {
+        res.status(422).json(null);
+    }
+});
+
 app.put("/wishlist/:id/add_:productId", async(req, res) => {
     const id = parseInt(req.params.id);
     const productId = parseInt(req.params.productId);
@@ -266,7 +284,7 @@ app.put("/wishlist/:id/add_:productId", async(req, res) => {
             },
             data: {
                 product: {
-                    connect: [{ id: productId }],
+                    connect: [{ externalId: productId }],
                 },
             },
         });
@@ -286,7 +304,7 @@ app.put("/wishlist/:id/delete_:productId", async(req, res) => {
             },
             data: {
                 product: {
-                    disconnect: [{ id: productId }],
+                    disconnect: [{ externalId: productId }],
                 },
             },
         });
@@ -315,7 +333,7 @@ app.post("/review", async(req, res) => {
     try {
         const review = await prisma.review.create({
             data: {
-                product: { connect: { id: productId } },
+                product: { connect: { externalId: productId } },
                 user: { connect: { id: userId } },
                 content: content,
                 rating: rating,
@@ -326,25 +344,6 @@ app.post("/review", async(req, res) => {
         // TODO: Identify different types of error, e.g. Bad input, Unique constraint violated, etc.
         console.log(e);
         res.status(422).json(null);
-    }
-});
-
-app.get("/review/:productExternalId", async(req, res) => {
-    const productExternalId = parseInt(req.params.productExternalId);
-    console.log(productExternalId);
-    try {
-        const review = await prisma.review.findMany({
-            where: {
-                productExternalId: productExternalId,
-            },
-        });
-        if (review === null) {
-            res.status(404).json(null);
-        } else {
-            res.json(review);
-        }
-    } catch (e) {
-        res.status(503).json(null);
     }
 });
 
