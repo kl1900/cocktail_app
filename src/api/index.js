@@ -4,16 +4,16 @@ import morgan from "morgan";
 import cors from "cors";
 import fetch from "node-fetch";
 
-import { RapidAPI_HOST, RapidAPI_KEY } from "./secret.js";
+import {RapidAPI_HOST, RapidAPI_KEY} from "./secret.js";
 
 const app = express();
 
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(morgan("dev"));
 
-const { PrismaClient } = pkg;
+const {PrismaClient} = pkg;
 const prisma = new PrismaClient();
 
 const options = {
@@ -24,9 +24,10 @@ const options = {
     },
 };
 
-app.get("/", async(req, res) => {});
+app.get("/", async (req, res) => {
+});
 
-app.get("/searchRecipe/:keyword", async(req, res) => {
+app.get("/searchRecipe/:keyword", async (req, res) => {
     const keyword = req.params.keyword;
     const url =
         "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?query=" +
@@ -46,7 +47,7 @@ app.get("/searchRecipe/:keyword", async(req, res) => {
     }
 });
 
-app.get("/getRecipeInfo/:id", async(req, res) => {
+app.get("/getRecipeInfo/:id", async (req, res) => {
     const id = req.params.id;
     const url =
         "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" +
@@ -66,7 +67,7 @@ app.get("/getRecipeInfo/:id", async(req, res) => {
     }
 });
 
-app.get("/getRandomRecipe", async(req, res) => {
+app.get("/getRandomRecipe", async (req, res) => {
     const url =
         "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=1";
     try {
@@ -83,7 +84,7 @@ app.get("/getRandomRecipe", async(req, res) => {
     }
 });
 
-app.get("/getRandomFoodJoke", async(req, res) => {
+app.get("/getRandomFoodJoke", async (req, res) => {
     const url =
         "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/jokes/random";
     try {
@@ -100,8 +101,8 @@ app.get("/getRandomFoodJoke", async(req, res) => {
     }
 });
 
-app.post("/user", async(req, res) => {
-    const { email, auth0Id, name } = req.body;
+app.post("/user", async (req, res) => {
+    const {email, auth0Id, name} = req.body;
     try {
         const user = await prisma.user.create({
             data: {
@@ -118,7 +119,7 @@ app.post("/user", async(req, res) => {
     }
 });
 
-app.get("/user/:id", async(req, res) => {
+app.get("/user/:id", async (req, res) => {
     const id = parseInt(req.params.id);
     try {
         const user = await prisma.user.findUnique({
@@ -145,8 +146,8 @@ app.get("/user/:id", async(req, res) => {
     }
 });
 
-app.put("/user/:id", async(req, res) => {
-    const { email, auth0Id, name } = req.body;
+app.put("/user/:id", async (req, res) => {
+    const {email, auth0Id, name} = req.body;
     const id = parseInt(req.params.id);
     try {
         const user = await prisma.user.update({
@@ -165,7 +166,7 @@ app.put("/user/:id", async(req, res) => {
     }
 });
 
-app.delete("/user/:id", async(req, res) => {
+app.delete("/user/:id", async (req, res) => {
     const id = parseInt(req.params.id);
     try {
         const user = await prisma.user.delete({
@@ -179,8 +180,8 @@ app.delete("/user/:id", async(req, res) => {
     }
 });
 
-app.post("/recipe", async(req, res) => {
-    const { externalId, productName, imageURL } = req.body;
+app.post("/recipe", async (req, res) => {
+    const {externalId, productName, imageURL} = req.body;
     try {
         const recipe = await prisma.product.create({
             data: {
@@ -197,7 +198,7 @@ app.post("/recipe", async(req, res) => {
     }
 });
 
-app.get("/recipe/:id", async(req, res) => {
+app.get("/recipe/:id", async (req, res) => {
     const id = parseInt(req.params.id);
     try {
         const recipe = await prisma.product.findUnique({
@@ -218,13 +219,13 @@ app.get("/recipe/:id", async(req, res) => {
     }
 });
 
-app.post("/wishlist", async(req, res) => {
-    const { title, userId } = req.body;
+app.post("/wishlist", async (req, res) => {
+    const {title, userId} = req.body;
     try {
         const wishlist = await prisma.wishlist.create({
             data: {
                 title: title,
-                user: { connect: { id: userId } },
+                user: {connect: {id: userId}},
             },
         });
         res.json(wishlist);
@@ -235,7 +236,7 @@ app.post("/wishlist", async(req, res) => {
     }
 });
 
-app.get("/wishlist/:id", async(req, res) => {
+app.get("/wishlist/:id", async (req, res) => {
     const id = parseInt(req.params.id);
     try {
         const wishlist = await prisma.wishlist.findUnique({
@@ -256,8 +257,8 @@ app.get("/wishlist/:id", async(req, res) => {
     }
 });
 
-app.put("/wishlist/:id", async(req, res) => {
-    const { title } = req.body;
+app.put("/wishlist/:id", async (req, res) => {
+    const {title} = req.body;
     const id = parseInt(req.params.id);
     try {
         const wishlist = await prisma.wishlist.update({
@@ -274,47 +275,97 @@ app.put("/wishlist/:id", async(req, res) => {
     }
 });
 
-app.put("/wishlist/:id/add_:productId", async(req, res) => {
+app.put("/wishlist/:id/add_:productId", async (req, res) => {
     const id = parseInt(req.params.id);
     const productId = parseInt(req.params.productId);
     try {
-        const wishlist = await prisma.wishlist.update({
+        const wishlist = await prisma.wishlist.findUnique({
+            where: {
+                id: id,
+            },
+            include: {
+                product: true,
+            },
+        });
+        if (wishlist === null) {
+            throw new Error("404 Not Found");
+        }
+        if (wishlist.product.length === 0) {
+            const recipe = await prisma.product.findUnique({
+                where: {
+                    externalId: productId,
+                },
+            });
+            if (recipe === null) {
+                throw new Error("404 Not Found")
+            }
+            const updatedWishlist = await prisma.wishlist.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    imageURL: recipe.imageURL,
+                    product: {
+                        connect: [{externalId: productId}],
+                    },
+                },
+            });
+            res.json(updatedWishlist);
+        } else {
+            const updatedWishlist = await prisma.wishlist.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    product: {
+                        connect: [{externalId: productId}],
+                    },
+                },
+            });
+            res.json(updatedWishlist);
+        }
+
+    } catch (e) {
+        console.log(e)
+        res.status(422).json(null);
+    }
+});
+
+app.put("/wishlist/:id/delete_:productId", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const productId = parseInt(req.params.productId);
+    try {
+        const wishlist = await prisma.wishlist.findUnique({
+            where: {
+                id: id,
+            },
+            include: {
+                product: true,
+            },
+        });
+        if (wishlist === null) {
+            throw new Error("404 Not Found");
+        }
+        const updatedWishlist = await prisma.wishlist.update({
             where: {
                 id: id,
             },
             data: {
+                imageURL: wishlist.product.length === 1 ? "https://www.nicepng.com/png/detail/775-7752286_empty-" +
+                    "basket-for-gifts-wood-basket-with-handle.png" : wishlist.imageURL,
                 product: {
-                    connect: [{ externalId: productId }],
+                    disconnect: [{externalId: productId}],
                 },
             },
         });
-        res.json(wishlist);
+        res.json(updatedWishlist);
+
     } catch (e) {
         res.status(422).json(null);
     }
 });
 
-app.put("/wishlist/:id/delete_:productId", async(req, res) => {
-    const id = parseInt(req.params.id);
-    const productId = parseInt(req.params.productId);
-    try {
-        const wishlist = await prisma.wishlist.update({
-            where: {
-                id: id,
-            },
-            data: {
-                product: {
-                    disconnect: [{ externalId: productId }],
-                },
-            },
-        });
-        res.json(wishlist);
-    } catch (e) {
-        res.status(422).json(null);
-    }
-});
-
-app.delete("/wishlist/:id", async(req, res) => {
+app.delete("/wishlist/:id", async (req, res) => {
     const id = parseInt(req.params.id);
     try {
         const wishlist = await prisma.wishlist.delete({
@@ -328,13 +379,13 @@ app.delete("/wishlist/:id", async(req, res) => {
     }
 });
 
-app.post("/review", async(req, res) => {
-    const { productId, userId, content, rating } = req.body;
+app.post("/review", async (req, res) => {
+    const {productId, userId, content, rating} = req.body;
     try {
         const review = await prisma.review.create({
             data: {
-                product: { connect: { externalId: productId } },
-                user: { connect: { id: userId } },
+                product: {connect: {externalId: productId}},
+                user: {connect: {id: userId}},
                 content: content,
                 rating: rating,
             },
@@ -347,8 +398,8 @@ app.post("/review", async(req, res) => {
     }
 });
 
-app.put("/review/:id", async(req, res) => {
-    const { content, rating } = req.body;
+app.put("/review/:id", async (req, res) => {
+    const {content, rating} = req.body;
     const id = parseInt(req.params.id);
     try {
         const review = await prisma.review.update({
@@ -368,7 +419,7 @@ app.put("/review/:id", async(req, res) => {
     }
 });
 
-app.delete("/review/:id", async(req, res) => {
+app.delete("/review/:id", async (req, res) => {
     const id = parseInt(req.params.id);
     try {
         const review = await prisma.review.delete({
@@ -382,7 +433,8 @@ app.delete("/review/:id", async(req, res) => {
     }
 });
 
-app.post("/home", async(req, res) => {});
+app.post("/home", async (req, res) => {
+});
 
 app.listen(8000, () => {
     console.log("Server running on http://localhost:8000 🎉 🚀");
