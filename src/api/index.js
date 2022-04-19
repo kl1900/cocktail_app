@@ -329,12 +329,13 @@ app.post("/review", async(req, res) => {
     }
 });
 
-app.get("/review/:id", async(req, res) => {
-    const id = parseInt(req.params.id);
+app.get("/review/:productExternalId", async(req, res) => {
+    const productExternalId = parseInt(req.params.productExternalId);
+    console.log(productExternalId);
     try {
-        const review = await prisma.review.findUnique({
+        const review = await prisma.review.findMany({
             where: {
-                id: id,
+                productExternalId: productExternalId,
             },
         });
         if (review === null) {

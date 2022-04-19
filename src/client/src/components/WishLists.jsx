@@ -29,17 +29,21 @@ export default function WishLists(){
       }, [id]);
 
     // console.log(wishlists);
+    useEffect(()=>{
+      const getPicture = (wishlistId) => {
+        return fetch(
+          `${GET_USER_URL}/wishlist/${wishlistId}`)
+          .then(response => response.json())
+          .then(data=>{
+            let recipe = data.product;
+            if(recipe){
+              return recipe[0].imageURL;
+          }}).then(res=>setUrl(res));
+      };
+     
+    }, [wishlists])
 
-    const getPicture = (wishlistId) => {
-      return fetch(
-        `${GET_USER_URL}/wishlist/${wishlistId}`)
-        .then(response => response.json())
-        .then(data=>{
-          let recipe = data.product;
-          if(recipe){
-            return recipe[0].imageURL;
-        }}).then(res=>setUrl(res));
-    };
+    
   
     const selectWishlist = (wishlistId) => {
         navigate(`/wishlists/${wishlistId}`);
@@ -61,7 +65,7 @@ export default function WishLists(){
       });
     };
 
-    const shareWishlist = (wishlistId) =>{
+    const editWishlist = (wishlistId) =>{
         
     };
     console.log(url);
@@ -77,9 +81,10 @@ export default function WishLists(){
                     <div>{wishlist.title}</div>
                     {/* <img option = {getPicture(wishlist.id)} src={url}/> */}
                     <div>
+                    <button className="edit" onClick={() => editWishlist(wishlist.id)}>Edit</button>
                     <button className="check" onClick={() => selectWishlist(wishlist.id)}>Check</button>
                     <button className="delete" onClick={() => deleteWishlist(wishlist.id)}>Delete</button>
-                    <button className="share" onClick={() => shareWishlist(wishlist.id)}>Share</button>
+          
                     </div>
                 </div>
                 </li>

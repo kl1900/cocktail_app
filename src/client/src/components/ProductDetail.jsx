@@ -10,6 +10,7 @@ export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [rating, setRating] = useState();
+  const [reviews, setReviews] = useState([]);
   const params = useParams();
   const navigate = useNavigate();
   // const { user } = useUser;
@@ -22,15 +23,24 @@ export default function ProductDetail() {
       );
       var data = await res.json();
       if (data) {
-        setRecipeDetails(data);
+        setRecipeDetails([...recipeDetails, data]);
       }
     }
     getRecipeDetails();
   },[params.productId]);
-  
-  
-  var ingredients=recipeDetails.extendedIngredients;
-  var steps=recipeDetails.analyzedInstructions[0].steps;
+
+  useEffect(()=>{
+    async function getReviews() {
+      const res = await fetch(
+        `${GET_USER_URL}/review/${params.productId}`
+      );
+      var data = await res.json();
+      if (data) {
+        setReviews([...reviews, data]);
+      }
+    }
+    getReviews();
+  },[params.productId]);
 
   function saveRecipe(){
     let data={
@@ -65,14 +75,17 @@ export default function ProductDetail() {
     }
   }
 
-  function submitReview(){
-    
+  console.log(typeof(params.productId));
+
+  function submitReview(e){
+    // e.preventDefault();
     let data={
       "productId": parseInt(params.productId),
       "userId": userId,
       "content": inputValue,
       "rating": parseInt(rating)
     }
+    console.log(data);
     fetch(`${GET_USER_URL}/review`, {
       method: 'POST', 
       headers: {
@@ -90,25 +103,26 @@ export default function ProductDetail() {
   }
 
   return (
-    <div key={params.productId} className="recipeDetail">
+    recipeDetails.map(recipeDetail => (
+      <div key={params.productId} className="recipeDetail">
       {/* <Link to="/app/repositories"> ⬅️ Back</Link> */}
       <div>
-      <h2>{recipeDetails.title}</h2>
+      <h2>{recipeDetail.title}</h2>
       <ul>
-        <li>{recipeDetails.glutenFree ? " " : "glutenFree"}</li>
-        <li>Ready in {recipeDetails.preparationMinutes} Minutes</li>
-        <li>{recipeDetails.aggregateLikes} Likes</li>
+        <li>{recipeDetail.glutenFree ? " " : "glutenFree"}</li>
+        <li>Ready in {recipeDetail.preparationMinutes} Minutes</li>
+        <li>{recipeDetail.aggregateLikes} Likes</li>
       </ul>
       <img src="https://spoonacular.com/application/frontend/images/heart.svg" alt="heart" />
-      <a href="#" onClick={() => checkLogin()} >Save to Recipe Box</a>
+      <a href="#" onClick={() => checkLogin() } >Save to Recipe Box</a>
       </div>
 
-      <div><img src={recipeDetails.image} /></div>
+      <div><img src={recipeDetail.image} /></div>
 
       <div>
         <p> Ingredients</p>
         <ul className="ingredients-list">
-          {ingredients.map((ingredient) => (
+          {recipeDetail.extendedIngredients.map((ingredient) => (
             <li className="ingredient-li" key={ingredient.id}>
               <div className="ingredient-row">
                 <div>{ingredient.original}</div>
@@ -120,7 +134,7 @@ export default function ProductDetail() {
       <div>
         <p> Instructions </p>
         <ol className="instruction-list">
-          {steps.map((eachStep) => (
+          {recipeDetail.analyzedInstructions[0].steps.map((eachStep) => (
             <li
               className="instruction" key={eachStep.number}
             >
@@ -132,17 +146,32 @@ export default function ProductDetail() {
         </ol>
       </div>
       <div>
+        <p> Reviews </p>
+        <ol className="review-list">
+          {reviews.map((review) => (
+            <li
+              className="review" key={review.id}
+            >
+              <div className="review-row">
+                <div>{review.rating}</div>
+                <div>{review.content}<br/>---from {review.user.name}</div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div>
         <form>
           <label>
-            Review:
-            <input type="text" value={rating} onChange={e=>{setRating(e.target.value)}}/>
-            <textarea type="text" rows="5" value={inputValue} onChange={e=>{setInputValue(e.target.value)}}/> 
-            <input type="button" value="Submit" onClick={submitReview()}/>
+            Add Review:
+            <input type="text" value={rating} onChange={(e)=>{setRating(e.target.value)}}/>
+            <textarea type="text" rows="5" value={inputValue} onChange={(e)=>{setInputValue(e.target.value)}}/> 
+            <button onClick={submitReview}>Submit</button>
           </label>
-          
         </form>
       </div>
     </div>
+    ))
     
   );
 }
