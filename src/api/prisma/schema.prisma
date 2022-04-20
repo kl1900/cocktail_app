@@ -16,13 +16,16 @@ model product {
 }
 
 model review {
-  id        Int     @id @default(autoincrement())
-  productId Int
-  userId    Int
-  content   String  @default("") @db.VarChar(10000)
-  rating    Int
-  product   product @relation(fields: [productId], references: [externalId], onDelete: Cascade, onUpdate: Cascade, map: "Review_productId_fkey")
-  user      user    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Review_userId_fkey")
+  id            Int       @id @default(autoincrement())
+  productId     Int
+  userId        Int
+  username      String?
+  content       String    @default("") @db.VarChar(10000)
+  rating        Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  product       product   @relation(fields: [productId], references: [externalId], onDelete: Cascade, onUpdate: Cascade, map: "Review_productId_fkey")
+  user          user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "Review_userId_fkey")
 
   @@index([productId], map: "Review_productId_fkey")
   @@index([userId], map: "Review_userId_fkey")
@@ -39,12 +42,12 @@ model user {
 }
 
 model wishlist {
-  id       Int       @id @default(autoincrement())
-  title    String    @db.VarChar(255)
-  userId   Int
-  user     user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "wishlist_ibfk_1")
-  imageURL String    @db.VarChar(255) @default("https://www.nicepng.com/png/detail/775-7752286_empty-basket-for-gifts-wood-basket-with-handle.png")
-  product product[]  @relation("producttowishlist")
+  id        Int       @id @default(autoincrement())
+  title     String    @db.VarChar(255)
+  userId    Int
+  user      user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "wishlist_ibfk_1")
+  imageURL  String    @db.VarChar(255) @default("https://www.nicepng.com/png/detail/775-7752286_empty-basket-for-gifts-wood-basket-with-handle.png")
+  product   product[] @relation("producttowishlist")
 
   @@index([userId], map: "userId")
 }
