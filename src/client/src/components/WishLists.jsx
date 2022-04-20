@@ -95,9 +95,9 @@ export default function WishLists(){
         countNum();
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
-    };
+  };
 
     console.log(count, wishlists);
     

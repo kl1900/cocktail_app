@@ -4,7 +4,7 @@ import { GET_USER_URL } from "../constants";
 import { useNavigate } from "react-router-dom";
 // import UserProfile from "./UserProfile";
 // import { useUser } from "../UserContext";
-import { addToWishlist } from "../hooks/addToWishlist"
+// import { addToWishlist } from "../hooks/addToWishlist";
 
 export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
@@ -15,7 +15,7 @@ export default function ProductDetail() {
   const params = useParams();
   const navigate = useNavigate();
   // const { user } = useUser;
-  let userId=1;
+  let userId = 1;
 
   const countNum = () => {
     setCount(count+1);
@@ -32,9 +32,9 @@ export default function ProductDetail() {
       }
     }
     getRecipeDetails();
-  },[params.productId]);
+  }, [params.productId]);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function getReviews() {
       const res = await fetch(
         `${GET_USER_URL}/recipe/${params.productId}`
@@ -56,24 +56,24 @@ export default function ProductDetail() {
     }
     
     fetch(`${GET_USER_URL}/recipe`, {
-      method: 'POST', 
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }
 
   function checkLogin() {
     // havent login user.check
-    if(0){
+    if (0) {
       navigate(`/login`);
     }else{
       // addToWishlist();
@@ -93,9 +93,9 @@ export default function ProductDetail() {
     }
   
     fetch(`${GET_USER_URL}/review`, {
-      method: 'POST', 
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
@@ -130,7 +130,9 @@ export default function ProductDetail() {
       <a href="#" onClick={() => checkLogin() } >Save to Recipe Box</a>
       </div>
 
-      <div><img src={recipeDetail.image} /></div>
+      <div>
+        <img src={recipeDetail.image} />
+      </div>
 
       <div>
         <div> Ingredients</div>
@@ -148,9 +150,7 @@ export default function ProductDetail() {
         <div> Instructions </div>
         <ol className="instruction-list">
           {recipeDetail.analyzedInstructions[0].steps.map((eachStep) => (
-            <li
-              className="instruction" key={eachStep.number}
-            >
+            <li className="instruction" key={eachStep.number}>
               <div className="instruction-row">
                 <div>{eachStep.step}</div>
               </div>
@@ -188,7 +188,5 @@ export default function ProductDetail() {
         </div>
       
     </div>
-    ))
-    
-  );
+  )));
 }
