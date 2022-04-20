@@ -9,12 +9,17 @@ import { addToWishlist } from "../hooks/addToWishlist"
 export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [rating, setRating] = useState();
-  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState("");
+  const [reviews, setReviews] = useState();
+  const [count, setCount] = useState(0);
   const params = useParams();
   const navigate = useNavigate();
   // const { user } = useUser;
   let userId=1;
+
+  const countNum = () => {
+    setCount(count+1);
+  }
 
   useEffect(() => {
     async function getRecipeDetails() {
@@ -23,7 +28,7 @@ export default function ProductDetail() {
       );
       var data = await res.json();
       if (data) {
-        setRecipeDetails([...recipeDetails, data]);
+        setRecipeDetails([data]);
       }
     }
     getRecipeDetails();
@@ -32,21 +37,22 @@ export default function ProductDetail() {
   useEffect(()=>{
     async function getReviews() {
       const res = await fetch(
-        `${GET_USER_URL}/review/${params.productId}`
+        `${GET_USER_URL}/recipe/${params.productId}`
       );
       var data = await res.json();
       if (data) {
-        setReviews([...reviews, data]);
+        // setReviews([...reviews, data.review]);
+        setReviews(data.review);
       }
     }
     getReviews();
-  },[params.productId]);
+  },[count]);
 
   function saveRecipe(){
     let data={
-      "externalId": params.productId,
-      "productName": recipeDetails.title,
-      "imageURL": recipeDetails.image
+      "externalId": parseInt(params.productId),
+      "productName": recipeDetails[0].title,
+      "imageURL": recipeDetails[0].image
     }
     
     fetch(`${GET_USER_URL}/recipe`, {
@@ -70,22 +76,22 @@ export default function ProductDetail() {
     if(0){
       navigate(`/login`);
     }else{
-      addToWishlist();
-      // saveRecipe();
+      // addToWishlist();
+      saveRecipe();
     }
   }
 
-  console.log(typeof(params.productId));
+  console.log(rating, reviews);
 
   function submitReview(e){
-    // e.preventDefault();
+    e.preventDefault();
     let data={
       "productId": parseInt(params.productId),
       "userId": userId,
       "content": inputValue,
-      "rating": parseInt(rating)
+      "rating": parseInt(rating),
     }
-    console.log(data);
+  
     fetch(`${GET_USER_URL}/review`, {
       method: 'POST', 
       headers: {
@@ -96,18 +102,25 @@ export default function ProductDetail() {
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
+      countNum();
     })
     .catch((error) => {
       console.error('Error:', error);
     });
   }
+  console.log(count);
+
+  function resetInput(){
+    setRating("");
+    setInputValue("");
+  }
 
   return (
     recipeDetails.map(recipeDetail => (
       <div key={params.productId} className="recipeDetail">
-      {/* <Link to="/app/repositories"> ⬅️ Back</Link> */}
+      {/* {userId? (<Link to="/app/repositories"> ⬅️ Back</Link>) : ("") } */}
       <div>
-      <h2>{recipeDetail.title}</h2>
+      <div>{recipeDetail.title}</div>
       <ul>
         <li>{recipeDetail.glutenFree ? " " : "glutenFree"}</li>
         <li>Ready in {recipeDetail.preparationMinutes} Minutes</li>
@@ -120,7 +133,7 @@ export default function ProductDetail() {
       <div><img src={recipeDetail.image} /></div>
 
       <div>
-        <p> Ingredients</p>
+        <div> Ingredients</div>
         <ul className="ingredients-list">
           {recipeDetail.extendedIngredients.map((ingredient) => (
             <li className="ingredient-li" key={ingredient.id}>
@@ -132,7 +145,7 @@ export default function ProductDetail() {
         </ul>
       </div>
       <div>
-        <p> Instructions </p>
+        <div> Instructions </div>
         <ol className="instruction-list">
           {recipeDetail.analyzedInstructions[0].steps.map((eachStep) => (
             <li
@@ -146,30 +159,34 @@ export default function ProductDetail() {
         </ol>
       </div>
       <div>
-        <p> Reviews </p>
-        <ol className="review-list">
-          {reviews.map((review) => (
-            <li
-              className="review" key={review.id}
-            >
-              <div className="review-row">
-                <div>{review.rating}</div>
-                <div>{review.content}<br/>---from {review.user.name}</div>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div>
-        <form>
-          <label>
-            Add Review:
-            <input type="text" value={rating} onChange={(e)=>{setRating(e.target.value)}}/>
-            <textarea type="text" rows="5" value={inputValue} onChange={(e)=>{setInputValue(e.target.value)}}/> 
-            <button onClick={submitReview}>Submit</button>
-          </label>
-        </form>
-      </div>
+        <div> Reviews </div>
+        
+          <div>
+            <div>
+              Add Review:
+              <input type="text" id="rating" value={rating} onChange={(e)=>{setRating(e.target.value)}}/>
+              <textarea type="text" rows="5" value={inputValue} onChange={(e)=>{setInputValue(e.target.value)}}/> 
+              <button onClick={(e)=>{submitReview(e);resetInput();}}>Submit</button>
+            </div>
+          </div>
+      
+          <div>
+            {reviews!==undefined?(
+              <ul className="review-list">
+                {/* {reviews[reviews.length-1].map((review) => ( */}
+                {reviews.map((review) => (
+                  <li className="review" key={review.id} >
+                    <div className="review-row">
+                      <div>{review.rating}</div>
+                      <div>{review.content}<br/>---from {review.userId}</div>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          ):(<div></div>)}
+          </div>
+        </div>
+      
     </div>
     ))
     

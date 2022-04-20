@@ -6,9 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 export default function WishList() {
   const [recipes, setRecipes] = useState([]);
+  const [wishlistTitle, setWishlistTitle] = useState("");
+  const [count, setCount] = useState(0);
   const params = useParams();
   const navigate = useNavigate();
   // const { user } = useUser;
+
+  const countNum = () => {
+    setCount(count+1);
+  }
 
   useEffect(() => {
     async function getWishlistDetails() {
@@ -19,12 +25,13 @@ export default function WishList() {
       const detail = data.product;
       if (detail) {
         setRecipes(detail);
+        setWishlistTitle(data.title);
       }
     }
     if (1) {
       getWishlistDetails();
     }
-  },[params.wishlistId]);
+  },[count]);
 
   const selectRecipe = (recipeId) => {
     navigate(`/products/${recipeId}`);
@@ -40,28 +47,27 @@ export default function WishList() {
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
+      countNum();
     })
     .catch((error) => {
       console.error('Error:', error);
     });
   };
 
-  console.log(recipes);
-
   return (
 
     <div className="wishlistName">
-      <h5>My Favorite Recipes</h5>
-      {/* <Link to="/wishlists"> ⬅️ Back</Link> */}
-      <h2>{params.wishlistId}</h2>
+      <div>My Favorite Recipes</div>
+      <Link to="/wishlists"> ⬅️ Back</Link>
+      <div>{wishlistTitle}</div>
       <ul className="wishlist-list">
             {recipes.map((recipe) => (
                 <li className="recipe-row-li" key={recipe.externalId} >
                 <div className="recipe-row">
                     <div><img src={recipe.imageURL} /></div>
                     <div>{recipe.productName}</div>
-                    <button className="check" key={recipe.id} onClick={() => selectRecipe(recipe.externalId)}>Check</button>
-                    <button className="delete" key={recipe.externalId} onClick={() => deleteRecipe(params.wishlistId, recipe.id)}>Delete</button>
+                    <button className="check" onClick={() => selectRecipe(recipe.externalId)}>Check</button>
+                    <button className="delete" onClick={() => deleteRecipe(params.wishlistId, recipe.externalId)}>Delete</button>
                 </div>
                 </li>
             ))}
