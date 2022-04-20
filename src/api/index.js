@@ -122,6 +122,10 @@ app.get("/me", requireAuth, async (req, res) => {
     where: {
       auth0Id,
     },
+    include: {
+      review: true,
+      wishlist: true,
+    }
   });
 
   res.json(user);
@@ -308,34 +312,32 @@ app.put("/wishlist/:id/delete_:productId", async (req, res) => {
   const id = parseInt(req.params.id);
   const productId = parseInt(req.params.productId);
   try {
-    const wishlist = await prisma.wishlist.findUnique({
+    const wishlist = await prisma.wishlist.update({
       where: {
         id: id,
       },
+      data: {
+        product: {
+          disconnect: [{ externalId: productId }],
+        },
+      },
       include: {
         product: true,
-      },
+      }
     });
-    if (wishlist === null) {
-      throw new Error("404 Not Found");
-    }
+    const newURL = wishlist.product.length === 0 ? "https://www.nicepng.com/png/detail/" +
+        "775-7752286_empty-basket-for-gifts-wood-basket-with-handle.png" : wishlist.product[0].imageURL;
     const updatedWishlist = await prisma.wishlist.update({
       where: {
         id: id,
       },
       data: {
-        imageURL:
-          wishlist.product.length === 1
-            ? "https://www.nicepng.com/png/detail/775-7752286_empty-" +
-              "basket-for-gifts-wood-basket-with-handle.png"
-            : wishlist.imageURL,
-        product: {
-          disconnect: [{ externalId: productId }],
-        },
+        imageURL: newURL,
       },
     });
     res.json(updatedWishlist);
   } catch (e) {
+    console.log(e);
     res.status(422).json(null);
   }
 });
@@ -357,10 +359,16 @@ app.delete("/wishlist/:id", async (req, res) => {
 app.post("/review", async (req, res) => {
   const { productId, userId, content, rating } = req.body;
   try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
     const review = await prisma.review.create({
       data: {
         product: { connect: { externalId: productId } },
         user: { connect: { id: userId } },
+        username: user.name,
         content: content,
         rating: rating,
       },
