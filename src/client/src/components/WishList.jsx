@@ -12,10 +12,6 @@ export default function WishList() {
   const navigate = useNavigate();
   // const { user } = useUser;
 
-  const countNum = () => {
-    setCount(count+1);
-  }
-
   useEffect(() => {
     async function getWishlistDetails() {
       const res = await fetch(
@@ -32,6 +28,10 @@ export default function WishList() {
       getWishlistDetails();
     }
   },[count]);
+
+  const countNum = () => {
+    setCount(count+1);
+  }
 
   const selectRecipe = (recipeId) => {
     navigate(`/products/${recipeId}`);
@@ -61,17 +61,27 @@ export default function WishList() {
       <Link to="/wishlists"> ⬅️ Back</Link>
       <div>{wishlistTitle}</div>
       <ul className="wishlist-list">
-            {recipes.map((recipe) => (
-                <li className="recipe-row-li" key={recipe.externalId} >
-                <div className="recipe-row">
-                    <div><img src={recipe.imageURL} /></div>
-                    <div>{recipe.productName}</div>
-                    <button className="check" onClick={() => selectRecipe(recipe.externalId)}>Check</button>
-                    <button className="delete" onClick={() => deleteRecipe(params.wishlistId, recipe.externalId)}>Delete</button>
-                </div>
-                </li>
-            ))}
-        </ul>
+        {recipes.map((recipe) => (
+          <li className="recipe-row-li" key={recipe.externalId} >
+            <div className="recipe-row">
+                <div><img src={recipe.imageURL} /></div>
+                <div>{recipe.productName}</div>
+                <button 
+                  className="check" 
+                  onClick={() => selectRecipe(recipe.externalId)}
+                  >
+                    Check
+                </button>
+                <button 
+                  className="delete" 
+                  onClick={() => deleteRecipe(params.wishlistId, recipe.externalId)}
+                  >
+                    Delete
+                </button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
