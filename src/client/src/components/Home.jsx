@@ -1,77 +1,61 @@
-import React, { Component, useState } from "react";
+import React, { useState } from 'react'
 
+import Creatable from 'react-select/creatable'
 
-export default function App() {
-    const [inputValues, setInputValues] = useState({
-      'componentTwo': 'val1',
-      'componentThree': 'val2',
-      'componentFour': 'val3',
-    });
+const roles = [
+  { label: 'admin', value: 1 },
+  { label: 'student', value: 2 },
+  { label: 'tutor', value: 3 },
+  { label: 'guardian', value: 4 }
+]
 
-    const addNewInputvalue = (name, value) => {
-        setInputValues((prev) => {
-            return {
-              ...prev,
-              [name]: value,
-            }
-        });
-    };
+// const customStyles = {
+//   option: (provided, state) => ({
+//     ...provided,
+//     borderBottom: '1px dotted pink',
+//     color: state.isSelected ? 'red' : 'blue',
+//     padding: 20
+//   })
+// }
 
-    const removeInput = (name) => {
-        setInputValues((prev) => {
-            const copy = {...prev};
-            delete copy[name];
+export default () => {
+  const [roleValue, setRoleValue] = useState('')
 
-            return copy;
-        });
-    };
+  const handleChange = (field, value) => {
+    switch (field) {
+      case 'roles':
+        setRoleValue(value)
+        break
 
-    const handleInputChange = (name, value) => {
-        setInputValues((prev) => {
-          return {
-            ...prev,
-            [name]: value,
-          };
-        });
-    };
+      default:
+        break
+    }
+  }
+console.log(roleValue);
 
-    const consoleAllValues = () => {
-        console.log(inputValues);
-    };
+ 
+  return (
+    <div className='container'>
+      <h3>Add User</h3>
+      <div className='register-form'>
 
-    return (
-        <div className="App">
-            <button onClick={addNewInputvalue}>New Input</button>
-            {Object.keys(inputValues).map((name, i) => {
-                return (<div>
-                    <ComponentTwo
-                        key={name}
-                        index={i}
-                        value={inputValues[name]}
-                        onChange={(value) => handleInputChange(name, value)}
-                        removeInput={() => removeInput(name)}
-                    />
-                   
-                </div>
-                    
-        );
-            })}
-            <button onClick={consoleAllValues}>console log all values</button>
+        <div className='input'>
+          <label>Role(s)</label>
+          <Creatable
+            isClearable
+            onChange={(value) => handleChange('roles', value)}
+            options={roles}
+            value={roleValue}
+            // styles={customStyles}
+          />
         </div>
-    );
+
+        <div className='buttons'>
+          <button>Submit</button>
+        </div>
+      </div>
+    </div>
+
+  )
 }
 
-const ComponentTwo = (props) => {
-    return (
-        <div>
-            <p>Input: {props.index}</p>
-            <input
-                name={"right_value"}
-                onChange={(e) => props.onChange(e.target.value)}
-                type="text"
-                value={props.value}
-            />
-            <button onClick={props.removeInput}>Remove Input</button>
-        </div>
-    );
-};

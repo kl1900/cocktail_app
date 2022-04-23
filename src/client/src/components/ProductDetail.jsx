@@ -1,6 +1,4 @@
 // npm install react-dropdown  --save
-// npm install semantic-ui-react semantic-ui-css
-// npm i --save lodash
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
@@ -24,7 +22,7 @@ export default function ProductDetail() {
   const [wishlists, setWishlists] = useState([]);
   const [wishlistIndex, setWishlistIndex] = useState();
   const [userMode, setUserMode] = useState(false);
-  // const [step, setStep] = useState(0);
+  const [step, setStep] = useState(0);
   const params = useParams();
   const navigate = useNavigate();
   // const { user } = useUser;
@@ -74,7 +72,7 @@ export default function ProductDetail() {
     if (userId) {
       getWishlists();
     }
-  }, []);
+  }, [step]);
 
   // check if user login or not
   useEffect(()=>{
@@ -101,42 +99,9 @@ export default function ProductDetail() {
     setCount(count+1);
   }
 
-  // const countStep = () => {
-  //   setStep(step+1);
-  // }
-
-  // function saveRecipe(){
-  //   let data={
-  //     "externalId": parseInt(params.productId),
-  //     "productName": recipeDetails[0].title,
-  //     "imageURL": recipeDetails[0].image
-  //   }
-    
-  //   fetch(`${GET_USER_URL}/recipe`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(data),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Success:", data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // }
-
-  // function checkLogin() {
-  //   havent login user.check
-  //   if (0) {
-  //     navigate(`/login`);
-  //   }else{
-  //     addToWishlist();
-  //     saveRecipe();
-  //   }
-  // }
+  const countStep = () => {
+    setStep(step+1);
+  }
 
   console.log("count:", {count});
   console.log("rating:",{rating});
@@ -259,32 +224,30 @@ export default function ProductDetail() {
     if(roleValue){
       // setWishlistIndex(roleValue.value);
       // if(typeof(wishlistIndex)!=="number"){
-      // if(!indexExist(wishlistIndex)){
-      //   const data={
-      //     "title" : wishlistIndex,
-      //     "userId" : userId,
-      //   };
-      //   console.log(data);
-      //   fetch(`${GET_USER_URL}/wishlist`, {
-      //     method: 'POST', 
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify(data),
-      //     })
-      //     .then(response => response.json())
-      //     .then(data => {
-      //         console.log('Success:', data);
-      //         setWishlistIndex(data.id);
-      //     })
-      //     .catch((error) => {
-      //     console.error('Error:', error);
-      //     }
-      //   );
-      // };
-
-      if(typeof(wishlistIndex)==="number"){
-      // if(indexExist(wishlistIndex)){
+      if(!indexExist(wishlistIndex)){
+        const data={
+          "title" : wishlistIndex,
+          "userId" : userId,
+        };
+        console.log(data);
+        fetch(`${GET_USER_URL}/wishlist/${params.productId}`, {
+          method: 'POST', 
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+          })
+          .then(response => response.json())
+          .then(data => {
+              console.log('Success:', data);
+              countStep();
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+          }
+        );
+      }
+      else {
         fetch(`${GET_USER_URL}/wishlist/${wishlistIndex}/add_${params.productId}`, {
           method: "PUT",
           headers: {
@@ -353,7 +316,7 @@ export default function ProductDetail() {
                     value={roleValue}
                   />
                   {/* <button onClick={saveToWishlist}>Save</button> */}
-                  <button onClick={()=>{createWishlist(); saveToWishlist();}}>Save</button>
+                  <button onClick={()=>{saveToWishlist();}}>Save</button>
                 </div>
               </div>
             ):("")

@@ -50,4 +50,5 @@ model wishlist {
   product   product[] @relation("producttowishlist")
 
   @@index([userId], map: "userId")
+  @@unique([title, userId], name: "title_userId_unique_constraint")
 }
