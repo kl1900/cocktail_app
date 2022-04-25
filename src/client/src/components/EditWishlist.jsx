@@ -15,7 +15,12 @@ export default ({wishlistId, changeToFalse, countNum}) => {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                if (data === null) {
+                    alert("Duplicate name detected");
+                }
+                else {
+                    console.log('Success:', data);
+                }
                 countNum();
             })
             .catch((error) => {

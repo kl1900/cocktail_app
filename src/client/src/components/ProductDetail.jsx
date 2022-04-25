@@ -14,10 +14,10 @@ export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [rating, setRating] = useState("");
-  const [reviews, setReviews] = useState();
+  const [reviews, setReviews] = useState([]);
   const [count, setCount] = useState(0);
   const [button, setButton] = useState("Submit");
-  const [recordId, setRecordId] = useState();
+  const [recordId, setRecordId] = useState(null);
   const [roleValue, setRoleValue] = useState('')
   const [wishlists, setWishlists] = useState([]);
   const [wishlistIndex, setWishlistIndex] = useState();
@@ -26,7 +26,7 @@ export default function ProductDetail() {
   const params = useParams();
   const navigate = useNavigate();
   // const { user } = useUser;
-  let userId = 1;
+  let userId = 3;
 
   // get product's details
   useEffect(() => {
@@ -51,6 +51,12 @@ export default function ProductDetail() {
       var data = await res.json();
       if (data) {
         // setReviews([...reviews, data.review]);
+        for (let i = 0; i < data.review.length; i++) {
+          if (data.review[i].userId === userId) {
+            setRecordId(data.review[i].id);
+            break;
+          }
+        }
         setReviews(data.review);
       }
     }
@@ -88,12 +94,6 @@ export default function ProductDetail() {
     }
   },[roleValue])
 
-  // useEffect(()=>{
-  //   if(typeof(wishlistIndex)==="number"){
-  //     saveToWishlist();
-  //   }
-  // },[step]);
-
   // useEffect of count numbers to refresh db
   const countNum = () => {
     setCount(count+1);
@@ -102,9 +102,6 @@ export default function ProductDetail() {
   const countStep = () => {
     setStep(step+1);
   }
-
-  console.log("count:", {count});
-  console.log("rating:",{rating});
 
   function submitReview(e){
     e.preventDefault();
@@ -118,8 +115,8 @@ export default function ProductDetail() {
       "content": inputValue,
       "rating": parseInt(rating),
     }
-
-    if(button==="Submit"){
+    
+    if(recordId === null){
       fetch(`${GET_USER_URL}/review`, {
         method: "POST",
         headers: {
@@ -130,14 +127,16 @@ export default function ProductDetail() {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
+        if (data === null) {
+          alert("You have already written a review for this product!")
+        }
         countNum();
       })
       .catch((error) => {
         console.error('Error:', error);
       });
     }
-    else if(button==="Edit"){
-      // console.log(userId);
+    else {
       fetch(`${GET_USER_URL}/review/${recordId}`, {
         method: "PUT",
         headers: {
@@ -167,6 +166,10 @@ export default function ProductDetail() {
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
+      setRecordId(null);
+      if (data === null) {
+        alert("Your review does not exist!")
+      }
       countNum();
     })
     .catch((error) => {
@@ -190,40 +193,33 @@ export default function ProductDetail() {
     )
   }
 
-  function createWishlist(){
-    if(roleValue){
-      // setWishlistIndex(roleValue.value);
-      // if(typeof(wishlistIndex)!=="number"){
-      if(!indexExist(wishlistIndex)){
-        const data={
-          "title" : wishlistIndex,
-          "userId" : userId,
-        };
-        console.log(data);
-        fetch(`${GET_USER_URL}/wishlist`, {
-          method: 'POST', 
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-          })
-          .then(response => response.json())
-          .then(data => {
-              console.log('Success:', data);
-              setWishlistIndex(data.id);
-          })
-          .catch((error) => {
-          console.error('Error:', error);
-          }
-        );
-      };
-    }
+  async function addProduct() {
+    const data={
+      "externalId": parseInt(params.productId),
+      "productName": recipeDetails[0].title,
+      "imageURL": recipeDetails[0].image,
+    };
+    fetch(`${GET_USER_URL}/recipe`, {
+      method: 'POST', 
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Product Success:', data);
+          return data;
+      })
+      .catch((error) => {
+        console.error('Product Error:', error);
+        return null;
+      }
+    );
   }
-
-  function saveToWishlist(){
+  console.log(roleValue);
+  function saveToWishlistHelper() {
     if(roleValue){
-      // setWishlistIndex(roleValue.value);
-      // if(typeof(wishlistIndex)!=="number"){
       if(!indexExist(wishlistIndex)){
         const data={
           "title" : wishlistIndex,
@@ -239,11 +235,13 @@ export default function ProductDetail() {
           })
           .then(response => response.json())
           .then(data => {
-              console.log('Success:', data);
+              console.log('Wishlist add Success:', data);
               countStep();
+              setRoleValue("");
+              alert("Successfully added recipe to " + data.title);
           })
           .catch((error) => {
-          console.error('Error:', error);
+          console.error('Wishlist add Error:', error);
           }
         );
       }
@@ -256,13 +254,37 @@ export default function ProductDetail() {
         })
         .then(response => response.json())
         .then(data => {
-          console.log('Success:', data);
+          if (data === null) {
+            alert("Wishlist not exist");
+          }
+          else {
+              console.log('Wishlist add Success:', data);
+              alert("Successfully added recipe to " + data.title);
+          }
+          countStep();
+          setRoleValue("");
         })
         .catch((error) => {
-          console.error('Error:', error);
+          console.error('Wishlist add Error:', error);
         });
       }
     }
+  }
+
+  function saveToWishlist(){
+    fetch(
+      `${GET_USER_URL}/recipe/${params.productId}`
+    ).then(response => response.json())
+    .then(data => {
+      if(data===null){
+        addProduct().then(() => {
+          saveToWishlistHelper();
+        });
+      }
+      else {
+        saveToWishlistHelper();
+      }
+    });
   }
 
   function resetInput(){
@@ -274,11 +296,6 @@ export default function ProductDetail() {
   for(let i=0;i<wishlists.length;i++){
       roles.push({label: wishlists[i].title, value: wishlists[i].id});
   }
-
-  console.log(wishlists);
-  console.log(roles);
-  console.log(roleValue);
-  console.log(wishlistIndex);
 
   const handleChange = (field, value) => {
     switch (field) {
@@ -356,21 +373,23 @@ export default function ProductDetail() {
             }
           </ol>
         </div>
-
+        
         <div>
           <div> Reviews </div>
           <div>
-            <div>
-              Add/Edit Review:
-              <input type="text" id="rating" value={rating} onChange={(e)=>{setRating(e.target.value)}}/>
-              <textarea type="text" rows="5" value={inputValue} onChange={(e)=>{setInputValue(e.target.value)}}/> 
-              <input type="submit" id="submit" value={button} onClick={(e)=>{submitReview(e);resetInput();}} />
-            </div>
+            {userMode ? (
+              <div>
+                {recordId !== null ? "Edit" : "Add"} Review:
+                  <input type="text" id="rating" value={rating} onChange={(e)=>{setRating(e.target.value)}}/>
+                  <textarea type="text" rows="5" value={inputValue} onChange={(e)=>{setInputValue(e.target.value)}}/> 
+                  <input type="submit" id="submit" value={button} onClick={(e)=>{submitReview(e);resetInput();}} />
+              </div>
+            ) : ("")}
           </div>
         
           <div>
             {
-              reviews!==undefined?(
+              reviews.length!==0?(
                 <ul className="review-list">
                   {
                     reviews.map((review) => (
@@ -382,7 +401,7 @@ export default function ProductDetail() {
                               (<div>Created at {review.createdAt} </div>)
                             }
                           </div>
-                          <div>
+                          {/* <div>
                             {review.userId===userId?(
                               <div 
                                 style={{cursor: "pointer"}} 
@@ -391,7 +410,7 @@ export default function ProductDetail() {
                               </div>
                               ):("")
                             }
-                          </div>
+                          </div> */}
                           <div>
                             {review.userId===userId?(
                               <div style={{cursor: "pointer"}} onClick={()=>deleteReview(review.id)}>
@@ -401,13 +420,18 @@ export default function ProductDetail() {
                             }
                           </div>
                           <div>{review.rating}</div>
-                          <div>{review.content}<br/>---from {review.username}</div>
+                          <div>{review.content.split("\n").map((item, index) => (
+                            <span key={index}>
+                              {item}
+                              <br/>
+                            </span>
+                          ))}---from {review.username}</div>
                         </div>
                       </li>
                     ))
                   }
                 </ul>
-              ):("")
+              ):("Currently no review for this recipe")
             }
           </div>
         </div>
