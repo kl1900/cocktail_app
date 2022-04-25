@@ -18,10 +18,15 @@ export default function WishList() {
         `${GET_USER_URL}/wishlist/${params.wishlistId}`
       );
       const data = await res.json();
-      const detail = data.product;
-      if (detail) {
-        setRecipes(detail);
-        setWishlistTitle(data.title);
+      if (data === null) {
+        navigate("/*");
+      }
+      else {
+        const detail = data.product;
+        if (detail) {
+          setRecipes(detail);
+          setWishlistTitle(data.title);
+        }
       }
     }
     if (1) {
@@ -46,7 +51,13 @@ export default function WishList() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
+      if (data === null) {
+        alert("Operation failed");
+        navigate("/wishlists");
+      }
+      else {
+        console.log('Success:', data);
+      }
       countNum();
     })
     .catch((error) => {

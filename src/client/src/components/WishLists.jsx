@@ -16,8 +16,7 @@ export default function WishLists(){
   // const { user } = useUser();
   const userId = 1;
   const id=1;
-  const user= fetch(
-      `${GET_USER_URL}/user/${id}`);
+
   
   const changeToFalse = (i) =>{
     const temp = editMode.slice();
@@ -36,6 +35,7 @@ export default function WishLists(){
   }
 
   const countNum = () => {
+    console.log("CountNum");
     setCount(count+1);
   }
   
@@ -77,11 +77,14 @@ export default function WishLists(){
     })
     .then(response => response.json())
     .then(data => {
+      alert("Successfully deleted "+ data.title);
       console.log('Success:', data);
       countNum();
     })
     .catch((error) => {
+      alert("Operation failed!");
       console.error("Error:", error);
+      countNum();
     });
   };
 
@@ -137,7 +140,7 @@ export default function WishLists(){
 
               <div>
                 <button className="check" onClick={() => selectWishlist(wishlist.id)}>Check</button>
-                <button className="delete" onClick={() => {deleteWishlist(wishlist.id);countNum()}}>Delete</button>
+                <button className="delete" onClick={() => deleteWishlist(wishlist.id)}>Delete</button>
               </div>
             </div>
             </li>

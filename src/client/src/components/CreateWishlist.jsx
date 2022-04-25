@@ -18,12 +18,17 @@ export default ({changeCreate, userId, countNum}) => {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                if (data === null) {
+                    alert("Duplicate name detected");
+                }
+                else {
+                    console.log('Success:', data);
+                }
                 changeCreate();
                 countNum();
             })
             .catch((error) => {
-            console.error('Error:', error);
+                console.error('Error:', error);
             });
         };
     
