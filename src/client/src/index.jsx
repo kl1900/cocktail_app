@@ -1,6 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { AuthTokenProvider } from "./AuthTokenContext";
 import Home from "./components/Home";
@@ -26,49 +32,63 @@ const requestedScopes = [
 
 function RequireAuth({ children }) {
   const { isAuthenticated, isLoading } = useAuth0();
-
+  console.log(`is authenticated: ${isAuthenticated}`);
+  console.log(`is loading: ${isLoading}`);
+  console.log(children);
   if (!isLoading && !isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
 }
 
+function OptionalAuth({ children }) {
+  const { isAuthenticated, isLoading } = useAuth0();
+  console.log(`is authenticated: ${isAuthenticated}`);
+  console.log(`is loading: ${isLoading}`);
+  <Outlet></Outlet>;
+  return children;
+}
+
 ReactDOM.render(
   <React.StrictMode>
-    {/* <Auth0Provider
+    <Auth0Provider
       domain={process.env.REACT_APP_AUTH0_DOMAIN}
       clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
       redirectUri={`${window.location.origin}/verify-user`}
       audience={process.env.REACT_APP_AUTH0_AUDIENCE}
       scope={requestedScopes.join(" ")}
     >
-      <AuthTokenProvider> */}
+      <AuthTokenProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/verify-user" element={<VerifyUser />} />
-            {/* <Route
+            <Route
               path="app"
               element={
                 <RequireAuth>
                   <AppLayout />
                 </RequireAuth>
               }
-            > */}
+            >
               <Route path="profile" element={<UserProfile />} />
               <Route path="debugger" element={<AuthDebugger />} />
               <Route path="wishlists" element={<WishLists />} />
               <Route path="wishlist/:wishlistId" element={<WishList />} />
-            {/* </Route> */}
+              <Route path="search" element={<SearchResult />} />
+              <Route path="products/:productId" element={<ProductDetail />} />
+            </Route>
             <Route path="/login" element={<Login />} />
-            <Route path="/search" element={<SearchResult />} />
-            <Route path="/products/:productId" element={<ProductDetail />} />
+            <Route path="foo" element={<OptionalAuth></OptionalAuth>}>
+              <Route path="search" element={<SearchResult />} />
+              <Route path="products/:productId" element={<ProductDetail />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      {/* </AuthTokenProvider>
-     </Auth0Provider> */}
+      </AuthTokenProvider>
+    </Auth0Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

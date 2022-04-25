@@ -14,14 +14,11 @@ export default function WishList() {
 
   useEffect(() => {
     async function getWishlistDetails() {
-      const res = await fetch(
-        `${GET_USER_URL}/wishlist/${params.wishlistId}`
-      );
+      const res = await fetch(`${GET_USER_URL}/wishlist/${params.wishlistId}`);
       const data = await res.json();
       if (data === null) {
         navigate("/*");
-      }
-      else {
+      } else {
         const detail = data.product;
         if (detail) {
           setRecipes(detail);
@@ -32,11 +29,11 @@ export default function WishList() {
     if (1) {
       getWishlistDetails();
     }
-  },[count]);
+  }, [count]);
 
   const countNum = () => {
-    setCount(count+1);
-  }
+    setCount(count + 1);
+  };
 
   const selectRecipe = (recipeId) => {
     navigate(`/products/${recipeId}`);
@@ -44,51 +41,53 @@ export default function WishList() {
 
   const deleteRecipe = (wishlistId, recipeId) => {
     fetch(`${GET_USER_URL}/wishlist/${wishlistId}/delete_${recipeId}`, {
-      method: 'PUT', 
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data === null) {
-        alert("Operation failed");
-        navigate("/wishlists");
-      }
-      else {
-        console.log('Success:', data);
-      }
-      countNum();
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data === null) {
+          alert("Operation failed");
+          navigate("/wishlists");
+        } else {
+          console.log("Success:", data);
+        }
+        countNum();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
-
     <div className="wishlistName">
       <div>My Favorite Recipes</div>
       <Link to="/wishlists"> ⬅️ Back</Link>
       <div>{wishlistTitle}</div>
       <ul className="wishlist-list">
         {recipes.map((recipe) => (
-          <li className="recipe-row-li" key={recipe.externalId} >
+          <li className="recipe-row-li" key={recipe.externalId}>
             <div className="recipe-row">
-                <div><img src={recipe.imageURL} /></div>
-                <div>{recipe.productName}</div>
-                <button 
-                  className="check" 
-                  onClick={() => selectRecipe(recipe.externalId)}
-                  >
-                    Check
-                </button>
-                <button 
-                  className="delete" 
-                  onClick={() => deleteRecipe(params.wishlistId, recipe.externalId)}
-                  >
-                    Delete
-                </button>
+              <div>
+                <img src={recipe.imageURL} />
+              </div>
+              <div>{recipe.productName}</div>
+              <button
+                className="check"
+                onClick={() => selectRecipe(recipe.externalId)}
+              >
+                Check
+              </button>
+              <button
+                className="delete"
+                onClick={() =>
+                  deleteRecipe(params.wishlistId, recipe.externalId)
+                }
+              >
+                Delete
+              </button>
             </div>
           </li>
         ))}
