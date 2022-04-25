@@ -1,12 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { AuthTokenProvider } from "./AuthTokenContext";
 import Home from "./components/Home";
@@ -34,19 +28,10 @@ function RequireAuth({ children }) {
   const { isAuthenticated, isLoading } = useAuth0();
   console.log(`is authenticated: ${isAuthenticated}`);
   console.log(`is loading: ${isLoading}`);
-  console.log(children);
   if (!isLoading && !isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
-}
-
-function OptionalAuth({ children }) {
-  const { isAuthenticated, isLoading } = useAuth0();
-  console.log(`is authenticated: ${isAuthenticated}`);
-  console.log(`is loading: ${isLoading}`);
-  <Outlet></Outlet>;
   return children;
 }
 
@@ -80,10 +65,8 @@ ReactDOM.render(
               <Route path="products/:productId" element={<ProductDetail />} />
             </Route>
             <Route path="/login" element={<Login />} />
-            <Route path="foo" element={<OptionalAuth></OptionalAuth>}>
-              <Route path="search" element={<SearchResult />} />
-              <Route path="products/:productId" element={<ProductDetail />} />
-            </Route>
+            <Route path="/search" element={<SearchResult />} />
+            <Route path="/products/:productId" element={<ProductDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -26,8 +26,14 @@ export default function ProductDetail() {
   const [step, setStep] = useState(0);
   const params = useParams();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth0();
-  let userId = 1;
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  console.log(user);
+  console.log(`is authenticated: ${isAuthenticated}`);
+  console.log(`is loading: ${isLoading}`);
+  let userId = null;
+  if (user !== undefined) {
+    userId = user.sub;
+  }
 
   // get product's details
   useEffect(() => {
@@ -467,7 +473,6 @@ export default function ProductDetail() {
             "Currently no review for this recipe"
           )}
         </div>
-        <button onClick={() => console.log(isAuthenticated)}>log user</button>
       </div>
     </div>
   ));
