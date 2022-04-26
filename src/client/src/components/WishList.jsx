@@ -42,7 +42,7 @@ export default function WishList() {
   };
 
   const selectRecipe = (recipeId) => {
-    navigate(`/products/${recipeId}`);
+    navigate(`/details/${recipeId}`);
   };
 
   const deleteRecipe = (wishlistId, recipeId) => {
@@ -71,7 +71,7 @@ export default function WishList() {
   return (
     <div className="wishlistName">
       <div>My Favorite Recipes</div>
-      <Link to="/app/wishlists"> ⬅️ Back</Link>
+      <Link to="/wishlists"> ⬅️ Back</Link>
       <div>{wishlistTitle}</div>
       <ul className="wishlist-list">
         {recipes.map((recipe) => (
