@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
 import { useNavigate } from "react-router-dom";
+import { useAuthToken } from "../AuthTokenContext";
 // import { useUser } from "../UserContext";
 
 export default function WishList() {
@@ -10,14 +11,19 @@ export default function WishList() {
   const [count, setCount] = useState(0);
   const params = useParams();
   const navigate = useNavigate();
-  // const { user } = useUser;
+  const { accessToken } = useAuthToken();
 
   useEffect(() => {
     async function getWishlistDetails() {
-      const res = await fetch(`${GET_USER_URL}/wishlist/${params.wishlistId}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/wishlist/${params.wishlistId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = await res.json();
       if (data === null) {
-        navigate("/*");
+        navigate("/app/*");
       } else {
         const detail = data.product;
         if (detail) {
@@ -43,6 +49,7 @@ export default function WishList() {
     fetch(`${GET_USER_URL}/wishlist/${wishlistId}/delete_${recipeId}`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
     })
@@ -64,7 +71,7 @@ export default function WishList() {
   return (
     <div className="wishlistName">
       <div>My Favorite Recipes</div>
-      <Link to="/wishlists"> ⬅️ Back</Link>
+      <Link to="/app/wishlists"> ⬅️ Back</Link>
       <div>{wishlistTitle}</div>
       <ul className="wishlist-list">
         {recipes.map((recipe) => (

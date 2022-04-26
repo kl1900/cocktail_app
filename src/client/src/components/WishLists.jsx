@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useUser } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
 import CreateWishlist from "./CreateWishlist";
 import EditWishlist from "./EditWishlist";
+import { useAuthToken } from "../AuthTokenContext";
 import { ImPencil } from "react-icons/im";
 
 export default function WishLists() {
@@ -12,10 +12,7 @@ export default function WishLists() {
   const [createMode, setCreateMode] = useState(false);
   const [editMode, setEditMode] = useState([]);
   const [count, setCount] = useState(0);
-
-  // const { user } = useUser();
-  const userId = 1;
-  const id = 1;
+  const { accessToken } = useAuthToken();
 
   const changeToFalse = (i) => {
     const temp = editMode.slice();
@@ -40,7 +37,12 @@ export default function WishLists() {
 
   useEffect(() => {
     async function getWishlists() {
-      const res = await fetch(`${GET_USER_URL}/user/${id}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = await res.json();
       const user_wishlist = data.wishlist;
       if (user_wishlist) {
@@ -69,6 +71,7 @@ export default function WishLists() {
     fetch(`${GET_USER_URL}/wishlist/${wishlistId}`, {
       method: "DELETE",
       headers: {
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
     })
@@ -95,7 +98,7 @@ export default function WishLists() {
           <div>
             <CreateWishlist
               changeCreate={changeCreate}
-              userId={userId}
+              accessToken={accessToken}
               countNum={countNum}
             />
           </div>

@@ -143,15 +143,18 @@ app.get("/getRandomFoodJoke", async(req, res) => {
 // user section
 app.get("/me", requireAuth, async(req, res) => {
     const auth0Id = req.user.sub;
-
     const user = await prisma.user.findUnique({
         where: {
             auth0Id,
         },
         include: {
+            wishlist: {
+                include: {
+                    product: true,
+                },
+            },
             review: true,
-            wishlist: true,
-        }
+        },
     });
 
     res.json(user);
@@ -223,13 +226,19 @@ app.get("/recipe/:id", async(req, res) => {
     }
 });
 
-app.post("/wishlist", async(req, res) => {
-    const { title, userId } = req.body;
+app.post("/wishlist", requireAuth, async(req, res) => {
+    const auth0Id = req.user.sub;
+    const { title } = req.body;
     try {
+        const user = await prisma.user.findUnique({
+            where: {
+                auth0Id,
+            },
+        });
         const wishlist = await prisma.wishlist.create({
             data: {
                 title: title,
-                user: { connect: { id: userId } },
+                user: { connect: { id: user.id } },
             },
         });
         res.json(wishlist);
@@ -240,10 +249,16 @@ app.post("/wishlist", async(req, res) => {
     }
 });
 
-app.post("/wishlist/:productId", async(req, res) => {
+app.post("/wishlist/:productId", requireAuth, async(req, res) => {
+    const auth0Id = req.user.sub;
     const productId = parseInt(req.params.productId);
-    const { title, userId } = req.body;
+    const { title } = req.body;
     try {
+        const user = await prisma.user.findUnique({
+            where: {
+                auth0Id,
+            },
+        });
         const product = await prisma.product.findUnique({
             where: {
                 externalId: productId,
@@ -257,7 +272,7 @@ app.post("/wishlist/:productId", async(req, res) => {
                 title: title,
                 imageURL: product.imageURL,
                 product: { connect: { externalId: productId } },
-                user: { connect: { id: userId } },
+                user: { connect: { id: user.id } },
             },
         });
         res.json(wishlist);
@@ -268,160 +283,266 @@ app.post("/wishlist/:productId", async(req, res) => {
     }
 });
 
-app.get("/wishlist/:id", async(req, res) => {
+app.get("/wishlist/:id", requireAuth, async(req, res) => {
     const id = parseInt(req.params.id);
+    const auth0Id = req.user.sub;
     try {
-        const wishlist = await prisma.wishlist.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
-                id: id,
+                auth0Id,
             },
             include: {
-                product: true,
+                wishlist: true,
             },
         });
-        if (wishlist === null) {
-            res.status(404).json(null);
-        } else {
-            res.json(wishlist);
+        let found = false;
+        for (let i = 0; i < user.wishlist.length; i++) {
+            if (user.wishlist[i].id === id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            res.status(401).json(null);
+        }
+        else {
+            const wishlist = await prisma.wishlist.findUnique({
+                where: {
+                    id: id,
+                },
+                include: {
+                    product: true,
+                },
+            });
+            if (wishlist === null) {
+                res.status(404).json(null);
+            } else {
+                res.json(wishlist);
+            }
         }
     } catch (e) {
         res.status(503).json(null);
     }
 });
 
-app.put("/wishlist/:id", async(req, res) => {
+app.put("/wishlist/:id", requireAuth, async(req, res) => {
     const { title } = req.body;
+    const auth0Id = req.user.sub;
     const id = parseInt(req.params.id);
-    try {
-        const wishlist = await prisma.wishlist.update({
-            where: {
-                id: id,
-            },
-            data: {
-                title: title,
-            },
-        });
-        res.json(wishlist);
-    } catch (e) {
-        res.status(422).json(null);
-    }
-});
-
-app.put("/wishlist/:id/add_:productId", async(req, res) => {
-    const id = parseInt(req.params.id);
-    const productId = parseInt(req.params.productId);
-    try {
-        const wishlist = await prisma.wishlist.findUnique({
-            where: {
-                id: id,
-            },
-            include: {
-                product: true,
-            },
-        });
-        if (wishlist === null) {
-            throw new Error("404 Not Found");
-        }
-        if (wishlist.product.length === 0) {
-            const recipe = await prisma.product.findUnique({
-                where: {
-                    externalId: productId,
-                },
-            });
-            if (recipe === null) {
-                throw new Error("404 Not Found");
-            }
-            const updatedWishlist = await prisma.wishlist.update({
-                where: {
-                    id: id,
-                },
-                data: {
-                    imageURL: recipe.imageURL,
-                    product: {
-                        connect: [{ externalId: productId }],
-                    },
-                },
-            });
-            res.json(updatedWishlist);
-        } else {
-            const updatedWishlist = await prisma.wishlist.update({
-                where: {
-                    id: id,
-                },
-                data: {
-                    product: {
-                        connect: [{ externalId: productId }],
-                    },
-                },
-            });
-            res.json(updatedWishlist);
-        }
-    } catch (e) {
-        console.log(e);
-        res.status(422).json(null);
-    }
-});
-
-app.put("/wishlist/:id/delete_:productId", async(req, res) => {
-    const id = parseInt(req.params.id);
-    const productId = parseInt(req.params.productId);
-    try {
-        const wishlist = await prisma.wishlist.update({
-            where: {
-                id: id,
-            },
-            data: {
-                product: {
-                    disconnect: [{ externalId: productId }],
-                },
-            },
-            include: {
-                product: true,
-            }
-        });
-        const newURL = wishlist.product.length === 0 ? "https://www.nicepng.com/png/detail/" +
-            "775-7752286_empty-basket-for-gifts-wood-basket-with-handle.png" : wishlist.product[0].imageURL;
-        const updatedWishlist = await prisma.wishlist.update({
-            where: {
-                id: id,
-            },
-            data: {
-                imageURL: newURL,
-            },
-        });
-        res.json(updatedWishlist);
-    } catch (e) {
-        console.log(e);
-        res.status(422).json(null);
-    }
-});
-
-app.delete("/wishlist/:id", async(req, res) => {
-    const id = parseInt(req.params.id);
-    try {
-        const wishlist = await prisma.wishlist.delete({
-            where: {
-                id: id,
-            },
-        });
-        res.json(wishlist);
-    } catch (e) {
-        res.status(422).json(null);
-    }
-});
-
-app.post("/review", async(req, res) => {
-    const { productId, userId, content, rating } = req.body;
     try {
         const user = await prisma.user.findUnique({
             where: {
-                id: userId,
+                auth0Id,
+            },
+            include: {
+                wishlist: true,
+            },
+        });
+        let found = false;
+        for (let i = 0; i < user.wishlist.length; i++) {
+            if (user.wishlist[i].id === id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            res.status(401).json(null);
+        }
+        else {
+            const wishlist = await prisma.wishlist.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    title: title,
+                },
+            });
+            res.json(wishlist);
+        }
+    } catch (e) {
+        res.status(422).json(null);
+    }
+});
+
+app.put("/wishlist/:id/add_:productId", requireAuth, async(req, res) => {
+    const id = parseInt(req.params.id);
+    const auth0Id = req.user.sub;
+    const productId = parseInt(req.params.productId);
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                auth0Id,
+            },
+            include: {
+                wishlist: true,
+            },
+        });
+        let found = false;
+        for (let i = 0; i < user.wishlist.length; i++) {
+            if (user.wishlist[i].id === id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            res.status(401).json(null);
+        }
+        else {
+            const wishlist = await prisma.wishlist.findUnique({
+                where: {
+                    id: id,
+                },
+                include: {
+                    product: true,
+                },
+            });
+            if (wishlist === null) {
+                throw new Error("404 Not Found");
+            }
+            if (wishlist.product.length === 0) {
+                const recipe = await prisma.product.findUnique({
+                    where: {
+                        externalId: productId,
+                    },
+                });
+                if (recipe === null) {
+                    throw new Error("404 Not Found");
+                }
+                const updatedWishlist = await prisma.wishlist.update({
+                    where: {
+                        id: id,
+                    },
+                    data: {
+                        imageURL: recipe.imageURL,
+                        product: {
+                            connect: [{ externalId: productId }],
+                        },
+                    },
+                });
+                res.json(updatedWishlist);
+            } else {
+                const updatedWishlist = await prisma.wishlist.update({
+                    where: {
+                        id: id,
+                    },
+                    data: {
+                        product: {
+                            connect: [{ externalId: productId }],
+                        },
+                    },
+                });
+                res.json(updatedWishlist);
+            }
+        }
+    } catch (e) {
+        console.log(e);
+        res.status(422).json(null);
+    }
+});
+
+app.put("/wishlist/:id/delete_:productId", requireAuth, async(req, res) => {
+    const auth0Id = req.user.sub;
+    const id = parseInt(req.params.id);
+    const productId = parseInt(req.params.productId);
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                auth0Id,
+            },
+            include: {
+                wishlist: true,
+            },
+        });
+        let found = false;
+        for (let i = 0; i < user.wishlist.length; i++) {
+            if (user.wishlist[i].id === id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            res.status(401).json(null);
+        }
+        else {
+            const wishlist = await prisma.wishlist.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    product: {
+                        disconnect: [{ externalId: productId }],
+                    },
+                },
+                include: {
+                    product: true,
+                }
+            });
+            const newURL = wishlist.product.length === 0 ? "https://www.nicepng.com/png/detail/" +
+                "775-7752286_empty-basket-for-gifts-wood-basket-with-handle.png" : wishlist.product[0].imageURL;
+            const updatedWishlist = await prisma.wishlist.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    imageURL: newURL,
+                },
+            });
+            res.json(updatedWishlist);
+        }
+    } catch (e) {
+        console.log(e);
+        res.status(422).json(null);
+    }
+});
+
+app.delete("/wishlist/:id", requireAuth, async(req, res) => {
+    const auth0Id = req.user.sub;
+    const id = parseInt(req.params.id);
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                auth0Id,
+            },
+            include: {
+                wishlist: true,
+            },
+        });
+        let found = false;
+        for (let i = 0; i < user.wishlist.length; i++) {
+            if (user.wishlist[i].id === id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            res.status(401).json(null);
+        }
+        else {
+            const wishlist = await prisma.wishlist.delete({
+                where: {
+                    id: id,
+                },
+            });
+            res.json(wishlist);
+        }
+    } catch (e) {
+        res.status(422).json(null);
+    }
+});
+
+app.post("/review", requireAuth, async(req, res) => {
+    const auth0Id = req.user.sub;
+    const { productId, content, rating } = req.body;
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                auth0Id,
             },
         });
         const review = await prisma.review.create({
             data: {
                 product: { connect: { externalId: productId } },
-                user: { connect: { id: userId } },
+                user: { connect: { id: user.id } },
                 username: user.name,
                 content: content,
                 rating: rating,
@@ -435,20 +556,42 @@ app.post("/review", async(req, res) => {
     }
 });
 
-app.put("/review/:id", async(req, res) => {
+app.put("/review/:id", requireAuth, async(req, res) => {
+    const auth0Id = req.user.sub;
     const { content, rating } = req.body;
     const id = parseInt(req.params.id);
     try {
-        const review = await prisma.review.update({
+        const user = await prisma.user.findUnique({
             where: {
-                id: id,
+                auth0Id,
             },
-            data: {
-                content: content,
-                rating: rating,
+            include: {
+                review: true,
             },
         });
-        res.json(review);
+        console.log(user);
+        let found = false;
+        for (let i = 0; i < user.review.length; i++) {
+            if (user.review[i].id === id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            res.status(401).json(null);
+        }
+        else {
+            const review = await prisma.review.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    content: content,
+                    rating: rating,
+                },
+            });
+            res.json(review);
+        }
     } catch (e) {
         // TODO: Identify different types of error, e.g. Bad input, Unique constraint violated, etc.
         console.log(e);
@@ -456,15 +599,36 @@ app.put("/review/:id", async(req, res) => {
     }
 });
 
-app.delete("/review/:id", async(req, res) => {
+app.delete("/review/:id", requireAuth, async(req, res) => {
+    const auth0Id = req.user.sub;
     const id = parseInt(req.params.id);
     try {
-        const review = await prisma.review.delete({
+        const user = await prisma.user.findUnique({
             where: {
-                id: id,
+                auth0Id,
+            },
+            include: {
+                review: true,
             },
         });
-        res.json(review);
+        let found = false;
+        for (let i = 0; i < user.review.length; i++) {
+            if (user.review[i].id === id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            res.status(401).json(null);
+        }
+        else {
+            const review = await prisma.review.delete({
+                where: {
+                    id: id,
+                },
+            });
+            res.json(review);
+        }
     } catch (e) {
         res.status(422).json(null);
     }

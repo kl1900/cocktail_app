@@ -5,11 +5,8 @@ import { GET_USER_URL } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { ImPencil, ImCross } from "react-icons/im";
 import Creatable from "react-select/creatable";
-import { func } from "prop-types";
 import { useAuth0 } from "@auth0/auth0-react";
-// import UserProfile from "./UserProfile";
-// import { useUser } from "../UserContext";
-// import { addToWishlist } from "../hooks/addToWishlist";
+import { useAuthToken } from "../AuthTokenContext";
 
 export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
@@ -27,13 +24,11 @@ export default function ProductDetail() {
   const params = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading } = useAuth0();
-  console.log(user);
-  console.log(`is authenticated: ${isAuthenticated}`);
-  console.log(`is loading: ${isLoading}`);
   let userId = null;
   if (user !== undefined) {
     userId = user.sub;
   }
+  const { accessToken } = useAuthToken();
 
   // get product's details
   useEffect(() => {
@@ -53,11 +48,18 @@ export default function ProductDetail() {
   useEffect(() => {
     async function getReviews() {
       const res = await fetch(`${GET_USER_URL}/recipe/${params.productId}`);
-      var data = await res.json();
+      const data = await res.json();
       if (data) {
-        // setReviews([...reviews, data.review]);
+        const user_res = await fetch(`${process.env.REACT_APP_API_URL}/me`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const user_data = await user_res.json();
+        const id = user_data.id;
         for (let i = 0; i < data.review.length; i++) {
-          if (data.review[i].userId === userId) {
+          if (data.review[i].userId === id) {
             setRecordId(data.review[i].id);
             break;
           }
@@ -66,12 +68,17 @@ export default function ProductDetail() {
       }
     }
     getReviews();
-  }, [count]);
+  }, [count, userMode]);
 
   // get user's wishlists
   useEffect(() => {
     async function getWishlists() {
-      const res = await fetch(`${GET_USER_URL}/user/${userId}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = await res.json();
       const user_wishlist = data.wishlist;
       if (user_wishlist) {
@@ -81,7 +88,7 @@ export default function ProductDetail() {
     if (userId) {
       getWishlists();
     }
-  }, [step]);
+  }, [step, userMode]);
 
   // check if user login or not
   useEffect(() => {
@@ -110,7 +117,6 @@ export default function ProductDetail() {
     e.preventDefault();
     let data1 = {
       productId: parseInt(params.productId),
-      userId: userId,
       content: inputValue,
       rating: parseInt(rating),
     };
@@ -123,6 +129,7 @@ export default function ProductDetail() {
       fetch(`${GET_USER_URL}/review`, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data1),
@@ -142,6 +149,7 @@ export default function ProductDetail() {
       fetch(`${GET_USER_URL}/review/${recordId}`, {
         method: "PUT",
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data2),
@@ -162,6 +170,7 @@ export default function ProductDetail() {
     fetch(`${GET_USER_URL}/review/${reviewId}`, {
       method: "DELETE",
       headers: {
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
     })
@@ -223,13 +232,13 @@ export default function ProductDetail() {
       if (!indexExist(wishlistIndex)) {
         const data = {
           title: wishlistIndex,
-          userId: userId,
         };
         console.log(data);
         fetch(`${GET_USER_URL}/wishlist/${params.productId}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(data),
         })
@@ -249,6 +258,7 @@ export default function ProductDetail() {
           {
             method: "PUT",
             headers: {
+              Authorization: `Bearer ${accessToken}`,
               "Content-Type": "application/json",
             },
           }
@@ -276,8 +286,24 @@ export default function ProductDetail() {
       .then((response) => response.json())
       .then((data) => {
         if (data === null) {
-          addProduct().then(() => {
+          const product_data = {
+            externalId: parseInt(params.productId),
+            productName: recipeDetails[0].title,
+            imageURL: recipeDetails[0].image,
+          };
+          fetch(`${GET_USER_URL}/recipe`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product_data),
+          }).then((response) => response.json())
+          .then((data) => {
+            console.log("Product Success:", data);
             saveToWishlistHelper();
+          })
+          .catch((error) => {
+            console.error("Product Error:", error);
           });
         } else {
           saveToWishlistHelper();
@@ -444,7 +470,7 @@ export default function ProductDetail() {
                             }
                           </div> */}
                     <div>
-                      {review.userId === userId ? (
+                      {review.id === recordId ? (
                         <div
                           style={{ cursor: "pointer" }}
                           onClick={() => deleteReview(review.id)}
@@ -452,7 +478,7 @@ export default function ProductDetail() {
                           <ImCross />
                         </div>
                       ) : (
-                        ""
+                          ""
                       )}
                     </div>
                     <div>{review.rating}</div>

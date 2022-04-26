@@ -1,17 +1,17 @@
 import React, { useState} from 'react';
 import { GET_USER_URL } from "../constants";
 
-export default ({changeCreate, userId, countNum}) => {
+export default ({changeCreate, accessToken, countNum}) => {
     const [wishlistName, setWishlistName] = useState("");
     
     const onSubmit=()=>{
         const data={
             "title" : wishlistName,
-            "userId" : userId,
         };
         fetch(`${GET_USER_URL}/wishlist`, {
             method: 'POST', 
             headers: {
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
