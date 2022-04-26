@@ -64,7 +64,7 @@ export default function WishLists() {
   }, [wishlists]);
 
   const selectWishlist = (wishlistId) => {
-    navigate(`/app/wishlist/${wishlistId}`);
+    navigate(`/wishlist/${wishlistId}`);
   };
 
   const deleteWishlist = (wishlistId) => {

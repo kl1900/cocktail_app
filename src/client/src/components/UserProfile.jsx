@@ -5,7 +5,7 @@ export default function Profile() {
   const { user } = useAuth0();
 
   return (
-    <div>
+    <div className="panel">
       <div>
         <p>Name: {user.name}</p>
       </div>

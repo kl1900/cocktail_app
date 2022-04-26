@@ -7,7 +7,9 @@ function AuthTokenProvider({ children }) {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
   const [accessToken, setAccessToken] = useState();
   const value = { accessToken, setAccessToken };
+  //   const [tokenRenewed, setTokenRenewed] = useState(false);
 
+  //   console.log(tokenRenewed);
   useEffect(() => {
     const getAccessToken = async () => {
       try {
@@ -17,6 +19,12 @@ function AuthTokenProvider({ children }) {
         console.log(err);
       }
     };
+
+    // if (!tokenRenewed) {
+    //   getAccessToken();
+    //   setTokenRenewed(true);
+    //   console.log(tokenRenewed);
+    // }
 
     if (isAuthenticated) {
       getAccessToken();
