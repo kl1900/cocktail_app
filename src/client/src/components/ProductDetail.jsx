@@ -460,21 +460,11 @@ export default function ProductDetail() {
                   <div className="review-row">
                     <div>
                       {review.updatedAt ? (
-                        <div>Updated at {review.updatedAt}</div>
+                        <div>Updated at {review.updatedAt.slice(0,10)}</div>
                       ) : (
                         <div>Created at {review.createdAt} </div>
                       )}
                     </div>
-                    {/* <div>
-                            {review.userId===userId?(
-                              <div 
-                                style={{cursor: "pointer"}} 
-                                onClick={()=>{editReview(review);setRecordId(review.id);}}>
-                                <ImPencil/>
-                              </div>
-                              ):("")
-                            }
-                          </div> */}
                     <div>
                       {review.id === recordId ? (
                         <div
