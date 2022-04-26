@@ -33,6 +33,9 @@ export default function AppLayout() {
                 LogOut
               </button>
             </li>
+            <li>
+              <Link to="/search">search</Link>
+            </li>
           </ul>
         </nav>
         <div>Welcome 👋 {user.name} </div>

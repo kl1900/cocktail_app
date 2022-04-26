@@ -26,9 +26,10 @@ const requestedScopes = [
 
 function RequireAuth({ children }) {
   const { isAuthenticated, isLoading } = useAuth0();
-
+  console.log(`is authenticated: ${isAuthenticated}`);
+  console.log(`is loading: ${isLoading}`);
   if (!isLoading && !isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
@@ -60,6 +61,8 @@ ReactDOM.render(
               <Route path="debugger" element={<AuthDebugger />} />
               <Route path="wishlists" element={<WishLists />} />
               <Route path="wishlist/:wishlistId" element={<WishList />} />
+              <Route path="search" element={<SearchResult />} />
+              <Route path="products/:productId" element={<ProductDetail />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/search" element={<SearchResult />} />
@@ -68,7 +71,7 @@ ReactDOM.render(
           </Routes>
         </BrowserRouter>
       </AuthTokenProvider>
-     </Auth0Provider>
+    </Auth0Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

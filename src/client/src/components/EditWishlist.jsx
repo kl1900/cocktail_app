@@ -1,14 +1,16 @@
 import React, { useState} from 'react';
-import { GET_USER_URL } from "../constants";
+import { useAuthToken } from "../AuthTokenContext";
 
 export default ({wishlistId, changeToFalse, countNum}) => {
     const [wishlistName, setWishlistName] = useState("");
+    const { accessToken } = useAuthToken();
     
     const onSubmit=()=>{
         const data={"title" : wishlistName};
-        fetch(`${GET_USER_URL}/wishlist/${wishlistId}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/wishlist/${wishlistId}`, {
             method: 'PUT', 
             headers: {
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
