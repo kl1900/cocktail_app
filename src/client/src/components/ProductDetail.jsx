@@ -113,27 +113,20 @@ export default function ProductDetail() {
     setStep(step + 1);
   };
 
-  function submitReview(e) {
-    e.preventDefault();
+  function submitReviewHelper() {
     let data1 = {
       productId: parseInt(params.productId),
       content: inputValue,
       rating: parseInt(rating),
     };
-    let data2 = {
-      content: inputValue,
-      rating: parseInt(rating),
-    };
-
-    if (recordId === null) {
-      fetch(`${GET_USER_URL}/review`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data1),
-      })
+    fetch(`${GET_USER_URL}/review`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data1),
+    })
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
@@ -145,6 +138,43 @@ export default function ProductDetail() {
         .catch((error) => {
           console.error("Error:", error);
         });
+  }
+
+  function submitReview(e) {
+    e.preventDefault();
+    let data2 = {
+      content: inputValue,
+      rating: parseInt(rating),
+    };
+
+    if (recordId === null) {
+      fetch(`${GET_USER_URL}/recipe/${params.productId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data === null) {
+              const product_data = {
+                externalId: parseInt(params.productId),
+                productName: recipeDetails[0].title,
+                imageURL: recipeDetails[0].image,
+              };
+              fetch(`${GET_USER_URL}/recipe`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(product_data),
+              }).then((response) => response.json())
+                  .then((data) => {
+                    console.log("Product Success:", data);
+                    submitReviewHelper();
+                  })
+                  .catch((error) => {
+                    console.error("Product Error:", error);
+                  });
+            } else {
+              submitReviewHelper();
+            }
+          });
     } else {
       fetch(`${GET_USER_URL}/review/${recordId}`, {
         method: "PUT",
@@ -203,30 +233,6 @@ export default function ProductDetail() {
     });
   }
 
-  async function addProduct() {
-    const data = {
-      externalId: parseInt(params.productId),
-      productName: recipeDetails[0].title,
-      imageURL: recipeDetails[0].image,
-    };
-    fetch(`${GET_USER_URL}/recipe`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Product Success:", data);
-        return data;
-      })
-      .catch((error) => {
-        console.error("Product Error:", error);
-        return null;
-      });
-  }
-  console.log(roleValue);
   function saveToWishlistHelper() {
     if (roleValue) {
       if (!indexExist(wishlistIndex)) {
