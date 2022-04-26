@@ -56,7 +56,7 @@ export default function SearchResult() {
                 <li key={i}>
                   <div>
                     <h6>
-                      <Link to={"/products/" + result.id.toString()}>
+                      <Link to={"/details/" + result.id.toString()}>
                         {result.title}
                       </Link>
                     </h6>

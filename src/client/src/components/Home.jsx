@@ -1,61 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
-import Creatable from 'react-select/creatable'
+export default function Home() {
+  const { isAuthenticated, user } = useAuth0();
 
-const roles = [
-  { label: 'admin', value: 1 },
-  { label: 'student', value: 2 },
-  { label: 'tutor', value: 3 },
-  { label: 'guardian', value: 4 }
-]
-
-// const customStyles = {
-//   option: (provided, state) => ({
-//     ...provided,
-//     borderBottom: '1px dotted pink',
-//     color: state.isSelected ? 'red' : 'blue',
-//     padding: 20
-//   })
-// }
-
-export default () => {
-  const [roleValue, setRoleValue] = useState('')
-
-  const handleChange = (field, value) => {
-    switch (field) {
-      case 'roles':
-        setRoleValue(value)
-        break
-
-      default:
-        break
-    }
+  function GuestHome() {
+    return <div>Guest Home</div>;
   }
-console.log(roleValue);
 
- 
-  return (
-    <div className='container'>
-      <h3>Add User</h3>
-      <div className='register-form'>
+  function UserHome() {
+    return <div>User Home</div>;
+  }
 
-        <div className='input'>
-          <label>Role(s)</label>
-          <Creatable
-            isClearable
-            onChange={(value) => handleChange('roles', value)}
-            options={roles}
-            value={roleValue}
-            // styles={customStyles}
-          />
-        </div>
-
-        <div className='buttons'>
-          <button>Submit</button>
-        </div>
-      </div>
-    </div>
-
-  )
+  if (isAuthenticated) {
+    return UserHome();
+  } else {
+    return GuestHome();
+  }
 }
-

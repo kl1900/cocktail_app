@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Wishlist App</h1>
+      <h1>Recipe Collection Login</h1>
       <div>
         {!isAuthenticated ? (
           <button onClick={loginWithRedirect}>Login</button>
