@@ -35,6 +35,7 @@ ReactDOM.render(
       clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
       redirectUri={`${window.location.origin}/verify-user`}
       audience={process.env.REACT_APP_AUTH0_AUDIENCE}
+      cacheLocation="localstorage"
     >
       <AuthTokenProvider>
         <BrowserRouter>
