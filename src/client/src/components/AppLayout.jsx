@@ -27,7 +27,7 @@ export default function AppLayout() {
           </button>
         </li>
         <li>
-          <Link to="/search">search</Link>
+          <Link to="/search/">search</Link>
         </li>
       </ul>
     );

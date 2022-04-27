@@ -401,31 +401,35 @@ export default function ProductDetail() {
         <img src={recipeDetail.image} />
       </div>
 
-      <div>
-        <div> Ingredients</div>
-        <ul className="ingredients-list">
-          {recipeDetail.extendedIngredients.map((ingredient) => (
-            <li className="ingredient-li" key={ingredient.id}>
-              <div className="ingredient-row">
-                <div>{ingredient.original}</div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {recipeDetail.extendedIngredients ? (
+          <div>
+            <div> Ingredients</div>
+            <ul className="ingredients-list">
+              {recipeDetail.extendedIngredients.map((ingredient) => (
+                  <li className="ingredient-li" key={ingredient.id}>
+                    <div className="ingredient-row">
+                      <div>{ingredient.original}</div>
+                    </div>
+                  </li>
+              ))}
+            </ul>
+          </div>
+      ) : ("")}
 
-      <div>
-        <div> Instructions </div>
-        <ol className="instruction-list">
-          {recipeDetail.analyzedInstructions[0].steps.map((eachStep) => (
-            <li className="instruction" key={eachStep.number}>
-              <div className="instruction-row">
-                <div>{eachStep.step}</div>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
+      {recipeDetail.analyzedInstructions[0] ? (
+          <div>
+            <div> Instructions </div>
+            <ol className="instruction-list">
+              {recipeDetail.analyzedInstructions[0].steps.map((eachStep) => (
+                  <li className="instruction" key={eachStep.number}>
+                    <div className="instruction-row">
+                      <div>{eachStep.step}</div>
+                    </div>
+                  </li>
+              ))}
+            </ol>
+          </div>
+      ) : ("")}
 
       <div>
         <div> Reviews </div>

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
+import {useNavigate} from "react-router-dom";
 
-export default function SearchBar({ parentCallback }) {
+export default function SearchBar() {
     const [query, setQuery] = useState("");
+    const navigate = useNavigate();
 
     const onSubmit = (e) => {
         e.preventDefault();
-        parentCallback(query);
-        setQuery("");
+        if (query !== "") {
+            navigate("/search/" + query);
+        }
     }
 
     return (

@@ -45,7 +45,8 @@ ReactDOM.render(
             <Route path="" element={<AppLayout />}>
               <Route index element={<Home />} />
 
-              <Route path="search" element={<SearchResult />} />
+                <Route path="search" element={<SearchResult />} />
+              <Route path="search/:keyword" element={<SearchResult />} />
               <Route path="details/:productId" element={<ProductDetail />} />
 
               <Route
