@@ -346,13 +346,13 @@ export default function ProductDetail() {
         <div>{recipeDetail.title}</div>
         <ul>
           {recipeDetail.glutenFree ? 
-            (<li>glutenFree</li>) : ("")
+            (<li>GlutenFree</li>) : ("")
             }
           {recipeDetail.vegan ? 
-            (<li>vegan</li>) : ("")
+            (<li>Vegan</li>) : ("")
            }
           {recipeDetail.dairyFree ? 
-            (<li>dairyFree</li>) : ("")
+            (<li>DairyFree</li>) : ("")
             }
           {recipeDetail.preparationMinutes ? 
             (<li>{`Need ${recipeDetail.preparationMinutes} minutes to prepare`}</li>):("")
