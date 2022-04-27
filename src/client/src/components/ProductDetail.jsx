@@ -337,7 +337,7 @@ export default function ProductDetail() {
         break;
     }
   };
-
+  console.log(recipeDetails);
   return recipeDetails.map((recipeDetail) => (
     <div key={params.productId} className="recipeDetail">
       {/* {userId? (<Link to="/app/repositories"> ⬅️ Back</Link>) : ("") } */}
@@ -345,17 +345,24 @@ export default function ProductDetail() {
       <div>
         <div>{recipeDetail.title}</div>
         <ul>
-          <li>{recipeDetail.glutenFree ? " " : "glutenFree"}</li>
-          <li>
-            {recipeDetail.preparationMinutes
-              ? `Ready in ${recipeDetail.preparationMinutes} Minutes`
-              : ""}
-          </li>
-          <li>
-            {recipeDetail.aggregateLikes
-              ? `${recipeDetail.aggregateLikes} Likes`
-              : ""}{" "}
-          </li>
+          {recipeDetail.glutenFree ? 
+            (<li>glutenFree</li>) : ("")
+            }
+          {recipeDetail.vegan ? 
+            (<li>vegan</li>) : ("")
+           }
+          {recipeDetail.dairyFree ? 
+            (<li>dairyFree</li>) : ("")
+            }
+          {recipeDetail.preparationMinutes ? 
+            (<li>{`Need ${recipeDetail.preparationMinutes} minutes to prepare`}</li>):("")
+            }
+          {recipeDetail.cookingMinutes ? 
+            (<li>{`Need ${recipeDetail.cookingMinutes} minutes to cook`}</li>):("")
+            }
+          {recipeDetail.aggregateLikes ? 
+            (<li>{`${recipeDetail.aggregateLikes} Likes`}</li>):("")
+            }
         </ul>
         {/* <img src="https://spoonacular.com/application/frontend/images/heart.svg" alt="heart" /> */}
         <div>
