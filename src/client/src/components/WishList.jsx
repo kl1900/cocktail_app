@@ -32,10 +32,10 @@ export default function WishList() {
         }
       }
     }
-    if (1) {
+    if (accessToken) {
       getWishlistDetails();
     }
-  }, [count]);
+  }, [count, accessToken]);
 
   const countNum = () => {
     setCount(count + 1);

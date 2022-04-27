@@ -49,10 +49,10 @@ export default function WishLists() {
         setWishlists(user_wishlist);
       }
     }
-    if (1) {
+    if (accessToken) {
       getWishlists();
     }
-  }, [count]);
+  }, [count, accessToken]);
 
   useEffect(() => {
     const length = wishlists.length;
