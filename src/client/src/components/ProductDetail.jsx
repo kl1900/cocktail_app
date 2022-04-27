@@ -51,26 +51,26 @@ export default function ProductDetail() {
       const res = await fetch(`${GET_USER_URL}/recipe/${params.productId}`);
       const data = await res.json();
       if (data) {
-        const user_res = await fetch(`${process.env.REACT_APP_API_URL}/me`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        const user_data = await user_res.json();
-        const id = user_data.id;
-        for (let i = 0; i < data.review.length; i++) {
-          if (data.review[i].userId === id) {
-            setRecordId(data.review[i].id);
-            break;
+        if (accessToken) {
+          const user_res = await fetch(`${process.env.REACT_APP_API_URL}/me`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          const user_data = await user_res.json();
+          const id = user_data.id;
+          for (let i = 0; i < data.review.length; i++) {
+            if (data.review[i].userId === id) {
+              setRecordId(data.review[i].id);
+              break;
+            }
           }
         }
         setReviews(data.review);
       }
     }
-    if (accessToken) {
-      getReviews();
-    }
+    getReviews();
   }, [accessToken, count, isAuthenticated, params.productId, userMode]);
 
   // get user's wishlists
