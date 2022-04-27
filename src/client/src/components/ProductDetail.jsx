@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
 import { useNavigate } from "react-router-dom";
-import { ImPencil, ImCross } from "react-icons/im";
+import { ImCross } from "react-icons/im";
 import Creatable from "react-select/creatable";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthToken } from "../AuthTokenContext";
@@ -460,9 +460,9 @@ export default function ProductDetail() {
                   <div className="review-row">
                     <div>
                       {review.updatedAt ? (
-                        <div>Updated at {review.updatedAt.slice(0,10)}</div>
+                        <div>Updated at {review.updatedAt.slice(0,10)} {review.updatedAt.slice(12,19)}</div>
                       ) : (
-                        <div>Created at {review.createdAt} </div>
+                        <div>Created at {review.createdAt.slice(0,10)} {review.createdAt.slice(12,19)}</div>
                       )}
                     </div>
                     <div>
