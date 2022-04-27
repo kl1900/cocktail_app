@@ -350,7 +350,6 @@ export default function ProductDetail() {
       <div>
         <div>{recipeDetail.title}</div>
         <ul>
-<<<<<<< HEAD
           {recipeDetail.glutenFree ?
             (<li>glutenFree</li>) : ("")
             }
@@ -367,35 +366,6 @@ export default function ProductDetail() {
             (<li>{`Need ${recipeDetail.cookingMinutes} minutes to cook`}</li>):("")
             }
           {recipeDetail.aggregateLikes ?
-=======
-          {
-            recipeDetail.glutenFree ? 
-              (<li>GlutenFree</li>) : ("")
-            }
-          {
-            recipeDetail.vegan ? 
-              (<li>Vegan</li>) : ("")
-          }
-          {
-            recipeDetail.dairyFree ? 
-              (<li>DairyFree</li>) : ("")
-            }
-          {
-            recipeDetail.readyInMinutes ? 
-              (<li>{`Ready in ${recipeDetail.readyInMinutes} minutes`}</li>
-                ) : (
-                  <div>
-                   recipeDetail.preparationMinutes ? 
-                    (<li>{`Need ${recipeDetail.preparationMinutes} minutes to prepare`}</li>) : ("")
-                    
-                   recipeDetail.cookingMinutes ? 
-                    (<li>{`Need ${recipeDetail.cookingMinutes} minutes to cook`}</li>) : ("")
-                    </div>
-              )
-            }
-          
-          {recipeDetail.aggregateLikes ? 
->>>>>>> cdcaf1a (fixed gluten)
             (<li>{`${recipeDetail.aggregateLikes} Likes`}</li>):("")
             }
         </ul>

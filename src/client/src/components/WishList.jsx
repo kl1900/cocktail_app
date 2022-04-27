@@ -3,12 +3,14 @@ import { useParams, Link } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { useAuthToken } from "../AuthTokenContext";
+import NotFound from "./NotFound";
 // import { useUser } from "../UserContext";
 
 export default function WishList() {
   const [recipes, setRecipes] = useState([]);
   const [wishlistTitle, setWishlistTitle] = useState("");
   const [count, setCount] = useState(0);
+  const [notFound, setNotfound] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
   const { accessToken } = useAuthToken();
@@ -23,7 +25,7 @@ export default function WishList() {
       });
       const data = await res.json();
       if (data === null) {
-        navigate("/app/*");
+        setNotfound(true);
       } else {
         const detail = data.product;
         if (detail) {
@@ -72,6 +74,8 @@ export default function WishList() {
     <div className="wishlistName">
       <div>My Favorite Recipes</div>
       <Link to="/wishlists"> ⬅️ Back</Link>
+      {notFound ? (<NotFound />) : 
+      (<div>
       <div>{wishlistTitle}</div>
       <ul className="wishlist-list">
         {recipes.map((recipe) => (
@@ -98,7 +102,7 @@ export default function WishList() {
             </div>
           </li>
         ))}
-      </ul>
+      </ul></div>)}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Todos from "../components/Todos";
+import Wishlists from "../components/WishLists";
 import { MemoryRouter } from "react-router-dom";
 import { enableFetchMocks } from "jest-fetch-mock";
 enableFetchMocks();
@@ -25,22 +25,24 @@ jest.mock("../AuthTokenContext", () => ({
 
 fetch.mockResponse(
   JSON.stringify([
-    { id: 1, title: "item 1", completed: false },
-    { id: 2, title: "item 2", completed: false },
-    { id: 3, title: "item 3", completed: false },
+    { id: 1, title: "recipe 1" },
+    { id: 2, title: "recipe 2" },
+    { id: 3, title: "recipe 3" },
   ])
 );
 
-test("renders todos list", async () => {
+test("renders recipe lists", async () => {
   render(
     <MemoryRouter initialEntries={["/"]}>
-      <Todos />
+      <Wishlists />
     </MemoryRouter>
   );
 
-  const todoItem = await screen.findByText("item 1");
-  const todoItem2 = await screen.findByText("item 2");
+  const recipelist1 = await screen.findByText("recipe 1");
+  const recipelist2 = await screen.findByText("recipe 2");
+  const recipelist3 = await screen.findByText("recipe 3");
 
-  expect(todoItem).toBeInTheDocument();
-  expect(todoItem2).toBeInTheDocument();
+  expect(recipelist1).toBeInTheDocument();
+  expect(recipelist2).toBeInTheDocument();
+  expect(recipelist3).toBeInTheDocument();
 });
