@@ -45,23 +45,26 @@ export default function SearchResult() {
                     " (" + results.results.length.toString() + ")"}:{" "}
             </h3>
             <div>
-                <ul>
+                <ul className={"row"}>
                     {results.results &&
                         results.results
                             .slice((page - 1) * 10, page * 10)
                             .map((result, i) => (
-                                <li key={i}>
-                                    <div>
-                                        <h6>
-                                            <Link to={"/details/" + result.id.toString()}>
-                                                {result.title}
-                                            </Link>
-                                        </h6>
-                                        <img
-                                            src={results.baseUri + result.image}
-                                            alt={"img" + i.toString()}
-                                            style={{maxWidth: "200px", maxHeight: "200px"}}
-                                        />
+                                <li key={i} className={"col"} style={{listStyleType: "None"}}>
+                                    <div className={"card"} style={{width: "15rem", height: "18rem", borderRadius: "20%"}}>
+                                        <div className={"card-body text-center"}>
+                                            <img
+                                                src={results.baseUri + result.image}
+                                                className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
+                                                alt={"img" + i.toString()}
+                                                style={{maxWidth: "200px", maxHeight: "200px", textAlign: "center"}}
+                                            />
+                                            <h6 className={"my-auto"} style={{textAlign: "center"}}>
+                                                <Link to={"/details/" + result.id.toString()}>
+                                                    {result.title}
+                                                </Link>
+                                            </h6>
+                                        </div>
                                     </div>
                                 </li>
                             ))}
