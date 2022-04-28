@@ -114,6 +114,7 @@ export default function WishLists() {
               <img
                   src={wishlist.imageURL}
                   style={{ width: "300px", height: "250px" }}
+                  alt={wishlist.title}
                 />
 
                 <div>
