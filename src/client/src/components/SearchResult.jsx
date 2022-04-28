@@ -45,12 +45,12 @@ export default function SearchResult() {
                     " (" + results.results.length.toString() + ")"}:{" "}
             </h3>
             <div>
-                <ul className={"row"}>
+                <div className={"row"}>
                     {results.results &&
                         results.results
                             .slice((page - 1) * 10, page * 10)
                             .map((result, i) => (
-                                <li key={i} className={"col"} style={{listStyleType: "None"}}>
+                                <div key={i} className={"col"}>
                                     <div className={"card"} style={{width: "15rem", height: "18rem", borderRadius: "20%"}}>
                                         <div className={"card-body text-center"}>
                                             <img
@@ -66,9 +66,9 @@ export default function SearchResult() {
                                             </h6>
                                         </div>
                                     </div>
-                                </li>
+                                </div>
                             ))}
-                </ul>
+                </div>
             </div>
             <span>Select Page: </span>
             <select
