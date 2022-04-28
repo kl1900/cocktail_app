@@ -12,9 +12,13 @@ export default function Home() {
       <h1>Recipe Collection Login</h1>
       <div>
         {!isAuthenticated ? (
-          <button onClick={loginWithRedirect}>Login</button>
+          <button onClick={loginWithRedirect}>
+            Login
+          </button>
         ) : (
-          <button onClick={() => navigate("/")}>Enter App</button>
+          <button onClick={() => navigate("/")}>
+            Enter App
+          </button>
         )}
       </div>
       <div>

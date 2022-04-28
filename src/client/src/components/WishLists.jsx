@@ -88,8 +88,6 @@ export default function WishLists() {
       });
   };
 
-  console.log(count, wishlists);
-
   return (
     <div>
       <div>My Favorite Recipe Box</div>
@@ -113,9 +111,7 @@ export default function WishLists() {
           {wishlists.map((wishlist, i) => (
             <li className="wishlist-row-li" key={wishlist.id}>
               <div className="wishlist-row">
-                {/* <div style={{background: "url("+getPicture(wishlist.id)+")", width: "300px", height: "250px", textAlign:"center", verticalAlign: "center"}}>{wishlist.title}</div> */}
-
-                <img
+              <img
                   src={wishlist.imageURL}
                   style={{ width: "300px", height: "250px" }}
                 />
