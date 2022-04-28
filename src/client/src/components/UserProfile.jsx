@@ -95,6 +95,9 @@ export default function Profile() {
         <p>🔑 Auth0Id: {user.sub}</p>
       </div>
       <div>
+        <p>✅ Email verified: {user.email_verified}</p>
+      </div>
+      <div>
         <Link to="/wishlists">my wishlists ({wishlistCount})</Link>
       </div>
       <div>
