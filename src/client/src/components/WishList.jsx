@@ -69,7 +69,7 @@ export default function WishList() {
         console.error("Error:", error);
       });
   };
-
+  console.log(recipes);
   return (
     <div className="wishlistName">
       <div>My Favorite Recipes</div>

@@ -3,7 +3,7 @@ import { BsSearch } from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
 
 export default function SearchBar() {
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = React.useState("");
     const navigate = useNavigate();
 
     const onSubmit = (e) => {
