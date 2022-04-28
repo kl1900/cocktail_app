@@ -22,7 +22,7 @@ export default function ProductDetail() {
   const [userMode, setUserMode] = useState(false);
   const [step, setStep] = useState(0);
   const params = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const { user, isAuthenticated, isLoading } = useAuth0();
   let userId = null;
@@ -369,7 +369,6 @@ export default function ProductDetail() {
             (<li>{`${recipeDetail.aggregateLikes} Likes`}</li>):("")
             }
         </ul>
-        {/* <img src="https://spoonacular.com/application/frontend/images/heart.svg" alt="heart" /> */}
         <div>
           {userMode ? (
             <div>
@@ -398,7 +397,7 @@ export default function ProductDetail() {
       </div>
 
       <div>
-        <img src={recipeDetail.image} />
+        <img src={recipeDetail.image} alt={recipeDetail.title}/>
       </div>
 
       {recipeDetail.extendedIngredients ? (

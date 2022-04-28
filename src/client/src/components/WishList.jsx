@@ -69,7 +69,7 @@ export default function WishList() {
         console.error("Error:", error);
       });
   };
-  console.log(recipes);
+
   return (
     <div className="wishlistName">
       <div>My Favorite Recipes</div>
@@ -82,7 +82,7 @@ export default function WishList() {
           <li className="recipe-row-li" key={recipe.externalId}>
             <div className="recipe-row">
               <div>
-                <img src={recipe.imageURL} />
+                <img src={recipe.imageURL} alt={recipe.productName}/>
               </div>
               <div>{recipe.productName}</div>
               <button
