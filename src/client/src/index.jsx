@@ -19,8 +19,6 @@ import "./style/index.css";
 
 function RequireAuth({ children }) {
   const { isAuthenticated, isLoading } = useAuth0();
-  console.log(`is authenticated: ${isAuthenticated}`);
-  console.log(`is loading: ${isLoading}`);
   if (!isLoading && !isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
