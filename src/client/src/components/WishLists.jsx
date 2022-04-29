@@ -118,7 +118,11 @@ export default function WishLists() {
               <div className={"card zoom-hover Green50"} 
                 style={{
                   width: "15rem", height: "18rem",
-                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
+                  // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
+                  // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#D2C950"
+                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "#9CA98C"
+
+                  
                 }}>
                 <div className={"card-body text-center"}
                   style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
