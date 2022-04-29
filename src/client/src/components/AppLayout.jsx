@@ -13,7 +13,7 @@ export default function AppLayout() {
   function UserHeadbar() {
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#">
+        <Link className="navbar-brand" to="/">
           <img
             src="https://www.pinclipart.com/picdir/middle/86-862588_mobi-food-logo-gif-clipart.png"
             width="30"
@@ -22,7 +22,7 @@ export default function AppLayout() {
             alt=""
           />
           Recipe Collection
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -56,16 +56,16 @@ export default function AppLayout() {
             {/*    <Link to="/wishlists" className={"nav-link"}>My Reviews</Link>*/}
             {/*</li>*/}
             <li className="nav-item active">
-              <a
+              <Link
                 className="nav-link"
-                href="#"
+                to="/"
                 onClick={(e) => {
                   e.preventDefault();
                   logout({ returnTo: window.location.origin });
                 }}
               >
                 Logout
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -134,34 +134,34 @@ export default function AppLayout() {
 
   function Footer() {
     return (
-      <footer class="py-3 my-4">
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-          <li class="nav-item">
+      <footer className="py-3 my-4">
+        <ul className="nav justify-content-center border-bottom pb-3 mb-3">
+          <li className="nav-item">
             <a
               href="https://github.com/kl1900"
-              class="nav-link px-2 text-muted"
+              className="nav-link px-2 text-muted"
             >
               Kuo Lu
             </a>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
             <a
               href="https://github.com/samjin-neu"
-              class="nav-link px-2 text-muted"
+              className="nav-link px-2 text-muted"
             >
               Sam Jin
             </a>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
             <a
               href="https://github.com/liz-cs"
-              class="nav-link px-2 text-muted"
+              className="nav-link px-2 text-muted"
             >
               Liz Guo
             </a>
           </li>
         </ul>
-        <p class="text-center text-muted">© 2022 Northeastern University</p>
+        <p className="text-center text-muted">© 2022 Northeastern University</p>
       </footer>
     );
   }

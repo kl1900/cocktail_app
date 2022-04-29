@@ -31,7 +31,6 @@ export default function WishLists() {
   };
 
   const countNum = () => {
-    console.log("CountNum");
     setCount(count + 1);
   };
 
@@ -111,7 +110,7 @@ export default function WishLists() {
           {wishlists.map((wishlist, i) => (
             <li className="wishlist-row-li" key={wishlist.id}>
               <div className="wishlist-row">
-              <img
+                <img
                   src={wishlist.imageURL}
                   style={{ width: "300px", height: "250px" }}
                   alt={wishlist.title}

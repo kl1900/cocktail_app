@@ -3,6 +3,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthToken } from "../AuthTokenContext";
 import { Link } from "react-router-dom";
 
+import "../style/profile.css";
+
 export default function Profile() {
   const { user } = useAuth0();
   const [userName, setUserName] = useState("");
@@ -59,49 +61,68 @@ export default function Profile() {
     };
 
     return (
-      <div>
-        <input id="newName" required placeholder="Enter name" />
-        <button onClick={onSubmit}>Submit</button>
-        <button
-          onClick={() => {
-            setEditMode(false);
-          }}
-        >
-          Cancel
-        </button>
+      <div class="input-group">
+        <input
+          id="newName"
+          type="text"
+          class="form-control"
+          placeholder="new username"
+          aria-label="new username"
+          aria-describedby="basic-addon2"
+        />
+        <div class="input-group-append">
+          <button
+            class="btn btn-outline-danger"
+            onClick={() => {
+              setEditMode(false);
+            }}
+          >
+            Cancel
+          </button>
+          <button class="btn btn-outline-primary" onClick={onSubmit}>
+            Submit
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="panel">
-      <div>
-        <p>Name: {userName}</p>
-        {editMode ? (
-          <div>
-            <EditName />
+    <div className="container d-flex justify-content-center mt-5">
+      <div className="card">
+        <div className="top-container ml-2">
+          <img
+            src={user.picture}
+            className="img-fluid profile-image"
+            width="100"
+            alt="profile"
+          />
+        </div>
+        <div class="ml-2">
+          <p class="name">
+            {userName}{" "}
+            {editMode ? (
+              <div>
+                <EditName />
+              </div>
+            ) : (
+              <button
+                class="btn btn-outline-primary btn-sm"
+                onClick={() => setEditMode(true)}
+              >
+                Edit Name
+              </button>
+            )}
+          </p>
+          <p class="mail">📧 Email: {user.email}</p>
+          <p>✅ Email Verified: {user.email_verified.toString()}</p>
+          <div class="recipe-border pt-2">
+            <Link to="/wishlists" className="recipe">
+              My Favorites ({wishlistCount})
+            </Link>
           </div>
-        ) : (
-          <button onClick={() => setEditMode(true)}>Edit Name</button>
-        )}
-      </div>
-      <div>
-        <img src={user.picture} width="70" alt="profile avatar" />
-      </div>
-      <div>
-        <p>📧 Email: {user.email}</p>
-      </div>
-      <div>
-        <p>🔑 Auth0Id: {user.sub}</p>
-      </div>
-      <div>
-        <p>✅ Email verified: {user.email_verified}</p>
-      </div>
-      <div>
-        <Link to="/wishlists">my wishlists ({wishlistCount})</Link>
-      </div>
-      <div>
-        <p>total reviews ({reviewCount})</p>
+          <p>Total Reviews Count: {reviewCount}</p>
+        </div>
       </div>
     </div>
   );
