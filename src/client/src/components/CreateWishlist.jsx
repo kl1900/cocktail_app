@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import { GET_USER_URL } from "../constants";
+import { AiOutlineRollback } from "react-icons/ai";
 
 export default ({changeCreate, accessToken, countNum}) => {
     const [wishlistName, setWishlistName] = useState("");
@@ -34,9 +35,11 @@ export default ({changeCreate, accessToken, countNum}) => {
     
     return (
         <div>
-            <div onClick={() => changeCreate()}>Go Back</div>
+            <div onClick={() => changeCreate()}  style={{ cursor: "pointer", marginLeft: "10px"}}>
+                <AiOutlineRollback size={28} />
+            </div>
             <input value={wishlistName} onChange={e=>setWishlistName(e.target.value)}/>
-            <button onClick={onSubmit}>Submit</button>
+            <button className="btn btn-primary" onClick={onSubmit}>Submit</button>
         </div>
     )
 }

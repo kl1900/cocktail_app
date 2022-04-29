@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
 import CreateWishlist from "./CreateWishlist";
 import EditWishlist from "./EditWishlist";
 import { useAuthToken } from "../AuthTokenContext";
 import { ImPencil } from "react-icons/im";
+
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function WishLists() {
   const navigate = useNavigate();
@@ -63,9 +66,9 @@ export default function WishLists() {
     setEditMode(temp);
   }, [wishlists]);
 
-  const selectWishlist = (wishlistId) => {
-    navigate(`/wishlist/${wishlistId}`);
-  };
+  // const selectWishlist = (wishlistId) => {
+  //   navigate(`/wishlist/${wishlistId}`);
+  // };
 
   const deleteWishlist = (wishlistId) => {
     fetch(`${GET_USER_URL}/wishlist/${wishlistId}`, {
@@ -90,21 +93,23 @@ export default function WishLists() {
 
   return (
     <div>
-      <div>My Favorite Recipe Box</div>
-      <div>
-        {createMode ? (
-          <div>
-            <CreateWishlist
-              changeCreate={changeCreate}
-              accessToken={accessToken}
-              countNum={countNum}
-            />
-          </div>
-        ) : (
-          <div>
-            <button onClick={() => setCreateMode(true)}>New Recipe List</button>
-          </div>
-        )}
+      <h1 style={{textAlign:"center", marginTop:"30px"}}>My Favorite Recipe Box</h1>
+      <div style={{height: "90px"}}>
+        <div style={{textAlign:"right", marginRight: "30px"}}>
+          {createMode ? (
+            <div>
+              <CreateWishlist
+                changeCreate={changeCreate}
+                accessToken={accessToken}
+                countNum={countNum}
+              />
+            </div>
+          ) : (
+            <div>
+              <button className="btn btn-primary" onClick={() => setCreateMode(true)}>Create New Recipe List</button>
+            </div>
+          )}
+        </div>
       </div>
       <div>
         <div className={"row justify-content-center"}>
@@ -115,7 +120,8 @@ export default function WishLists() {
                   width: "15rem", height: "18rem",
                   borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
                 }}>
-                <div className={"card-body text-center"}>
+                <div className={"card-body text-center"}
+                  style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
                   <img
                     src={wishlist.imageURL}
                     className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
@@ -125,11 +131,17 @@ export default function WishLists() {
                         textAlign: "center"
                     }}
                   />
-                  {/* <h6 className={"my-auto"} style={{textAlign: "center"}}>
-                      <Link to={"/details/" + result.id.toString()}>
-                          {result.title}
-                      </Link>
-                  </h6> */}
+
+                  <a href="">
+                    <div className={"zoom-hover-half"}
+                      style={{position: 'absolute', right:"7%", top:"6%"}} onClick={(e) => {
+                        e.preventDefault();
+                        deleteWishlist(wishlist.id);
+                      }
+                    }>
+                      <FaTrashAlt size={28} color="red"/>
+                    </div>
+                  </a>
 
                   <div>
                     {editMode[i] ? (
@@ -141,10 +153,14 @@ export default function WishLists() {
                         />
                       </div>
                     ) : (
-                      <div>
-                        <div>{wishlist.title}</div>
+                      <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+                        <h4 className={"my-auto"} style={{textAlign: "center", fontWeight: "bold"}}>
+                          <Link to={`/wishlist/${wishlist.id}`}>
+                            { wishlist.title }
+                          </Link>
+                        </h4>
                         <div
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer", marginLeft: "10px"}}
                           onClick={() => changeToTrue(i)}
                         >
                           <ImPencil />
@@ -154,18 +170,18 @@ export default function WishLists() {
                   </div>
 
                   <div>
-                    <button
+                    {/* <button
                       className="check"
                       onClick={() => selectWishlist(wishlist.id)}
                     >
                       Check
-                    </button>
-                    <button
+                    </button> */}
+                    {/* <button
                       className="delete"
                       onClick={() => deleteWishlist(wishlist.id)}
                     >
                       Delete
-                    </button>
+                    </button> */}
                   </div>
                 </div>
                 </div>
