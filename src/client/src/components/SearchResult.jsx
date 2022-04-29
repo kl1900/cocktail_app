@@ -3,6 +3,7 @@ import {useParams, Link} from "react-router-dom";
 import {GET_USER_URL} from "../constants";
 import SearchBar from "./SearchBar.jsx";
 import {useNavigate} from "react-router-dom";
+import {IoChevronBack, IoChevronForward} from "react-icons/io5";
 
 export default function SearchResult() {
     const [results, setResults] = useState([]);
@@ -24,12 +25,12 @@ export default function SearchResult() {
                 .then((data) => {
                     console.log(data);
                     setResults(data);
-                    const maxPageNum = Math.ceil(data.results.length / 10);
+                    const maxPageNum = Math.ceil(data.results.length / 12);
                     const tmpList = [];
                     for (let i = 1; i <= maxPageNum; i++) {
                         tmpList.push(i);
                     }
-                    console.log(tmpList);
+                    setPage(1);
                     setPageList(tmpList);
                 })
                 .catch((error) => console.log(error));
@@ -45,19 +46,25 @@ export default function SearchResult() {
                     " (" + results.results.length.toString() + ")"}:{" "}
             </h3>
             <div>
-                <div className={"row"}>
+                <div className={"row justify-content-center"}>
                     {results.results &&
                         results.results
-                            .slice((page - 1) * 10, page * 10)
+                            .slice((page - 1) * 12, page * 12)
                             .map((result, i) => (
-                                <div key={i} className={"col"}>
-                                    <div className={"card"} style={{width: "15rem", height: "18rem", borderRadius: "20%"}}>
+                                <div key={i} className={"col"} style={{flexGrow: 0}}>
+                                    <div className={"card zoom-hover"} style={{
+                                        width: "15rem", height: "18rem",
+                                        borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
+                                    }}>
                                         <div className={"card-body text-center"}>
                                             <img
                                                 src={results.baseUri + result.image}
                                                 className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
                                                 alt={"img" + i.toString()}
-                                                style={{maxWidth: "200px", maxHeight: "200px", textAlign: "center"}}
+                                                style={{
+                                                    width: "180px", height: "180px", objectFit: "cover",
+                                                    textAlign: "center"
+                                                }}
                                             />
                                             <h6 className={"my-auto"} style={{textAlign: "center"}}>
                                                 <Link to={"/details/" + result.id.toString()}>
@@ -70,17 +77,39 @@ export default function SearchResult() {
                             ))}
                 </div>
             </div>
-            <span>Select Page: </span>
-            <select
-                name="pages"
-                id="pages"
-                onChange={(e) => setPage(parseInt(e.target.value))}
-                style={{marginLeft: "10px"}}
-            >
-                {pageList.map((curr_page) => (
-                    <option value={curr_page}>{curr_page}</option>
-                ))}
-            </select>
+            <ul className={"list-group list-group-horizontal-md"}>
+                {pageList[0] && page !== pageList[0] ? (
+                    <li className={"list-group-item"}>
+                        <span><a href="" onClick={(e) => {
+                            e.preventDefault();
+                            setPage(page - 1);
+                        }}><IoChevronBack/>Prev Page</a></span>
+                    </li>
+                ) : ("")}
+
+                <li className={"list-group-item"}>
+                    <span>Select Page: </span>
+                    <select
+                        name="pages"
+                        id="pages"
+                        onChange={(e) => setPage(parseInt(e.target.value))}
+                        style={{marginLeft: "10px"}}
+                    >
+                        {pageList.map((curr_page) => (
+                            <option value={curr_page} selected={page === curr_page}>{curr_page}</option>
+                        ))}
+                    </select>
+                </li>
+
+                {pageList[0] && page !== pageList[pageList.length - 1] ? (
+                    <li className={"list-group-item"}>
+                        <span><a href="" onClick={(e) => {
+                            e.preventDefault();
+                            setPage(page + 1);
+                        }}>Next Page<IoChevronForward/></a></span>
+                    </li>
+                ) : ("")}
+            </ul>
         </div>
     );
 }

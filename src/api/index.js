@@ -489,8 +489,7 @@ app.put("/wishlist/:id/delete_:productId", requireAuth, async (req, res) => {
       });
       const newURL =
         wishlist.product.length === 0
-          ? "https://www.nicepng.com/png/detail/" +
-            "775-7752286_empty-basket-for-gifts-wood-basket-with-handle.png"
+          ? "/empty-basket.png"
           : wishlist.product[0].imageURL;
       const updatedWishlist = await prisma.wishlist.update({
         where: {
