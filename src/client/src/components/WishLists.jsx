@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
 import CreateWishlist from "./CreateWishlist";
 import EditWishlist from "./EditWishlist";
 import { useAuthToken } from "../AuthTokenContext";
 import { ImPencil } from "react-icons/im";
+
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function WishLists() {
   const navigate = useNavigate();
@@ -62,9 +65,9 @@ export default function WishLists() {
     setEditMode(temp);
   }, [wishlists]);
 
-  const selectWishlist = (wishlistId) => {
-    navigate(`/wishlist/${wishlistId}`);
-  };
+  // const selectWishlist = (wishlistId) => {
+  //   navigate(`/wishlist/${wishlistId}`);
+  // };
 
   const deleteWishlist = (wishlistId) => {
     fetch(`${GET_USER_URL}/wishlist/${wishlistId}`, {
@@ -89,73 +92,109 @@ export default function WishLists() {
 
   return (
     <div>
-      <div>My Favorite Recipe Box</div>
-      <div>
-        {createMode ? (
-          <div>
-            <CreateWishlist
-              changeCreate={changeCreate}
-              accessToken={accessToken}
-              countNum={countNum}
-            />
-          </div>
-        ) : (
-          <div>
-            <button onClick={() => setCreateMode(true)}>New Recipe List</button>
-          </div>
-        )}
+      <h1 style={{textAlign:"center", marginTop:"30px"}}>My Favorite Recipe Box</h1>
+      <div style={{height: "90px"}}>
+        <div style={{textAlign:"right", marginRight: "30px"}}>
+          {createMode ? (
+            <div>
+              <CreateWishlist
+                changeCreate={changeCreate}
+                accessToken={accessToken}
+                countNum={countNum}
+              />
+            </div>
+          ) : (
+            <div>
+              <button className="btn " style={{backgroundColor:"#FBA827"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
+            </div>
+          )}
+        </div>
       </div>
+                      
       <div>
-        <ul className="wishlist-list">
+        <div className={"row justify-content-center"}>
           {wishlists.map((wishlist, i) => (
-            <li className="wishlist-row-li" key={wishlist.id}>
-              <div className="wishlist-row">
-                <img
-                  src={wishlist.imageURL}
-                  style={{ width: "300px", height: "250px" }}
-                  alt={wishlist.title}
-                />
+            <div className="wishlist-row-li" key={wishlist.id} style={{flexGrow: 0}}>
+              <div className={"card zoom-hover Green50"} 
+                style={{
+                  width: "15rem", height: "18rem",
+                  // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
+                  // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#D2C950"
+                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "#9CA98C"
 
-                <div>
-                  {editMode[i] ? (
-                    <div>
-                      <EditWishlist
-                        wishlistId={wishlist.id}
-                        changeToFalse={() => changeToFalse(i)}
-                        countNum={countNum}
-                      />
+                  
+                }}>
+                <div className={"card-body text-center"}
+                  style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
+                  <img
+                    src={wishlist.imageURL}
+                    className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
+                    alt={wishlist.title}
+                    style={{
+                        width: "180px", height: "180px", objectFit: "cover",
+                        textAlign: "center"
+                    }}
+                  />
+                  <a href="">
+                    <div className={"zoom-hover-half"}
+                      style={{position: 'absolute', right:"7%", top:"6%"}} onClick={(e) => {
+                        e.preventDefault();
+                        deleteWishlist(wishlist.id);
+                      }
+                    }>
+                      <img src="/imgs/crytomato.png" alt="crying tomato" style={{width: "45px", height: "45px"}}/>
+
+                        {/* <FaTrashAlt size={28} color="#F9A646"/> */}
                     </div>
-                  ) : (
-                    <div>
-                      <div>{wishlist.title}</div>
-                      <div
-                        style={{ cursor: "pointer" }}
-                        onClick={() => changeToTrue(i)}
-                      >
-                        <ImPencil />
+                  </a>
+
+                  <div>
+                    {editMode[i] ? (
+                      <div>
+                        <EditWishlist
+                          wishlistId={wishlist.id}
+                          changeToFalse={() => changeToFalse(i)}
+                          countNum={countNum}
+                        />
                       </div>
-                    </div>
-                  )}
-                </div>
+                    ) : (
+                      <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+                        <h4 className={"my-auto"} style={{textAlign: "center", fontWeight: "bold"}}>
+                          <Link to={`/wishlist/${wishlist.id}`}>
+                            { wishlist.title }
+                          </Link>
+                        </h4>
+                        <div
+                          style={{ cursor: "pointer", marginLeft: "10px"}}
+                          onClick={() => changeToTrue(i)}
+                        >
+                          <img className="zoom-hover-half" src="/imgs/carrot.png" alt="editing carrot" style={{width: "20px", height: "30px"}}/>
 
-                <div>
-                  <button
-                    className="check"
-                    onClick={() => selectWishlist(wishlist.id)}
-                  >
-                    Check
-                  </button>
-                  <button
-                    className="delete"
-                    onClick={() => deleteWishlist(wishlist.id)}
-                  >
-                    Delete
-                  </button>
+                          {/* <ImPencil /> */}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    {/* <button
+                      className="check"
+                      onClick={() => selectWishlist(wishlist.id)}
+                    >
+                      Check
+                    </button> */}
+                    {/* <button
+                      className="delete"
+                      onClick={() => deleteWishlist(wishlist.id)}
+                    >
+                      Delete
+                    </button> */}
+                  </div>
+                </div>
                 </div>
               </div>
-            </li>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );

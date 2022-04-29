@@ -45,9 +45,9 @@ export default function WishList() {
     setCount(count + 1);
   };
 
-  const selectRecipe = (recipeId) => {
-    navigate(`/details/${recipeId}`);
-  };
+  // const selectRecipe = (recipeId) => {
+  //   navigate(`/details/${recipeId}`);
+  // };
 
   const deleteRecipe = (wishlistId, recipeId) => {
     fetch(`${GET_USER_URL}/wishlist/${wishlistId}/delete_${recipeId}`, {
@@ -78,7 +78,7 @@ export default function WishList() {
       <Link to="/wishlists"> ⬅️ Back</Link>
       {notFound ? (<NotFound />) : 
       (<div>
-        <h3>{wishlistTitle}</h3>
+        <h3 style={{textAlign:"center"}}>{wishlistTitle}</h3>
         <div className={"row justify-content-center"}>
           {recipes.map((recipe) => (
             <div className={"col"} style={{flexGrow: 0}} key={recipe.externalId}>
@@ -86,7 +86,8 @@ export default function WishList() {
                   width: "15rem", height: "18rem",
                   borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
               }}>
-                <div className={"card-body text-center"}>
+                <div className={"card-body text-center"}
+                  style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
                   <a href="">
                     <div className={"zoom-hover-half"}
                       style={{position: 'absolute', right:"7%", top:"3%"}} onClick={(e) => {

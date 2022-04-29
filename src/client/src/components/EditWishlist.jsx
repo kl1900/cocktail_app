@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import { useAuthToken } from "../AuthTokenContext";
+import { AiOutlineRollback } from "react-icons/ai";
 
 export default ({wishlistId, changeToFalse, countNum}) => {
     const [wishlistName, setWishlistName] = useState("");
@@ -32,9 +33,23 @@ export default ({wishlistId, changeToFalse, countNum}) => {
     
     return (
         <div>
-            <div onClick={() => changeToFalse()}>Go Back</div>
-            <input value={wishlistName} onChange={e=>setWishlistName(e.target.value)}/>
-            <button onClick={onSubmit}>Submit</button>
+            <div style={{display: "flex", flexDirection: "row", justifyContent: "left", marginTop: "10px"}}>
+                <div>
+                    <div style={{float: "left", height: "30px"}}>
+                        <a href="" onClick={(e) => {
+                            e.preventDefault();
+                            changeToFalse();
+                        }}>
+                            <AiOutlineRollback size={28} />
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <input value={wishlistName} style={{height: "30px", width: "150px"}} onChange={e=>setWishlistName(e.target.value)}/>
+                 </div>
+            </div>
+            
+            <button className="btn btn-outline-primary" onClick={onSubmit} style={{marginTop: "6px"}}>Submit</button>
         </div>
     )
 }

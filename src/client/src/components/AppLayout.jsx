@@ -14,8 +14,8 @@ export default function AppLayout() {
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link className="navbar-brand" to="/">
           <img
-            src="https://www.pinclipart.com/picdir/middle/86-862588_mobi-food-logo-gif-clipart.png"
-            width="30"
+            src="/logo.png"
+            width="37.34"
             height="30"
             className="d-inline-block align-top"
             alt=""
@@ -74,8 +74,8 @@ export default function AppLayout() {
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <a className="navbar-brand" href="#">
           <img
-            src="https://www.pinclipart.com/picdir/middle/86-862588_mobi-food-logo-gif-clipart.png"
-            width="30"
+            src="/logo.png"
+            width="37.34"
             height="30"
             className="d-inline-block align-top"
             alt=""

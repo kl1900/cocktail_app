@@ -7,6 +7,15 @@ html,
 body,
 #root {
     height: 100%;
+    background-image: url(/public/imgs/bg3.jpeg);
+    background-position-x: center;
+    background-position-y: center;
+    background-size: initial;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: initial;
 }
 
 table,
