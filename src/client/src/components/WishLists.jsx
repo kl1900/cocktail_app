@@ -107,56 +107,71 @@ export default function WishLists() {
         )}
       </div>
       <div>
-        <ul className="wishlist-list">
+        <div className={"row justify-content-center"}>
           {wishlists.map((wishlist, i) => (
-            <li className="wishlist-row-li" key={wishlist.id}>
-              <div className="wishlist-row">
-              <img
-                  src={wishlist.imageURL}
-                  style={{ width: "300px", height: "250px" }}
-                  alt={wishlist.title}
-                />
+            <div className="wishlist-row-li" key={wishlist.id} style={{flexGrow: 0}}>
+              <div className={"card zoom-hover"} 
+                style={{
+                  width: "15rem", height: "18rem",
+                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
+                }}>
+                <div className={"card-body text-center"}>
+                  <img
+                    src={wishlist.imageURL}
+                    className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
+                    alt={wishlist.title}
+                    style={{
+                        width: "180px", height: "180px", objectFit: "cover",
+                        textAlign: "center"
+                    }}
+                  />
+                  {/* <h6 className={"my-auto"} style={{textAlign: "center"}}>
+                      <Link to={"/details/" + result.id.toString()}>
+                          {result.title}
+                      </Link>
+                  </h6> */}
 
-                <div>
-                  {editMode[i] ? (
-                    <div>
-                      <EditWishlist
-                        wishlistId={wishlist.id}
-                        changeToFalse={() => changeToFalse(i)}
-                        countNum={countNum}
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <div>{wishlist.title}</div>
-                      <div
-                        style={{ cursor: "pointer" }}
-                        onClick={() => changeToTrue(i)}
-                      >
-                        <ImPencil />
+                  <div>
+                    {editMode[i] ? (
+                      <div>
+                        <EditWishlist
+                          wishlistId={wishlist.id}
+                          changeToFalse={() => changeToFalse(i)}
+                          countNum={countNum}
+                        />
                       </div>
-                    </div>
-                  )}
-                </div>
+                    ) : (
+                      <div>
+                        <div>{wishlist.title}</div>
+                        <div
+                          style={{ cursor: "pointer" }}
+                          onClick={() => changeToTrue(i)}
+                        >
+                          <ImPencil />
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-                <div>
-                  <button
-                    className="check"
-                    onClick={() => selectWishlist(wishlist.id)}
-                  >
-                    Check
-                  </button>
-                  <button
-                    className="delete"
-                    onClick={() => deleteWishlist(wishlist.id)}
-                  >
-                    Delete
-                  </button>
+                  <div>
+                    <button
+                      className="check"
+                      onClick={() => selectWishlist(wishlist.id)}
+                    >
+                      Check
+                    </button>
+                    <button
+                      className="delete"
+                      onClick={() => deleteWishlist(wishlist.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
                 </div>
               </div>
-            </li>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
