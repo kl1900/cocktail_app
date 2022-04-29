@@ -1,9 +1,7 @@
 // npm install react-dropdown  --save
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
-import { useNavigate } from "react-router-dom";
-import { ImCross } from "react-icons/im";
 import Creatable from "react-select/creatable";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthToken } from "../AuthTokenContext";
@@ -11,7 +9,7 @@ import { useAuthToken } from "../AuthTokenContext";
 export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState("1");
   const [reviews, setReviews] = useState([]);
   const [count, setCount] = useState(0);
   const [button, setButton] = useState("Submit");
@@ -22,9 +20,8 @@ export default function ProductDetail() {
   const [userMode, setUserMode] = useState(false);
   const [step, setStep] = useState(0);
   const params = useParams();
-  // const navigate = useNavigate();
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   let userId = null;
   if (user !== undefined) {
     userId = user.sub;
@@ -222,15 +219,6 @@ export default function ProductDetail() {
       });
   }
 
-  function editReview(review) {
-    {
-      setRating(review.rating);
-      setInputValue(review.content);
-      console.log(rating, inputValue);
-      setButton("Edit");
-    }
-  }
-
   function indexExist(value) {
     return roles.some(function (el) {
       return el.value === value;
@@ -342,37 +330,55 @@ export default function ProductDetail() {
         break;
     }
   };
-  console.log(recipeDetails);
+
   return recipeDetails.map((recipeDetail) => (
     <div key={params.productId} className="recipeDetail">
-      {/* {userId? (<Link to="/app/repositories"> ⬅️ Back</Link>) : ("") } */}
-      {/* <button onclick={this.props.history.goBack()}>Go Back</button> */}
-      <div>
-        <div>{recipeDetail.title}</div>
-        <ul>
-          {recipeDetail.glutenFree ?
-            (<li>glutenFree</li>) : ("")
-            }
-          {recipeDetail.vegan ?
-            (<li>vegan</li>) : ("")
-           }
-          {recipeDetail.dairyFree ?
-            (<li>dairyFree</li>) : ("")
-            }
-          {recipeDetail.preparationMinutes ?
-            (<li>{`Need ${recipeDetail.preparationMinutes} minutes to prepare`}</li>):("")
-            }
-          {recipeDetail.cookingMinutes ?
-            (<li>{`Need ${recipeDetail.cookingMinutes} minutes to cook`}</li>):("")
-            }
-          {recipeDetail.aggregateLikes ?
-            (<li>{`${recipeDetail.aggregateLikes} Likes`}</li>):("")
-            }
-        </ul>
+      <div className="container">
+        <div className="row mt-5">
+          <div className="col-7">
+            <img src={recipeDetail.image} alt={recipeDetail.title} with="200" />
+          </div>
+          <div className="col-5">
+            <div className="my-5">
+              <h2>{recipeDetail.title}</h2>
+              <div className="receipe-duration">
+                <ul>
+                  {recipeDetail.glutenFree ? (
+                    <li key="glutenFree">glutenFree</li>
+                  ) : (
+                    ""
+                  )}
+                  {recipeDetail.vegan ? <li key="vegan">vegan</li> : ""}
+                  {recipeDetail.dairyFree ? (
+                    <li key="dairyFree">dairyFree</li>
+                  ) : (
+                    ""
+                  )}
+                  {recipeDetail.preparationMinutes ? (
+                    <li key="prepTime">{`Prep: ${recipeDetail.preparationMinutes} minutes`}</li>
+                  ) : (
+                    ""
+                  )}
+                  {recipeDetail.cookingMinutes ? (
+                    <li key="cookingTime">{`Cook: ${recipeDetail.cookingMinutes} minutes`}</li>
+                  ) : (
+                    ""
+                  )}
+                  {recipeDetail.aggregateLikes ? (
+                    <li key="numberOfLikes">{`${recipeDetail.aggregateLikes} Likes`}</li>
+                  ) : (
+                    ""
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div>
           {userMode ? (
             <div>
-              <div>Save to Recipe Box (Or Create a New One to Save)</div>
+              <h5 className="mt-2">Save to Recipe</h5>
               <div>
                 <Creatable
                   isClearable
@@ -380,134 +386,200 @@ export default function ProductDetail() {
                   options={roles}
                   value={roleValue}
                 />
-                {/* <button onClick={saveToWishlist}>Save</button> */}
-                <button
-                  onClick={() => {
-                    saveToWishlist();
-                  }}
-                >
-                  Save
-                </button>
+                <div className="text-right">
+                  <button
+                    className="btn btn-outline-primary mt-2"
+                    onClick={() => {
+                      saveToWishlist();
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
             ""
           )}
         </div>
-      </div>
 
-      <div>
-        <img src={recipeDetail.image} alt={recipeDetail.title}/>
-      </div>
-
-      {recipeDetail.extendedIngredients ? (
-          <div>
-            <div> Ingredients</div>
-            <ul className="ingredients-list">
-              {recipeDetail.extendedIngredients.map((ingredient) => (
-                  <li className="ingredient-li" key={ingredient.id}>
-                    <div className="ingredient-row">
-                      <div>{ingredient.original}</div>
-                    </div>
-                  </li>
-              ))}
-            </ul>
-          </div>
-      ) : ("")}
-
-      {recipeDetail.analyzedInstructions[0] ? (
-          <div>
-            <div> Instructions </div>
-            <ol className="instruction-list">
-              {recipeDetail.analyzedInstructions[0].steps.map((eachStep) => (
+        {/* Recipe instruction */}
+        {recipeDetail.analyzedInstructions[0] ? (
+          <div className="row">
+            <div className="col-12 col-lg-8">
+              <h4> Instructions</h4>
+              <ol className="instruction-list">
+                {recipeDetail.analyzedInstructions[0].steps.map((eachStep) => (
                   <li className="instruction" key={eachStep.number}>
                     <div className="instruction-row">
                       <div>{eachStep.step}</div>
                     </div>
                   </li>
-              ))}
-            </ol>
-          </div>
-      ) : ("")}
-
-      <div>
-        <div> Reviews </div>
-        <div>
-          {userMode ? (
-            <div>
-              {recordId !== null ? "Edit" : "Add"} Review:
-              <input
-                type="text"
-                id="rating"
-                value={rating}
-                onChange={(e) => {
-                  setRating(e.target.value);
-                }}
-              />
-              <textarea
-                type="text"
-                rows="5"
-                value={inputValue}
-                onChange={(e) => {
-                  setInputValue(e.target.value);
-                }}
-              />
-              <input
-                type="submit"
-                id="submit"
-                value={button}
-                onClick={(e) => {
-                  submitReview(e);
-                  resetInput();
-                }}
-              />
+                ))}
+              </ol>
             </div>
-          ) : (
-            ""
-          )}
+            {recipeDetail.extendedIngredients ? (
+              <div className="col-12 col-lg-4">
+                <div className="ingredients">
+                  <h4> Ingredients</h4>
+                  {recipeDetail.extendedIngredients.map((ingredient, index) => (
+                    <div className="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        className="custom-control-input"
+                        id={"customCheck" + index}
+                      />
+                      <label
+                        className="custom-control-label"
+                        for={"customCheck" + index}
+                      >
+                        {ingredient.original}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        ) : (
+          ""
+        )}
+        <div className="mt-5"></div>
+        <div className="row">
+          <div className="col-12">
+            <div className="section-heading text-left">
+              <h3>Leave a comment</h3>
+            </div>
+          </div>
         </div>
 
-        <div>
-          {reviews.length !== 0 ? (
-            <ul className="review-list">
-              {reviews.map((review) => (
-                <li className="review" key={review.id}>
-                  <div className="review-row">
-                    <div>
-                      {review.updatedAt ? (
-                        <div>Updated at {review.updatedAt.slice(0,10)} {review.updatedAt.slice(12,19)}</div>
-                      ) : (
-                        <div>Created at {review.createdAt.slice(0,10)} {review.createdAt.slice(12,19)}</div>
-                      )}
-                    </div>
-                    <div>
-                      {review.id === recordId ? (
-                        <div
-                          style={{ cursor: "pointer" }}
-                          onClick={() => deleteReview(review.id)}
-                        >
-                          <ImCross />
-                        </div>
-                      ) : (
-                          ""
-                      )}
-                    </div>
-                    <div>{review.rating}</div>
-                    <div>
-                      {review.content.split("\n").map((item, index) => (
-                        <span key={index}>
-                          {item}
-                          <br />
-                        </span>
-                      ))}
-                      ---from {review.username}
-                    </div>
+        {userMode ? (
+          <div className="row">
+            <div class="col-12">
+              <p>{recordId !== null ? "Edit" : "Add"} Review:</p>
+            </div>
+            <div class="col-12">
+              <div class="contact-form-area">
+                <div class="row">
+                  <div class="col-12">
+                    <label for="rating">Select rating:</label>
+                    <select
+                      class="form-control"
+                      id="rating"
+                      value={rating}
+                      onChange={(e) => {
+                        setRating(e.target.value);
+                      }}
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </select>
                   </div>
-                </li>
-              ))}
-            </ul>
+                  <div class="col-12 form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea
+                      class="form-control"
+                      type="text"
+                      rows="5"
+                      value={inputValue}
+                      onChange={(e) => {
+                        setInputValue(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div class="col-12 text-right">
+                    <input
+                      class="btn btn-outline-primary"
+                      type="submit"
+                      id="submit"
+                      value={button}
+                      onClick={(e) => {
+                        submitReview(e);
+                        resetInput();
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+
+        <div className="row">
+          <div className="col-12">
+            <div className="section-heading text-left">
+              <h3>Comments</h3>
+            </div>
+          </div>
+        </div>
+
+        {/* Comment section */}
+        <div class="row">
+          {reviews.length !== 0 ? (
+            <div class="col-12">
+              <div class="contact-form-area">
+                <div class="row">
+                  <div class="col-12">
+                    {reviews.map((review) => (
+                      <div class="commented-section mt-2">
+                        <div class="d-flex flex-row align-items-center commented-user">
+                          <h5 class="mr-2">Rated by: {review.username}</h5>
+                          <span class="dot mb-1"></span>
+                          {review.updatedAt ? (
+                            <div class="mb-1 ml-2">
+                              Updated at {review.updatedAt.slice(0, 10)}{" "}
+                              {review.updatedAt.slice(12, 19)}
+                            </div>
+                          ) : (
+                            <div class="mb-1 ml-2">
+                              Created at {review.createdAt.slice(0, 10)}{" "}
+                              {review.createdAt.slice(12, 19)}
+                            </div>
+                          )}
+                        </div>
+                        <div class="col-12">
+                          <h5>Rating: {review.rating}</h5>
+                        </div>
+                        <div class="col-12">
+                          {review.content.split("\n").map((item, index) => (
+                            <blockquote class="blockquote">
+                              <p key={index} class="mb-0">
+                                {item}
+                                <br />
+                              </p>
+                            </blockquote>
+                          ))}
+                        </div>
+
+                        <div>
+                          {review.id === recordId ? (
+                            <div
+                              style={{ cursor: "pointer" }}
+                              onClick={() => deleteReview(review.id)}
+                            >
+                              <button className="btn btn-outline-danger">
+                                Delete
+                              </button>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : (
-            "Currently no review for this recipe"
+            <p>"Currently no review for this recipe"</p>
           )}
         </div>
       </div>

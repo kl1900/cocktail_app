@@ -38,12 +38,11 @@ ReactDOM.render(
       <AuthTokenProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
             <Route path="/verify-user" element={<VerifyUser />} />
             <Route path="" element={<AppLayout />}>
               <Route index element={<Home />} />
-
-                <Route path="search" element={<SearchResult />} />
+              <Route path="login" element={<Login />} />
+              <Route path="search" element={<SearchResult />} />
               <Route path="search/:keyword" element={<SearchResult />} />
               <Route path="details/:productId" element={<ProductDetail />} />
 
@@ -79,8 +78,8 @@ ReactDOM.render(
                   </RequireAuth>
                 }
               />
+              <Route path="*" element={<NotFound />} />
             </Route>
-            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </AuthTokenProvider>
