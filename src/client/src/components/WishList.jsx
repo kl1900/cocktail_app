@@ -4,6 +4,8 @@ import { GET_USER_URL } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { useAuthToken } from "../AuthTokenContext";
 import NotFound from "./NotFound";
+import { FcDislike } from "react-icons/fc";
+import { IoScale } from "react-icons/io5";
 // import { useUser } from "../UserContext";
 
 export default function WishList() {
@@ -76,33 +78,39 @@ export default function WishList() {
       <Link to="/wishlists"> ⬅️ Back</Link>
       {notFound ? (<NotFound />) : 
       (<div>
-      <div>{wishlistTitle}</div>
-      <ul className="wishlist-list">
-        {recipes.map((recipe) => (
-          <li className="recipe-row-li" key={recipe.externalId}>
-            <div className="recipe-row">
-              <div>
-                <img src={recipe.imageURL} alt={recipe.productName}/>
+        <h3>{wishlistTitle}</h3>
+        <div className={"row justify-content-center"}>
+          {recipes.map((recipe) => (
+            <div className={"col"} style={{flexGrow: 0}} key={recipe.externalId}>
+              <div className={"card zoom-hover"} style={{
+                  width: "15rem", height: "18rem",
+                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
+              }}>
+                <div className={"card-body text-center"}>
+                  <div style={{position: 'absolute', right:"10%", top:"5%"}} onClick={() =>
+                    deleteRecipe(params.wishlistId, recipe.externalId)
+                  }>
+                    <FcDislike size={28} />
+                  </div>
+                  <img 
+                    src={recipe.imageURL} 
+                    className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
+                    alt={recipe.productName} 
+                    style={{
+                        width: "180px", height: "180px", objectFit: "cover",
+                        textAlign: "center"
+                  }}/>
+                  <h6 className={"my-auto"} style={{textAlign: "center"}}>
+                      <Link to={`/details/${recipe.externalId}`}>
+                          {recipe.productName}
+                      </Link>
+                  </h6>
+                </div>
               </div>
-              <div>{recipe.productName}</div>
-              <button
-                className="check"
-                onClick={() => selectRecipe(recipe.externalId)}
-              >
-                Check
-              </button>
-              <button
-                className="delete"
-                onClick={() =>
-                  deleteRecipe(params.wishlistId, recipe.externalId)
-                }
-              >
-                Delete
-              </button>
             </div>
-          </li>
-        ))}
-      </ul></div>)}
+          ))}
+        </div>
+      </div>)}
     </div>
   );
 }
