@@ -77,17 +77,17 @@ export default function SearchResult() {
                             ))}
                 </div>
             </div>
-            <div className={"list-group list-group-horizontal-md"}>
+            <ul className={"list-group list-group-horizontal-md"}>
                 {pageList[0] && page !== pageList[0] ? (
-                    <div className={"list-group-item"}>
+                    <li className={"list-group-item"}>
                         <span><a href="" onClick={(e) => {
                             e.preventDefault();
                             setPage(page - 1);
                         }}><IoChevronBack/>Prev Page</a></span>
-                    </div>
+                    </li>
                 ) : ("")}
 
-                <div className={"list-group-item"}>
+                <li className={"list-group-item"}>
                     <span>Select Page: </span>
                     <select
                         name="pages"
@@ -99,17 +99,17 @@ export default function SearchResult() {
                             <option value={curr_page} selected={page === curr_page}>{curr_page}</option>
                         ))}
                     </select>
-                </div>
+                </li>
 
                 {pageList[0] && page !== pageList[pageList.length - 1] ? (
-                    <div className={"list-group-item"}>
+                    <li className={"list-group-item"}>
                         <span><a href="" onClick={(e) => {
                             e.preventDefault();
                             setPage(page + 1);
                         }}>Next Page<IoChevronForward/></a></span>
-                    </div>
+                    </li>
                 ) : ("")}
-            </div>
+            </ul>
         </div>
     );
 }

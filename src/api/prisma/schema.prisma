@@ -46,7 +46,7 @@ model wishlist {
   title     String    @db.VarChar(255)
   userId    Int
   user      user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "wishlist_ibfk_1")
-  imageURL  String    @db.VarChar(255) @default("https://www.nicepng.com/png/detail/775-7752286_empty-basket-for-gifts-wood-basket-with-handle.png")
+  imageURL  String    @db.VarChar(255) @default("/empty-basket.png")
   product   product[] @relation("producttowishlist")
 
   @@index([userId], map: "userId")
