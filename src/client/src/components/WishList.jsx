@@ -78,7 +78,7 @@ export default function WishList() {
       <Link to="/wishlists"> ⬅️ Back</Link>
       {notFound ? (<NotFound />) : 
       (<div>
-        <h3>{wishlistTitle}</h3>
+        <h3 style={{textAlign:"center"}}>{wishlistTitle}</h3>
         <div className={"row justify-content-center"}>
           {recipes.map((recipe) => (
             <div className={"col"} style={{flexGrow: 0}} key={recipe.externalId}>

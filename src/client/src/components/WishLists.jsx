@@ -105,19 +105,20 @@ export default function WishLists() {
             </div>
           ) : (
             <div>
-              <button className="btn btn-primary" onClick={() => setCreateMode(true)}>Create New Recipe List</button>
+              <button className="btn " style={{backgroundColor:"#FBA827"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
             </div>
           )}
         </div>
       </div>
+                      
       <div>
         <div className={"row justify-content-center"}>
           {wishlists.map((wishlist, i) => (
             <div className="wishlist-row-li" key={wishlist.id} style={{flexGrow: 0}}>
-              <div className={"card zoom-hover"} 
+              <div className={"card zoom-hover Green50"} 
                 style={{
                   width: "15rem", height: "18rem",
-                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
+                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
                 }}>
                 <div className={"card-body text-center"}
                   style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
@@ -137,7 +138,9 @@ export default function WishLists() {
                         deleteWishlist(wishlist.id);
                       }
                     }>
-                      <FaTrashAlt size={28} color="red"/>
+                      <img src="/imgs/crytomato.png" alt="crying tomato" style={{width: "45px", height: "45px"}}/>
+
+                        {/* <FaTrashAlt size={28} color="#F9A646"/> */}
                     </div>
                   </a>
 
@@ -161,7 +164,9 @@ export default function WishLists() {
                           style={{ cursor: "pointer", marginLeft: "10px"}}
                           onClick={() => changeToTrue(i)}
                         >
-                          <ImPencil />
+                          <img className="zoom-hover-half" src="/imgs/carrot.png" alt="editing carrot" style={{width: "20px", height: "30px"}}/>
+
+                          {/* <ImPencil /> */}
                         </div>
                       </div>
                     )}
