@@ -61,25 +61,25 @@ export default function Profile() {
     };
 
     return (
-      <div class="input-group">
+      <div className="input-group">
         <input
           id="newName"
           type="text"
-          class="form-control"
+          className="form-control"
           placeholder="new username"
           aria-label="new username"
           aria-describedby="basic-addon2"
         />
-        <div class="input-group-append">
+        <div className="input-group-append">
           <button
-            class="btn btn-outline-danger"
+            className="btn btn-outline-danger"
             onClick={() => {
               setEditMode(false);
             }}
           >
             Cancel
           </button>
-          <button class="btn btn-outline-primary" onClick={onSubmit}>
+          <button className="btn btn-outline-primary" onClick={onSubmit}>
             Submit
           </button>
         </div>
@@ -98,8 +98,8 @@ export default function Profile() {
             alt="profile"
           />
         </div>
-        <div class="ml-2">
-          <p class="name">
+        <div className="ml-2">
+          <p className="name">
             {userName}{" "}
             {editMode ? (
               <div>
@@ -107,16 +107,16 @@ export default function Profile() {
               </div>
             ) : (
               <button
-                class="btn btn-outline-primary btn-sm"
+                className="btn btn-outline-primary btn-sm"
                 onClick={() => setEditMode(true)}
               >
                 Edit Name
               </button>
             )}
           </p>
-          <p class="mail">📧 Email: {user.email}</p>
+          <p className="mail">📧 Email: {user.email}</p>
           <p>✅ Email Verified: {user.email_verified.toString()}</p>
-          <div class="recipe-border pt-2">
+          <div className="recipe-border pt-2">
             <Link to="/wishlists" className="recipe">
               My Favorites ({wishlistCount})
             </Link>

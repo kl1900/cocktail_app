@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet, Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import SearchBar from "./SearchBar";
 
 export default function AppLayout() {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
@@ -52,9 +51,6 @@ export default function AppLayout() {
                 My Favorites
               </Link>
             </li>
-            {/*<li className="nav-item active">*/}
-            {/*    <Link to="/wishlists" className={"nav-link"}>My Reviews</Link>*/}
-            {/*</li>*/}
             <li className="nav-item active">
               <Link
                 className="nav-link"
@@ -105,15 +101,6 @@ export default function AppLayout() {
                 Home
               </Link>
             </li>
-            {/*<li className="nav-item disabled">*/}
-            {/*    <div className={"nav-link"}>My Profile</div>*/}
-            {/*</li>*/}
-            {/*<li className="nav-item disabled">*/}
-            {/*    <div className={"nav-link"}>My Favorites</div>*/}
-            {/*</li>*/}
-            {/*<li className="nav-item active">*/}
-            {/*    <Link to="/wishlists" className={"nav-link"}>My Reviews</Link>*/}
-            {/*</li>*/}
             <li className="nav-item active">
               <Link to="/login" className={"nav-link"}>
                 Login
