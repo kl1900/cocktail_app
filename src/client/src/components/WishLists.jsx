@@ -34,7 +34,6 @@ export default function WishLists() {
   };
 
   const countNum = () => {
-    console.log("CountNum");
     setCount(count + 1);
   };
 
@@ -131,7 +130,6 @@ export default function WishLists() {
                         textAlign: "center"
                     }}
                   />
-
                   <a href="">
                     <div className={"zoom-hover-half"}
                       style={{position: 'absolute', right:"7%", top:"6%"}} onClick={(e) => {
