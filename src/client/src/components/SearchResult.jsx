@@ -56,7 +56,8 @@ export default function SearchResult() {
                                         width: "15rem", height: "18rem",
                                         borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
                                     }}>
-                                        <div className={"card-body text-center"}>
+                                        <div className={"card-body text-center"}
+                                             style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
                                             <img
                                                 src={results.baseUri + result.image}
                                                 className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
@@ -66,7 +67,7 @@ export default function SearchResult() {
                                                     textAlign: "center"
                                                 }}
                                             />
-                                            <h6 className={"my-auto"} style={{textAlign: "center"}}>
+                                            <h6 className={"my-auto"} style={{textAlign: "center", fontWeight: "bold"}}>
                                                 <Link to={"/details/" + result.id.toString()}>
                                                     {result.title}
                                                 </Link>
@@ -77,7 +78,7 @@ export default function SearchResult() {
                             ))}
                 </div>
             </div>
-            <ul className={"list-group list-group-horizontal-md"}>
+            <ul className={"list-group list-group-horizontal justify-content-center"} style={{flexDirection: "row", marginTop: "50px"}}>
                 {pageList[0] && page !== pageList[0] ? (
                     <li className={"list-group-item"}>
                         <span><a href="" onClick={(e) => {
