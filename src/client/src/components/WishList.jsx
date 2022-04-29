@@ -87,11 +87,16 @@ export default function WishList() {
                   borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
               }}>
                 <div className={"card-body text-center"}>
-                  <div style={{position: 'absolute', right:"10%", top:"5%"}} onClick={() =>
-                    deleteRecipe(params.wishlistId, recipe.externalId)
-                  }>
-                    <FcDislike size={28} />
-                  </div>
+                  <a href="">
+                    <div className={"zoom-hover-half"}
+                      style={{position: 'absolute', right:"7%", top:"3%"}} onClick={(e) => {
+                        e.preventDefault();
+                        deleteRecipe(params.wishlistId, recipe.externalId);
+                      }
+                    }>
+                      <FcDislike size={28} />
+                    </div>
+                  </a>
                   <img 
                     src={recipe.imageURL} 
                     className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
