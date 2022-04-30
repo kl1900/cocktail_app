@@ -6,10 +6,10 @@ import userEvent from "@testing-library/user-event";
 const mockUseNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => {
-    return mockUseNavigate;
-  },
+    ...jest.requireActual("react-router-dom"),
+    useNavigate: () => {
+        return mockUseNavigate;
+    },
 }));
 
 test("renders search button", () => {

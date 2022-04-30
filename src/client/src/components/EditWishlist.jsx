@@ -2,33 +2,37 @@ import React, { useState} from 'react';
 import { useAuthToken } from "../AuthTokenContext";
 import { AiOutlineRollback } from "react-icons/ai";
 
-export default ({wishlistId, changeToFalse, countNum}) => {
+export default function EditWishlist({wishlistId, changeToFalse, countNum}) {
     const [wishlistName, setWishlistName] = useState("");
     const { accessToken } = useAuthToken();
     
     const onSubmit=()=>{
         const data={"title" : wishlistName};
-        fetch(`${process.env.REACT_APP_API_URL}/wishlist/${wishlistId}`, {
-            method: 'PUT', 
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data === null) {
-                    alert("Duplicate name detected");
-                }
-                else {
-                    console.log('Success:', data);
-                }
-                countNum();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        if (data.title.length>0){
+            fetch(`${process.env.REACT_APP_API_URL}/wishlist/${wishlistId}`, {
+                method: 'PUT', 
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data === null) {
+                        alert("Duplicate name detected");
+                    }
+                    else {
+                        console.log('Success:', data);
+                    }
+                    countNum();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }else{
+                alert("Please Enter a Valid Name")
+            }   
         };
     
     return (
@@ -36,7 +40,7 @@ export default ({wishlistId, changeToFalse, countNum}) => {
             <div style={{display: "flex", flexDirection: "row", justifyContent: "left", marginTop: "10px"}}>
                 <div>
                     <div style={{float: "left", height: "30px"}}>
-                        <a href="" onClick={(e) => {
+                        <a href="#" onClick={(e) => {
                             e.preventDefault();
                             changeToFalse();
                         }}>
@@ -45,7 +49,14 @@ export default ({wishlistId, changeToFalse, countNum}) => {
                     </div>
                 </div>
                 <div>
-                    <input value={wishlistName} style={{height: "30px", width: "150px"}} onChange={e=>setWishlistName(e.target.value)}/>
+                    <input 
+                        value={wishlistName} 
+                        style={{height: "30px", width: "150px"}} 
+                        onChange={e=>setWishlistName(e.target.value)}
+                        maxlength="20"
+                        minLength="1"
+                        required
+                    />
                  </div>
             </div>
             

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {GET_USER_URL} from "../constants";
 import {useNavigate} from "react-router-dom";
 import {useAuth0} from "@auth0/auth0-react";
@@ -68,7 +68,7 @@ export default function Home() {
 
     const getName = (i) => {
         if (i === 'Fruit') {
-            return 'Fruits'
+            return 'Fruits and Vegatables'
         } else if (i === 'Everyday') {
             return 'Everyday Cookings'
         } else {
@@ -83,14 +83,14 @@ export default function Home() {
                     <Link key={i} to={"/search/" + i}>
                         <div key={index} style={{width: "70px"}}>
                             <img src={`/imgs/${index + 1}.png`} alt={i} style={{width: "70px", borderRadius: "50%"}}/>
-                            <h6 style={{textAlign: "center"}}>{getName(i)}</h6>
+                            <h6 style={{textAlign: "center", marginTop: "10px"}}>{getName(i)}</h6>
 
                         </div>
                     </Link>
                 ))}
             </div>
             {isAuthenticated ? (
-                <div style={{marginTop: "50px"}}>
+                <div style={{marginTop: "30px"}}>
                     <h3>Your Highest Rated Recipes: </h3>
                     <div style={{marginTop: "30px"}}>
                         {userFav.length === 0 ? (

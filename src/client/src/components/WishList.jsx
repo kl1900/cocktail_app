@@ -74,11 +74,11 @@ export default function WishList() {
 
   return (
     <div className="wishlistName">
-      <h3 style={{marginTop: "30px", marginBottom: "30px"}}>My Favorite Recipe Box</h3>
+      <h3 style={{marginTop: "30px", marginBottom: "30px"}}>My Favorite Recipe Box: </h3>
       <Link to="/wishlists" > ⬅️ Back</Link>
       {notFound ? (<NotFound />) : 
       (<div>
-        <h1 style={{textAlign:"center", marginTop:"30px"}}>{wishlistTitle}</h1>
+        <h1 style={{textAlign:"center", marginTop:"30px", marginBottom: "30px", color: "#FDE79C", fontWeight: "bolder", fontSize: "3rem"}}>{wishlistTitle}</h1>
         {accessToken && recipes.length === 0 ? (
             <div style={{marginTop: "90px"}}>
               <h2 style={{textAlign: "center"}}>Oops!<br/>This box is empty!</h2>

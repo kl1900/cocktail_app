@@ -143,7 +143,9 @@ export default function AppLayout() {
                 </Link>
               </li>
             </ul>
+            <div className="ml-auto" style={{marginRight: "10px"}}>Hello, Foodie!</div>
           </div>
+          
         </div>
       </nav>
     );
@@ -159,8 +161,8 @@ export default function AppLayout() {
   function Footer() {
     return (
       <footer className="bd-footer py-5 mt-5 bg-light">
-        <div className="container py-5">
-          <div className="py-5 ">
+        <div className="container py-5" >
+          <div className="py-5" >
             <div className="row">
               <div className="col-6 col-lg-2 offset-lg-1 mb-3">
                 <h5>Product</h5>
@@ -253,7 +255,7 @@ export default function AppLayout() {
               <p>© 2022 Northeastern University. All rights reserved.</p>
               <ul className="list-unstyled d-flex">
                 <li className="ms-3 mr-3">
-                  <a className="link-dark" href="https://www.twitter.com">
+                  <a className="link-dark" href="https://www.twitter.com" aria-label="Twitter">
                     <svg className="bi" width="24" height="24">
                       <use xlinkHref="#twitter">
                         <symbol id="twitter" viewBox="0 0 16 16">
@@ -264,7 +266,7 @@ export default function AppLayout() {
                   </a>
                 </li>
                 <li className="ms-3 mr-3">
-                  <a className="link-dark" href="https://www.instagram.com">
+                  <a className="link-dark" href="https://www.instagram.com" aria-label="instagram">
                     <svg className="bi" width="24" height="24">
                       <use xlinkHref="#instagram">
                         <symbol id="instagram" viewBox="0 0 16 16">
@@ -275,7 +277,7 @@ export default function AppLayout() {
                   </a>
                 </li>
                 <li className="ms-3 mr-3">
-                  <a className="link-dark" href="https://www.facebook.com">
+                  <a className="link-dark" href="https://www.facebook.com" aria-label="facebook">
                     <svg className="bi" width="24" height="24">
                       <use xlinkHref="#facebook">
                         <symbol id="facebook" viewBox="0 0 16 16">

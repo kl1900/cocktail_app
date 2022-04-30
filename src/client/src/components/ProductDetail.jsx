@@ -64,8 +64,6 @@ export default function ProductDetail() {
           for (let i = 0; i < data.review.length; i++) {
             if (data.review[i].userId === id) {
               setRecordId(data.review[i].id);
-              // setRating(data.review[i].rating);
-              // setInputValue(data.review[i].content);
               break;
             }
           }
@@ -355,7 +353,7 @@ export default function ProductDetail() {
           </div>
           <div className="col-5 special">
             <div className="my-5">
-              <h2>{recipeDetail.title}</h2>
+              <h3>{recipeDetail.title}</h3>
               <div className="receipe-duration">
                 <ul>
                   {recipeDetail.glutenFree ? (
@@ -387,23 +385,27 @@ export default function ProductDetail() {
                 </ul>
               </div>
             </div>
-          </div>
-        </div>
+          
+        
 
-        <div>
+        <div className="float-bottom pl-5">
           {userMode ? (
-            <div className="mt-2">
-              <h5>Save to Recipe</h5>
-              <div>
+            <div className="mt-4">
+              <h4>Save to Recipe</h4>
+              <div className="row" >
+                <label style={{minWidth: "200px"}}>
                 <Creatable
+                  id="save"
                   isClearable
                   onChange={(value) => handleChange("roles", value)}
                   options={roles}
                   value={roleValue}
                 />
+                </label>
                 <div className="text-right">
                   <button
-                    className="btn btn-outline-primary mt-2"
+                    className="btn btn-outline-primary"
+                    // style={{marginTop: "0px"}}
                     onClick={() => {
                       saveToWishlist();
                     }}
@@ -417,7 +419,8 @@ export default function ProductDetail() {
             ""
           )}
         </div>
-
+        </div>
+        </div>
         {/* Recipe instruction */}
         {recipeDetail.analyzedInstructions[0] ? (
           <div className="row mt-3 pt-3">
@@ -465,9 +468,9 @@ export default function ProductDetail() {
         {userMode ? (
           <div className="row" style={{ marginTop: "40px" }}>
             <div className={"col-12"}>
-              <h3>
+              <h4>
                 {recordId !== null ? "Edit Your Comment" : "Leave a Comment"}
-              </h3>
+              </h4>
             </div>
             <div className={"col-12"}>
               <div className={"contact-form-area"}>
@@ -480,6 +483,7 @@ export default function ProductDetail() {
                     <label htmlFor={"comment"}>Comment:</label>
                     <textarea
                       className={"form-control"}
+                      id="comment"
                       type="text"
                       rows="5"
                       value={inputValue}
@@ -511,7 +515,7 @@ export default function ProductDetail() {
         <div className="row">
           <div className="col-12">
             <div className="section-heading text-left">
-              <h3>Comments</h3>
+              <h4>Comments</h4>
             </div>
           </div>
         </div>
@@ -535,9 +539,9 @@ export default function ProductDetail() {
                             "d-flex flex-row align-items-center commented-user"
                           }
                         >
-                          <h5 className={"mr-2"}>
+                          <h4 className={"mr-2"}>
                             Rated by: {review.user.name}
-                          </h5>
+                          </h4>
                           <span className={"dot mb-1"}></span>
                           {review.updatedAt ? (
                             <div className={"mb-1 ml-2"}>

@@ -36,11 +36,11 @@ export default function SearchResult() {
 
   return (
     <div className="container mt-5">
-      <h3>
+      <h5 style={{color: "black", fontWeight: "bold"}}>
         Search Results
         {results.results &&
           " (" + results.results.length.toString() + ")"}:{" "}
-      </h3>
+      </h5>
       <div>
         <div className={"row justify-content-center"}>
           {results.results &&
