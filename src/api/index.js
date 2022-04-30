@@ -122,23 +122,6 @@ app.get("/getRandomRecipe", async (req, res) => {
   }
 });
 
-app.get("/getRandomFoodJoke", async (req, res) => {
-  const url =
-    "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/jokes/random";
-  try {
-    const response = await fetch(url, options).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-      return res.json();
-    });
-    res.json(response);
-  } catch (error) {
-    console.log(error);
-    res.status(parseInt(error.message)).json(null);
-  }
-});
-
 // user section
 app.get("/me", requireAuth, async (req, res) => {
   const auth0Id = req.user.sub;
