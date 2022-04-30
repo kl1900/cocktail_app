@@ -103,7 +103,7 @@ export default function WishLists() {
                   </div>
               ) : (
                   <div>
-                    <button className="btn " style={{backgroundColor:"#FBA827"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
+                    <button className="btn " style={{backgroundColor:"#FFE9B5"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
                   </div>
               )}
             </div>
@@ -143,7 +143,7 @@ export default function WishLists() {
                   width: "15rem", height: "18rem",
                   // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
                   // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#D2C950"
-                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
+                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "#FFE9B5"
                 }}>
                 <div className={"card-body"}
                   style={{display: "flex", flexDirection: "column", justifyContent: "space-evenly"}}>

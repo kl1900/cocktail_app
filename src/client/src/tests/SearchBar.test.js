@@ -6,18 +6,18 @@ import userEvent from "@testing-library/user-event";
 const mockUseNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => {
-    return mockUseNavigate;
-  },
+    ...jest.requireActual("react-router-dom"),
+    useNavigate: () => {
+        return mockUseNavigate;
+    },
 }));
 
 
 test("renders search button", () => {
-  render(
-    <SearchBar />
-  );
-  expect(screen.getByText("Search")).toBeInTheDocument();
+    render( <
+        SearchBar / >
+    );
+    expect(screen.getByText("Search")).toBeInTheDocument();
 });
 
 
@@ -25,12 +25,12 @@ const stateSetter = jest.fn();
 jest.spyOn(React, 'useState').mockImplementation(stateValue => [stateValue = 'burger', stateSetter]);
 
 test("enter search button navigates to search/object", () => {
-    render(
-        <SearchBar />
+    render( <
+        SearchBar / >
     );
 
     const enterSearchButton = screen.getByText("Search");
     userEvent.click(enterSearchButton);
-  
+
     expect(mockUseNavigate).toHaveBeenCalledWith("/search/burger");
-  });
+});

@@ -12,7 +12,6 @@ jest.mock("@auth0/auth0-react", () => ({
             isLoading: false,
             user: {
                 sub: "subId",
-                name: "liz",
                 email: "liz@gmail.com",
                 email_verified: true,
             },
@@ -21,6 +20,12 @@ jest.mock("@auth0/auth0-react", () => ({
         };
     },
 }));
+
+fetch.mockResponse(
+    JSON.stringify([
+      { name: "liz"},
+    ])
+  );
 
 test("renders Profile", () => {
     render( 

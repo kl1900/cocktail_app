@@ -39,7 +39,7 @@ export default ({changeCreate, accessToken, countNum}) => {
                 <AiOutlineRollback size={28} />
             </div>
             <input value={wishlistName} onChange={e=>setWishlistName(e.target.value)}/>
-            <button className="btn" style={{backgroundColor:"#FBA827"}} onClick={onSubmit}>Submit</button>
+            <button className="btn" style={{backgroundColor:"#FFE9B5"}} onClick={onSubmit}>Submit</button>
         </div>
     )
 }
