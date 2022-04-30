@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Home from "../components/Login";
+import Login from "../components/Login";
 import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
@@ -30,7 +30,7 @@ jest.mock("react-router-dom", () => ({
 test("renders Home copy and Login Button", () => {
   render(
     <MemoryRouter initialEntries={["/"]}>
-      <Home />
+      <Login />
     </MemoryRouter>
   );
 
@@ -41,7 +41,7 @@ test("renders Home copy and Login Button", () => {
 test("login button calls loginWithRedirect", () => {
   render(
     <MemoryRouter initialEntries={["/"]}>
-      <Home />
+      <Login />
     </MemoryRouter>
   );
 
@@ -55,7 +55,7 @@ test("renders Enter App button when user is authenticated", () => {
   mockIsAuthenticated = true;
   render(
     <MemoryRouter initialEntries={["/"]}>
-      <Home />
+      <Login />
     </MemoryRouter>
   );
 
@@ -66,7 +66,7 @@ test("enter App button navigates to /app", () => {
   mockIsAuthenticated = true;
   render(
     <MemoryRouter initialEntries={["/"]}>
-      <Home />
+      <Login />
     </MemoryRouter>
   );
 

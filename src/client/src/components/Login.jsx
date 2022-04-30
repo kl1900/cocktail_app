@@ -2,9 +2,13 @@ import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
+<<<<<<< HEAD
 import "../style/login.css";
 
 export default function Home() {
+=======
+export default function Login() {
+>>>>>>> 7a995c8 (added pics)
   const navigate = useNavigate();
   const { isAuthenticated, loginWithRedirect } = useAuth0();
   const signUp = () => loginWithRedirect({ screen_hint: "signup" });

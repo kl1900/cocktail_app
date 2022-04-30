@@ -39,7 +39,10 @@ export default function SearchResult() {
 
     return (
         <div>
-            <SearchBar/>
+            <div style={{textAlign:"center", marginTop:"30px"}} size="28">
+                <SearchBar />
+            </div>
+            
             <h3>
                 Search Results
                 {results.results &&
@@ -67,7 +70,7 @@ export default function SearchResult() {
                                                     textAlign: "center"
                                                 }}
                                             />
-                                            <h6 className={"my-auto"} style={{textAlign: "center", fontWeight: "bold"}}>
+                                            <h6 className={"my-auto overflow-auto text-ellips"} style={{textAlign: "center", fontWeight: "bold"}} title={result.title}>
                                                 <Link to={"/details/" + result.id.toString()}>
                                                     {result.title}
                                                 </Link>

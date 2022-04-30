@@ -121,8 +121,6 @@ export default function WishLists() {
                   // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
                   // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#D2C950"
                   borderRadius: "20%", margin: "13px 15px", backgroundColor: "#9CA98C"
-
-                  
                 }}>
                 <div className={"card-body text-center"}
                   style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
@@ -142,7 +140,7 @@ export default function WishLists() {
                         deleteWishlist(wishlist.id);
                       }
                     }>
-                      <img src="/imgs/crytomato.png" alt="crying tomato" style={{width: "45px", height: "45px"}}/>
+                      <img src="/imgs/crytomato.png" alt="crying tomato" style={{width: "45px", height: "45px"}} title="Delete"/>
 
                         {/* <FaTrashAlt size={28} color="#F9A646"/> */}
                     </div>
@@ -159,16 +157,16 @@ export default function WishLists() {
                       </div>
                     ) : (
                       <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                        <h4 className={"my-auto"} style={{textAlign: "center", fontWeight: "bold"}}>
+                        <h6 className={"my-auto overflow-auto text-ellips"} style={{textAlign: "center", fontWeight: "bold"}} title={wishlist.title}>
                           <Link to={`/wishlist/${wishlist.id}`}>
                             { wishlist.title }
                           </Link>
-                        </h4>
+                        </h6>
                         <div
                           style={{ cursor: "pointer", marginLeft: "10px"}}
                           onClick={() => changeToTrue(i)}
                         >
-                          <img className="zoom-hover-half" src="/imgs/carrot.png" alt="editing carrot" style={{width: "20px", height: "30px"}}/>
+                          <img className="zoom-hover-half" src="/imgs/carrot.png" alt="editing carrot" style={{width: "20px", height: "30px"}} title="Rename"/>
 
                           {/* <ImPencil /> */}
                         </div>

@@ -74,11 +74,11 @@ export default function WishList() {
 
   return (
     <div className="wishlistName">
-      <div>My Favorite Recipes</div>
-      <Link to="/wishlists"> ⬅️ Back</Link>
+      <h3 style={{marginTop: "30px", marginBottom: "30px"}}>My Favorite Recipes</h3>
+      <Link to="/wishlists" > ⬅️ Back</Link>
       {notFound ? (<NotFound />) : 
       (<div>
-        <h3 style={{textAlign:"center"}}>{wishlistTitle}</h3>
+        <h1 style={{textAlign:"center", marginTop:"30px"}}>{wishlistTitle}</h1>
         <div className={"row justify-content-center"}>
           {recipes.map((recipe) => (
             <div className={"col"} style={{flexGrow: 0}} key={recipe.externalId}>
@@ -95,7 +95,7 @@ export default function WishList() {
                         deleteRecipe(params.wishlistId, recipe.externalId);
                       }
                     }>
-                      <FcDislike size={28} />
+                      <FcDislike size={28} title="Delete"/>
                     </div>
                   </a>
                   <img 
@@ -106,7 +106,8 @@ export default function WishList() {
                         width: "180px", height: "180px", objectFit: "cover",
                         textAlign: "center"
                   }}/>
-                  <h6 className={"my-auto"} style={{textAlign: "center"}}>
+                  <h6 className={"my-auto overflow-auto text-ellips"} style={{textAlign: "center", fontWeight: "bold"}} title={recipe.productName}>
+                  {/* <h6 className={"my-auto"} style={{textAlign: "center", textOverflow: "ellipsis"}}> */}
                       <Link to={`/details/${recipe.externalId}`}>
                           {recipe.productName}
                       </Link>
