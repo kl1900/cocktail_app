@@ -39,10 +39,6 @@ export default function SearchResult() {
 
     return (
         <div>
-            <div style={{textAlign:"center", marginTop:"30px"}} size="28">
-                <SearchBar />
-            </div>
-            
             <h3>
                 Search Results
                 {results.results &&
