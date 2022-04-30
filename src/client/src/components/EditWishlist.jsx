@@ -32,7 +32,7 @@ export default ({wishlistId, changeToFalse, countNum}) => {
         };
     
     return (
-        <div>
+        <div className={"justify-content-center"} style={{display: "flex", flexDirection: "column"}}>
             <div style={{display: "flex", flexDirection: "row", justifyContent: "left", marginTop: "10px"}}>
                 <div>
                     <div style={{float: "left", height: "30px"}}>
@@ -49,7 +49,7 @@ export default ({wishlistId, changeToFalse, countNum}) => {
                  </div>
             </div>
             
-            <button className="btn btn-outline-primary" onClick={onSubmit} style={{marginTop: "6px"}}>Submit</button>
+            <button className="btn btn-outline-primary mx-auto" onClick={onSubmit} style={{marginTop: "6px"}}>Submit</button>
         </div>
     )
 }

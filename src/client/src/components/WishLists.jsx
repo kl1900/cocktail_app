@@ -5,9 +5,9 @@ import { GET_USER_URL } from "../constants";
 import CreateWishlist from "./CreateWishlist";
 import EditWishlist from "./EditWishlist";
 import { useAuthToken } from "../AuthTokenContext";
-import { ImPencil } from "react-icons/im";
+// import { ImPencil } from "react-icons/im";
 
-import { FaTrashAlt } from "react-icons/fa";
+// import { FaTrashAlt } from "react-icons/fa";
 
 export default function WishLists() {
   const navigate = useNavigate();
@@ -120,33 +120,31 @@ export default function WishLists() {
                   width: "15rem", height: "18rem",
                   // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
                   // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#D2C950"
-                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "#9CA98C"
-
-                  
+                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
                 }}>
-                <div className={"card-body text-center"}
-                  style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
-                  <img
-                    src={wishlist.imageURL}
-                    className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
-                    alt={wishlist.title}
-                    style={{
-                        width: "180px", height: "180px", objectFit: "cover",
-                        textAlign: "center"
-                    }}
-                  />
-                  <a href="">
-                    <div className={"zoom-hover-half"}
-                      style={{position: 'absolute', right:"7%", top:"6%"}} onClick={(e) => {
-                        e.preventDefault();
-                        deleteWishlist(wishlist.id);
-                      }
-                    }>
-                      <img src="/imgs/crytomato.png" alt="crying tomato" style={{width: "45px", height: "45px"}}/>
-
-                        {/* <FaTrashAlt size={28} color="#F9A646"/> */}
+                <div className={"card-body"}
+                  style={{display: "flex", flexDirection: "column", justifyContent: "space-evenly"}}>
+                    <div style={{position: "relative"}}>
+                      <img
+                        src={wishlist.imageURL}
+                        className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
+                        alt={wishlist.title}
+                        style={{
+                          width: "180px", height: "180px", objectFit: "cover",
+                          textAlign: "center"
+                      }}/>
+                      <a href="">
+                        <div className={"zoom-hover-half"}
+                          style={{position: 'absolute', right:"-1%", top:"-10%"}} onClick={(e) => {
+                            e.preventDefault();
+                            deleteWishlist(wishlist.id);
+                          }
+                        }>
+                          <img src="/imgs/crytomato.png" alt="crying tomato" style={{width: "45px", height: "45px"}} title="Delete" />
+                        </div>
+                      </a>
                     </div>
-                  </a>
+                  
 
                   <div>
                     {editMode[i] ? (
@@ -159,16 +157,16 @@ export default function WishLists() {
                       </div>
                     ) : (
                       <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                        <h4 className={"my-auto"} style={{textAlign: "center", fontWeight: "bold"}}>
+                        <h6 className={"my-auto overflow-auto text-ellips"} style={{textAlign: "center", fontWeight: "bold"}} title={wishlist.title}>
                           <Link to={`/wishlist/${wishlist.id}`}>
                             { wishlist.title }
                           </Link>
-                        </h4>
+                        </h6>
                         <div
                           style={{ cursor: "pointer", marginLeft: "10px"}}
                           onClick={() => changeToTrue(i)}
                         >
-                          <img className="zoom-hover-half" src="/imgs/carrot.png" alt="editing carrot" style={{width: "20px", height: "30px"}}/>
+                          <img className="zoom-hover-half" src="/imgs/carrot.png" alt="editing carrot" style={{width: "20px", height: "30px"}} title="Rename"/>
 
                           {/* <ImPencil /> */}
                         </div>

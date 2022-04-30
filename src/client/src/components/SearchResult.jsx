@@ -9,7 +9,6 @@ export default function SearchResult() {
     const [results, setResults] = useState([]);
     const [page, setPage] = useState(1);
     const [pageList, setPageList] = useState([]);
-    const navigate = useNavigate();
     const params = useParams();
     const keyword = params.keyword || "";
 
@@ -39,7 +38,6 @@ export default function SearchResult() {
 
     return (
         <div>
-            <SearchBar/>
             <h3>
                 Search Results
                 {results.results &&
@@ -67,7 +65,7 @@ export default function SearchResult() {
                                                     textAlign: "center"
                                                 }}
                                             />
-                                            <h6 className={"my-auto"} style={{textAlign: "center", fontWeight: "bold"}}>
+                                            <h6 className={"my-auto overflow-auto text-ellips"} style={{textAlign: "center", fontWeight: "bold"}} title={result.title}>
                                                 <Link to={"/details/" + result.id.toString()}>
                                                     {result.title}
                                                 </Link>

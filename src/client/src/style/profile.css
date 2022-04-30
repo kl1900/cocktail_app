@@ -1,68 +1,116 @@
 .card {
-  background-color: #fff;
-  width: 500px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 2rem !important;
+    background-color: #fff;
+    width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 1rem !important;
+}
+
+.card-body {
+    padding: 0;
 }
 
 .top-container {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .profile-image {
-  border-radius: 10px;
-  border: 2px solid #5957f9;
+    border-radius: 10px;
+    border: 2px solid #5957f9;
 }
 
 .name {
-  font-size: 25px;
-  font-weight: bold;
-  position: relative;
-  top: 15px;
-  border-left-width: 10px;
+    font-size: 25px;
+    font-weight: bold;
+    position: relative;
+    top: 15px;
+    border-left-width: 10px;
 }
 
 .mail {
-  position: relative;
-  top: 10px;
+    position: relative;
+    top: 10px;
 }
 
 .middle-container {
-  background-color: #eee;
-  border-radius: 12px;
+    background-color: #eee;
+    border-radius: 12px;
 }
 
 .middle-container:hover {
-  border: 1px solid #5957f9;
+    border: 1px solid #5957f9;
 }
 
 .round-div {
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .recipe {
-  font-size: 16px;
-  font-weight: 700;
-  color: #272727;
-  text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    color: #272727;
+    text-decoration: none;
 }
 
 .recipe-border:hover {
-  border-bottom: 1px solid #dee2e6 !important;
+    border-bottom: 1px solid #dee2e6 !important;
 }
 
 .recipe:link,
 .recipe:hover,
 .recipe:visited,
 .recipe:visited {
-  text-decoration: none;
+    text-decoration: none;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: relative;
+    width: 1em;
+    font-size: 6vw;
+    color: #FFD600;
+    cursor: pointer
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
+
+@media screen and (max-width: 990px) {
+    .special {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 }

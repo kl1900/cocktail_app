@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { BsSearch } from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
 
 export default function SearchBar() {
@@ -14,19 +13,22 @@ export default function SearchBar() {
     }
 
     return (
-        <form action="/" method="get">
+        <form className={"form-inline"} action="/" method="get">
             <label htmlFor="header-search">
-                <BsSearch/>
             </label>
-            <input
-                type="text"
-                id="header-search"
-                placeholder="Enter recipe name"
-                name="search"
-                value={query || ""}
-                onChange={event => setQuery(event.target.value)}
-            />
-            <button type="submit" onClick={onSubmit}>Search</button>
+            <div className={"row"} style={{flexWrap: "nowrap"}}>
+                <input
+                    type="text"
+                    id="header-search"
+                    className={"form-control mr-sm-2"}
+                    style={{marginRight: "0.5rem"}}
+                    placeholder="Enter recipe name"
+                    name="search"
+                    value={query || ""}
+                    onChange={event => setQuery(event.target.value)}
+                />
+                <button className={"btn btn-outline-success my-2 my-sm-0"} type="submit" onClick={onSubmit}>Search</button>
+            </div>
         </form>
     );
 }
