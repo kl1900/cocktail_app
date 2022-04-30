@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Profile from "../components/UserProfile";
+import { enableFetchMocks } from "jest-fetch-mock";
+enableFetchMocks();
 
 let mockIsAuthenticated = false;
 
@@ -20,6 +22,12 @@ jest.mock("@auth0/auth0-react", () => ({
         };
     },
 }));
+
+jest.mock("../AuthTokenContext", () => ({
+    useAuthToken: () => {
+      return { accessToken: "123" };
+    },
+  }));
 
 fetch.mockResponse(
     JSON.stringify([

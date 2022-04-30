@@ -124,9 +124,9 @@ export default function Reviews() {
                             </div>
                             <div className={"reviews-element"} style={{maxWidth: "500px"}}>
                                 <Link to={"/details/" + review.productId.toString()}>
-                                    <h3>
+                                    <h4 style={{fontWeight: "bold"}}>
                                         {review.product.productName}
-                                    </h3>
+                                    </h4>
                                 </Link>
                                 <h5 style={{marginTop: "20px", marginBottom:"20px"}}>{review.updatedAt.slice(0, 10)}{" "}
                                     {review.updatedAt.slice(12, 19)}</h5>

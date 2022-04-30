@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { GET_USER_URL } from "../constants";
 import CreateWishlist from "./CreateWishlist";
 import EditWishlist from "./EditWishlist";
 import { useAuthToken } from "../AuthTokenContext";
 
 export default function WishLists() {
-  const navigate = useNavigate();
   const [wishlists, setWishlists] = useState([]);
   const [createMode, setCreateMode] = useState(false);
   const [editMode, setEditMode] = useState([]);
@@ -62,10 +60,6 @@ export default function WishLists() {
     setEditMode(temp);
   }, [wishlists]);
 
-  // const selectWishlist = (wishlistId) => {
-  //   navigate(`/wishlist/${wishlistId}`);
-  // };
-
   const deleteWishlist = (wishlistId) => {
     fetch(`${GET_USER_URL}/wishlist/${wishlistId}`, {
       method: "DELETE",
@@ -89,7 +83,7 @@ export default function WishLists() {
 
   return (
     <div>
-      <h1 style={{textAlign:"center", marginTop:"30px"}}>My Favorite Recipe Box</h1>
+      <h1 style={{textAlign:"center", marginTop:"60px", marginBottom: "30px", color: "#FDE79C", fontWeight: "bolder", fontSize: "3rem"}}>My Favorite Recipe Boxes</h1>
       {accessToken && wishlists.length !== 0 ? (
           <div style={{height: "90px"}}>
             <div style={{textAlign:"right", marginRight: "30px"}}>
@@ -143,29 +137,31 @@ export default function WishLists() {
                   width: "15rem", height: "18rem",
                   // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
                   // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#D2C950"
-                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "#FFE9B5"
+                  borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
                 }}>
                 <div className={"card-body"}
                   style={{display: "flex", flexDirection: "column", justifyContent: "space-evenly"}}>
                     <div style={{position: "relative"}}>
                       <img
                         src={wishlist.imageURL}
-                        className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
+                        className={"img-thumbnail round card-img-bottom my-auto mx-auto d-block"}
                         alt={wishlist.title}
                         style={{
                           width: "180px", height: "180px", objectFit: "cover",
                           textAlign: "center"
                       }}/>
-                      <a href="">
-                        <div className={"zoom-hover-half"}
-                          style={{position: 'absolute', right:"-1%", top:"-10%"}} onClick={(e) => {
-                            e.preventDefault();
-                            deleteWishlist(wishlist.id);
-                          }
-                        }>
-                          <img src="/imgs/crytomato.png" alt="crying tomato" style={{width: "45px", height: "45px"}} title="Delete" />
-                        </div>
-                      </a>
+                      <div className={"zoom-hover-half"}
+                        style={{position: 'absolute', right:"-1%", top:"-10%", cursor: "pointer"}} onClick={(e) => {
+                          e.preventDefault();
+                          deleteWishlist(wishlist.id);
+                        }
+                      }>
+                        <img 
+                          src="/imgs/crytomato.png" 
+                          alt="crying tomato" 
+                          style={{width: "45px", height: "45px"}} 
+                          title="Delete" />
+                      </div>
                     </div>
                   
 
@@ -180,36 +176,28 @@ export default function WishLists() {
                       </div>
                     ) : (
                       <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                        <h6 className={"my-auto overflow-auto text-ellips"} style={{textAlign: "center", fontWeight: "bold"}} title={wishlist.title}>
-                          <Link to={`/wishlist/${wishlist.id}`}>
-                            { wishlist.title }
-                          </Link>
+                        <h6 
+                          className={"my-auto overflow-auto text-ellips"} 
+                          style={{textAlign: "center", fontWeight: "bold"}} 
+                          title={wishlist.title}>
+                            <Link to={`/wishlist/${wishlist.id}`}>
+                              { wishlist.title }
+                            </Link>
                         </h6>
                         <div
                           style={{ cursor: "pointer", marginLeft: "10px"}}
                           onClick={() => changeToTrue(i)}
                         >
-                          <img className="zoom-hover-half" src="/imgs/carrot.png" alt="editing carrot" style={{width: "20px", height: "30px"}} title="Rename"/>
-
-                          {/* <ImPencil /> */}
+                          <img 
+                            className="zoom-hover-half" 
+                            src="/imgs/carrot.png" 
+                            alt="editing carrot" 
+                            style={{width: "20px", height: "30px"}} 
+                            title="Rename"
+                          />
                         </div>
                       </div>
                     )}
-                  </div>
-
-                  <div>
-                    {/* <button
-                      className="check"
-                      onClick={() => selectWishlist(wishlist.id)}
-                    >
-                      Check
-                    </button> */}
-                    {/* <button
-                      className="delete"
-                      onClick={() => deleteWishlist(wishlist.id)}
-                    >
-                      Delete
-                    </button> */}
                   </div>
                 </div>
                 </div>
