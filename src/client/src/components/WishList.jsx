@@ -79,6 +79,13 @@ export default function WishList() {
       {notFound ? (<NotFound />) : 
       (<div>
         <h1 style={{textAlign:"center", marginTop:"30px"}}>{wishlistTitle}</h1>
+        {accessToken && recipes.length === 0 ? (
+            <div style={{marginTop: "90px"}}>
+              <h2 style={{textAlign: "center"}}>Oops!<br/>This box is empty!</h2>
+            </div>
+        ) : (
+            ""
+        )}
         <div className={"row justify-content-center"}>
           {recipes.map((recipe) => (
             <div className={"col"} style={{flexGrow: 0}} key={recipe.externalId}>

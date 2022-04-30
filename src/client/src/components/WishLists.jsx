@@ -5,9 +5,6 @@ import { GET_USER_URL } from "../constants";
 import CreateWishlist from "./CreateWishlist";
 import EditWishlist from "./EditWishlist";
 import { useAuthToken } from "../AuthTokenContext";
-// import { ImPencil } from "react-icons/im";
-
-// import { FaTrashAlt } from "react-icons/fa";
 
 export default function WishLists() {
   const navigate = useNavigate();
@@ -93,25 +90,51 @@ export default function WishLists() {
   return (
     <div>
       <h1 style={{textAlign:"center", marginTop:"30px"}}>My Favorite Recipe Box</h1>
-      <div style={{height: "90px"}}>
-        <div style={{textAlign:"right", marginRight: "30px"}}>
-          {createMode ? (
-            <div>
-              <CreateWishlist
-                changeCreate={changeCreate}
-                accessToken={accessToken}
-                countNum={countNum}
-              />
+      {accessToken && wishlists.length !== 0 ? (
+          <div style={{height: "90px"}}>
+            <div style={{textAlign:"right", marginRight: "30px"}}>
+              {createMode ? (
+                  <div>
+                    <CreateWishlist
+                        changeCreate={changeCreate}
+                        accessToken={accessToken}
+                        countNum={countNum}
+                    />
+                  </div>
+              ) : (
+                  <div>
+                    <button className="btn " style={{backgroundColor:"#FBA827"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
+                  </div>
+              )}
             </div>
-          ) : (
-            <div>
-              <button className="btn " style={{backgroundColor:"#FBA827"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
-            </div>
-          )}
-        </div>
-      </div>
-                      
+          </div>
+      ) : ("")}
       <div>
+        {accessToken && wishlists.length === 0 ? (
+            <div>
+              <div style={{height: "90px"}}></div>
+              <h2 style={{textAlign: "center"}}>Oops!<br/>You haven't created any recipe boxes yet!</h2>
+              <div style={{height: "90px"}}>
+                <div style={{textAlign:"center"}}>
+                  {createMode ? (
+                      <div>
+                        <CreateWishlist
+                            changeCreate={changeCreate}
+                            accessToken={accessToken}
+                            countNum={countNum}
+                        />
+                      </div>
+                  ) : (
+                      <div>
+                        <button className="btn " style={{backgroundColor:"#FBA827"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
+                      </div>
+                  )}
+                </div>
+              </div>
+            </div>
+        ) : (
+            ""
+        )}
         <div className={"row justify-content-center"}>
           {wishlists.map((wishlist, i) => (
             <div className="wishlist-row-li" key={wishlist.id} style={{flexGrow: 0}}>

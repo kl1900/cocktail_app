@@ -1,19 +1,41 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Outlet, Link} from "react-router-dom";
 import {useAuth0} from "@auth0/auth0-react";
 import SearchBar from "./SearchBar";
+import {useAuthToken} from "../AuthTokenContext";
 
 export default function AppLayout() {
-    const {user, isAuthenticated, isLoading, logout} = useAuth0();
+    const { isAuthenticated, isLoading, logout} = useAuth0();
+    const [name, setName] = useState("(user)");
+    const { accessToken } = useAuthToken();
+
+    useEffect(() => {
+        async function getUser() {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/me`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            const data = await res.json();
+            if (data) {
+                setName(data.name);
+            }
+        }
+        if (accessToken) {
+            getUser();
+        }
+    }, [accessToken]);
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
+
     function UserHeadbar() {
         return (
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <Link className="navbar-brand" to="/">
+                <Link className="navbar-brand" style={{paddingRight: "20px"}} to="/">
                     <img
                         src="/logo.png"
                         width="37.34"
@@ -25,6 +47,17 @@ export default function AppLayout() {
                 </Link>
                 <div className={"navbar-nav mr-auto"}>
                     <SearchBar/>
+                </div>
+                <div className={"navbar-nav float-end"} style={{paddingLeft: "50px", paddingRight: "30px",
+                    display: "flex", flexDirection: "row", flexWrap: "nowrap"}}>
+                    <div>
+                        {"Hello,"}&nbsp;
+                    </div>
+                    <div>
+                        <Link to={"/profile"}>
+                            {name}
+                        </Link>
+                    </div>
                 </div>
                 <button
                     className="navbar-toggler"
@@ -38,7 +71,7 @@ export default function AppLayout() {
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className="collapse navbar-collapse" id="navbarSupportedContent" style={{flexGrow: 0}}>
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item active">
                             <Link to="/" className={"nav-link"}>
@@ -46,13 +79,13 @@ export default function AppLayout() {
                             </Link>
                         </li>
                         <li className="nav-item active">
-                            <Link to="/profile" className={"nav-link"}>
-                                My Profile
+                            <Link to="/wishlists" className={"nav-link text-nowrap"}>
+                                My Favorites
                             </Link>
                         </li>
                         <li className="nav-item active">
-                            <Link to="/wishlists" className={"nav-link"}>
-                                My Favorites
+                            <Link to="/reviews" className={"nav-link text-nowrap"}>
+                                My Reviews
                             </Link>
                         </li>
                         <li className="nav-item active">

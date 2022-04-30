@@ -1,11 +1,11 @@
 # Functional requirements
 
-- [ ] Homepage
+- [x] Homepage
 
   - [x] The landing page of your web application. It is the first page users should see when they visit your website.
   - [x] Must be mapped to either the root context ("/") or ("/home").
-  - [ ] Must display generic content for anonymous users. The content must be dynamic based on the latest data. For instance, you might display snippets and links to the most recent post, review, or member who recently joined
-  - [ ] Must display specific content for the logged-in user. The content must be dynamic based on the most recent data entered by the logged-in user. For instance, you might display snippets and links to the most recent post or review created by the logged-in user
+  - [x] Must display generic content for anonymous users. The content must be dynamic based on the latest data. For instance, you might display snippets and links to the most recent post, review, or member who recently joined
+  - [x] Must display specific content for the logged-in user. The content must be dynamic based on the most recent data entered by the logged-in user. For instance, you might display snippets and links to the most recent post or review created by the logged-in user
   - [x] Must be clear to what the Web site is about and must look polished and finished
 
 - [x] Log in/Register page

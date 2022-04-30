@@ -121,7 +121,11 @@ export default function Profile() {
               My Favorites ({wishlistCount})
             </Link>
           </div>
-          <p>Total Reviews Count: {reviewCount}</p>
+          <div className="pt-2">
+            <Link to="/reviews" className="recipe">
+              My Reviews ({reviewCount})
+            </Link>
+          </div>
         </div>
       </div>
     </div>
