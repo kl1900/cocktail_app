@@ -39,25 +39,29 @@ export default function Profile() {
       const data = {
         newName: document.getElementById("newName").value,
       };
-      fetch(`${process.env.REACT_APP_API_URL}/me`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data === null) {
-            alert("Duplicate name detected");
-          } else {
-            setUserName(data.name);
-          }
+      if (data.newName.length < 20 || data.newName.length > 1) {
+        fetch(`${process.env.REACT_APP_API_URL}/me`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            if (data === null) {
+              alert("Duplicate name detected");
+            } else {
+              setUserName(data.name);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      } else {
+        alert("name can only be 1-10 characters");
+      }
     };
 
     return (
@@ -69,6 +73,9 @@ export default function Profile() {
           placeholder="new username"
           aria-label="new username"
           aria-describedby="basic-addon2"
+          maxlength="20"
+          minLength="1"
+          required
         />
         <div className="input-group-append">
           <button
