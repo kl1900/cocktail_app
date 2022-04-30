@@ -34,7 +34,7 @@ test("renders Home copy and Login Button", () => {
     </MemoryRouter>
   );
 
-  expect(screen.getByText("Recipe Collection Login")).toBeInTheDocument();
+  expect(screen.getByText("Sign In")).toBeInTheDocument();
   expect(screen.getByText("Login")).toBeInTheDocument();
 });
 
