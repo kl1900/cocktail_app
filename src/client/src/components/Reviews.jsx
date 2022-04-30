@@ -110,15 +110,15 @@ export default function Reviews() {
             )}
             <div className={"list-group"}>
                 {reviews.map((review, i) => (
-                    <div key={i.toString()} className={"list-group-item"}>
+                    <div key={i.toString()} className={"list-group-item opacity-25"}>
                         <div className={"reviews-row"}>
                             <div style={{paddingRight: "30px", paddingLeft: "30px", maxWidth: "500px"}}>
                                 <img
                                     src={review.product.imageURL}
-                                    className={"img-thumbnail rounded card-img-bottom mx-auto my-auto d-block reviews-element"}
+                                    className={"img-thumbnail  card-img-bottom mx-auto my-auto d-block reviews-element"}
                                     alt={"img" + i.toString()}
                                     style={{
-                                        width: "180px", height: "180px", objectFit: "cover"
+                                        width: "180px", height: "180px", objectFit: "cover", borderRadius: "50%"
                                     }}
                                 />
                             </div>
@@ -128,6 +128,8 @@ export default function Reviews() {
                                         {review.product.productName}
                                     </h3>
                                 </Link>
+                                <h5 style={{marginTop: "20px", marginBottom:"20px"}}>{review.updatedAt.slice(0, 10)}{" "}
+                                    {review.updatedAt.slice(12, 19)}</h5>
                                 <div className={"reviews-element"} style={{display: "flex"}}>
                                     {editIndex === i ? (
                                         <RatingStar rating={editRating} setRating={setEditRating}/>
@@ -139,8 +141,7 @@ export default function Reviews() {
                                         ))}</h5>
                                     )}
                                 </div>
-                                <h5>{review.updatedAt.slice(0, 10)}{" "}
-                                    {review.updatedAt.slice(12, 19)}</h5>
+                                
                                 {editIndex === i ? (
                                     <form>
                                         <div className={"form-group"} style={{justifyContent: "start", display: "flex"}}>
@@ -166,7 +167,7 @@ export default function Reviews() {
                                     )
                                 ))}
                                 <div className={"row reviews-element"} style={{maxWidth: "500px", flexWrap: "nowrap"}}>
-                                    <div style={{marginRight: "30px"}}>
+                                    <div style={{marginRight: "30px", marginLeft: "16px"}}>
                                         <button className={"btn btn-outline-success"}
                                                 style={{width: "70px"}}
                                                 onClick={(e) => {
