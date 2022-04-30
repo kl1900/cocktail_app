@@ -8,6 +8,8 @@ import { useAuthToken } from "../AuthTokenContext";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import RatingStar from "./RatingStar";
 
+import "../style/index.css";
+
 export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -69,7 +71,9 @@ export default function ProductDetail() {
           }
         }
         const tmp_reviews = data.review;
-        tmp_reviews.sort((a, b) => -(new Date(a.updatedAt) - new Date(b.updatedAt)));
+        tmp_reviews.sort(
+          (a, b) => -(new Date(a.updatedAt) - new Date(b.updatedAt))
+        );
         setReviews(tmp_reviews);
       }
     }
@@ -339,10 +343,15 @@ export default function ProductDetail() {
 
   return recipeDetails.map((recipeDetail) => (
     <div key={params.productId} className="recipeDetail">
-      <div className="container">
+      <div className="container mt-5 bg-light  pl-5 pt-5 pb-5 pr-5">
         <div className="row">
           <div>
-            <img className={"img-fluid"} src={recipeDetail.image} alt={recipeDetail.title} with="200" />
+            <img
+              className={"img-fluid"}
+              src={recipeDetail.image}
+              alt={recipeDetail.title}
+              with="200"
+            />
           </div>
           <div className="col-5 special">
             <div className="my-5">
@@ -383,8 +392,8 @@ export default function ProductDetail() {
 
         <div>
           {userMode ? (
-            <div>
-              <h5 className="mt-2">Save to Recipe</h5>
+            <div className="mt-2">
+              <h5>Save to Recipe</h5>
               <div>
                 <Creatable
                   isClearable
@@ -411,7 +420,7 @@ export default function ProductDetail() {
 
         {/* Recipe instruction */}
         {recipeDetail.analyzedInstructions[0] ? (
-          <div className="row">
+          <div className="row mt-3 pt-3">
             <div className="col-12 col-lg-8">
               <h4> Instructions</h4>
               <ol className="instruction-list">
@@ -452,30 +461,25 @@ export default function ProductDetail() {
         ) : (
           ""
         )}
-        {/*<div className="mt-5"></div>*/}
-        {/*<div className="row">*/}
-        {/*  <div className="col-12">*/}
-        {/*    <div className="section-heading text-left">*/}
-        {/*      <h3>Leave a comment</h3>*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
 
         {userMode ? (
-          <div className="row" style={{marginTop: "40px"}}>
+          <div className="row" style={{ marginTop: "40px" }}>
             <div className={"col-12"}>
-              <h3>{recordId !== null ? "Edit Your Comment" : "Leave a Comment"}</h3>
+              <h3>
+                {recordId !== null ? "Edit Your Comment" : "Leave a Comment"}
+              </h3>
             </div>
             <div className={"col-12"}>
               <div className={"contact-form-area"}>
                 <div className={"row"}>
                   <div className={"col-12"}>
                     <span>Rating: </span>
-                    <RatingStar rating={rating} setRating={setRating}/>
+                    <RatingStar rating={rating} setRating={setRating} />
                   </div>
                   <div className={"col-12 form-group"}>
                     <label htmlFor={"comment"}>Comment:</label>
-                    <textarea className={"form-control"}
+                    <textarea
+                      className={"form-control"}
                       type="text"
                       rows="5"
                       value={inputValue}
@@ -484,8 +488,9 @@ export default function ProductDetail() {
                       }}
                     />
                   </div>
-                  <div className={"col-12 text-right"}>
-                    <input className={"btn btn-outline-primary"}
+                  <div className={"col-12 text-right pr-4"}>
+                    <input
+                      className={"btn btn-outline-primary"}
                       type="submit"
                       id="submit"
                       value={button}
@@ -519,9 +524,20 @@ export default function ProductDetail() {
                 <div className={"row"}>
                   <div className={"col-12"}>
                     {reviews.map((review) => (
-                      <div className={"commented-section mt-2"} key={review.id}>
-                        <div className={"d-flex flex-row align-items-center commented-user"}>
-                          <h5 className={"mr-2"}>Rated by: {review.user.name}</h5>
+                      <div
+                        className={
+                          "commented-section comment mt-2 pt-2 pl-2 pr-2 pb-2"
+                        }
+                        key={review.id}
+                      >
+                        <div
+                          className={
+                            "d-flex flex-row align-items-center commented-user"
+                          }
+                        >
+                          <h5 className={"mr-2"}>
+                            Rated by: {review.user.name}
+                          </h5>
                           <span className={"dot mb-1"}></span>
                           {review.updatedAt ? (
                             <div className={"mb-1 ml-2"}>
@@ -536,15 +552,25 @@ export default function ProductDetail() {
                           )}
                         </div>
                         <div className={"col-12"}>
-                          <h5>Rating: {[1,2,3,4,5].map((num) => (
+                          <h5>
+                            Rating:{" "}
+                            {[1, 2, 3, 4, 5].map((num) => (
                               <span key={"star" + num.toString()}>
-                                {review.rating >= num ? (<AiFillStar/>) : (<AiOutlineStar/>)}
+                                {review.rating >= num ? (
+                                  <AiFillStar />
+                                ) : (
+                                  <AiOutlineStar />
+                                )}
                               </span>
-                            ))}</h5>
+                            ))}
+                          </h5>
                         </div>
                         <div className={"col-12"}>
                           {review.content.split("\n").map((item, index) => (
-                            <blockquote key={"block" + item} className={"blockquote"}>
+                            <blockquote
+                              key={"block" + item}
+                              className={"blockquote"}
+                            >
                               <p key={index} className={"mb-0"}>
                                 {item}
                                 <br />
@@ -553,7 +579,7 @@ export default function ProductDetail() {
                           ))}
                         </div>
 
-                        <div>
+                        <div className="text-right">
                           {review.id === recordId ? (
                             <div
                               style={{ cursor: "pointer" }}

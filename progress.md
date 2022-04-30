@@ -46,7 +46,7 @@
 # User experience requirements
 
 - [x] Navigating between pages must be clearly marked
-- [ ] Currently logged in user must be clearly marked
+- [x] Currently logged in user must be clearly marked
 - [x] Errors must be clearly marked and options to fix them must be provided
 - [x] Navigating to the home page must be clearly marked
 - [x] Navigating to the profile must be clearly marked
