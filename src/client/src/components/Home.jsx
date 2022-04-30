@@ -4,16 +4,19 @@ import {GET_USER_URL} from "../constants";
 import SearchBar from "./SearchBar.jsx";
 import {useNavigate} from "react-router-dom";
 
+// src:"/imgs/1.png"
+const list = ["Appetizers and Snacks", "Bread Recipes", "Breakfast and Brunch", "Desserts", "Dinner Recipe", "Drinks", "Everyday", "Fruit", "Lunch Recipes"];
+
 export default function Home() {
     const [joke, setJoke] = useState("");
-    const [count, setCount] = useState(0);
+    // const [count, setCount] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
         getFoodJoke().then(data => {
             setJoke(data.text);
         }).catch(error => console.log(error));
-    }, [count])
+    }, [])
 
     async function getRandomRecipe() {
         const res = await fetch(`${GET_USER_URL}/getRandomRecipe`);
@@ -41,8 +44,30 @@ export default function Home() {
         }).catch(error => console.log(error));
     };
 
+    const getName = (i) => {
+        if (i === 'Fruit') {
+            return 'Fruits'
+        }
+        else if (i === 'Everyday') {
+            return 'Everyday Cookings'
+        }
+        else {
+            return i;
+        }}
+
     return (
         <div>
+            <div className="row" style={{justifyContent: "space-evenly", marginTop: "20px"}}> 
+                {list.map((i, index) => (
+                    <Link to={"/search/" + i}>
+                        <div key={index} style={{width: "70px"}}>
+                            <img src={`/imgs/${index+1}.png`} alt={i} style={{width: "70px", borderRadius: "50%"}}/>
+                            <h6 style={{textAlign: "center"}}>{getName(i)}</h6>
+                            
+                        </div>
+                    </Link>
+                ))}
+            </div>
             <div style={{background: "yellow"}}>
                 <h2>All Your Food. In One Place.</h2>
                 <SearchBar/>
