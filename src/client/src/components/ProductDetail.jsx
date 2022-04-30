@@ -5,11 +5,12 @@ import { GET_USER_URL } from "../constants";
 import Creatable from "react-select/creatable";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthToken } from "../AuthTokenContext";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [rating, setRating] = useState("1");
+  const [rating, setRating] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [count, setCount] = useState(0);
   const [button, setButton] = useState("Submit");
@@ -60,6 +61,8 @@ export default function ProductDetail() {
           for (let i = 0; i < data.review.length; i++) {
             if (data.review[i].userId === id) {
               setRecordId(data.review[i].id);
+              // setRating(data.review[i].rating);
+              // setInputValue(data.review[i].content);
               break;
             }
           }
@@ -117,7 +120,7 @@ export default function ProductDetail() {
     let data1 = {
       productId: parseInt(params.productId),
       content: inputValue,
-      rating: parseInt(rating),
+      rating: rating,
     };
     fetch(`${GET_USER_URL}/review`, {
       method: "POST",
@@ -144,7 +147,7 @@ export default function ProductDetail() {
     e.preventDefault();
     let data2 = {
       content: inputValue,
-      rating: parseInt(rating),
+      rating: rating,
     };
 
     if (recordId === null) {
@@ -311,7 +314,7 @@ export default function ProductDetail() {
   }
 
   function resetInput() {
-    setRating("");
+    setRating(1);
     setInputValue("");
   }
 
@@ -334,11 +337,11 @@ export default function ProductDetail() {
   return recipeDetails.map((recipeDetail) => (
     <div key={params.productId} className="recipeDetail">
       <div className="container">
-        <div className="row mt-5">
-          <div className="col-7">
-            <img src={recipeDetail.image} alt={recipeDetail.title} with="200" />
+        <div className="row">
+          <div>
+            <img className={"img-fluid"} src={recipeDetail.image} alt={recipeDetail.title} with="200" />
           </div>
-          <div className="col-5">
+          <div className="col-5 special">
             <div className="my-5">
               <h2>{recipeDetail.title}</h2>
               <div className="receipe-duration">
@@ -431,7 +434,7 @@ export default function ProductDetail() {
                       />
                       <label
                         className="custom-control-label"
-                        for={"customCheck" + index}
+                        htmlFor={"customCheck" + index}
                       >
                         {ingredient.original}
                       </label>
@@ -446,44 +449,51 @@ export default function ProductDetail() {
         ) : (
           ""
         )}
-        <div className="mt-5"></div>
-        <div className="row">
-          <div className="col-12">
-            <div className="section-heading text-left">
-              <h3>Leave a comment</h3>
-            </div>
-          </div>
-        </div>
+        {/*<div className="mt-5"></div>*/}
+        {/*<div className="row">*/}
+        {/*  <div className="col-12">*/}
+        {/*    <div className="section-heading text-left">*/}
+        {/*      <h3>Leave a comment</h3>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
         {userMode ? (
-          <div className="row">
-            <div class="col-12">
-              <p>{recordId !== null ? "Edit" : "Add"} Review:</p>
+          <div className="row" style={{marginTop: "40px"}}>
+            <div className={"col-12"}>
+              <h3>{recordId !== null ? "Edit Your Comment" : "Leave a Comment"}</h3>
             </div>
-            <div class="col-12">
-              <div class="contact-form-area">
-                <div class="row">
-                  <div class="col-12">
-                    <label for="rating">Select rating:</label>
-                    <select
-                      class="form-control"
-                      id="rating"
-                      value={rating}
-                      onChange={(e) => {
-                        setRating(e.target.value);
-                      }}
-                    >
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                    </select>
+            <div className={"col-12"}>
+              <div className={"contact-form-area"}>
+                <div className={"row"}>
+                  <div className={"col-12"}>
+                    <span>Rating: </span>
+                    <div className="rating justify-content-end">
+                      <input type="radio" name="rating" value={5} id={"5"} checked={rating === 5}
+                             onClick={() => {
+                               setRating(5);
+                             }}/> <label htmlFor="5">☆</label>
+                      <input type="radio" name="rating" value={4} id={"4"} checked={rating === 4}
+                             onClick={() => {
+                               setRating(4);
+                             }}/> <label htmlFor="4">☆</label>
+                      <input type="radio" name="rating" value={3} id={"3"} checked={rating === 3}
+                             onClick={() => {
+                               setRating(3);
+                             }}/> <label htmlFor="3">☆</label>
+                      <input type="radio" name="rating" value={2} id={"2"} checked={rating === 2}
+                             onClick={() => {
+                               setRating(2);
+                             }}/> <label htmlFor="2">☆</label>
+                      <input type="radio" name="rating" value={1} id={"1"} checked={rating === 1}
+                             onClick={() => {
+                               setRating(1);
+                             }}/> <label htmlFor="1">☆</label>
+                    </div>
                   </div>
-                  <div class="col-12 form-group">
-                    <label for="comment">Comment:</label>
-                    <textarea
-                      class="form-control"
+                  <div className={"col-12 form-group"}>
+                    <label htmlFor={"comment"}>Comment:</label>
+                    <textarea className={"form-control"}
                       type="text"
                       rows="5"
                       value={inputValue}
@@ -492,9 +502,8 @@ export default function ProductDetail() {
                       }}
                     />
                   </div>
-                  <div class="col-12 text-right">
-                    <input
-                      class="btn btn-outline-primary"
+                  <div className={"col-12 text-right"}>
+                    <input className={"btn btn-outline-primary"}
                       type="submit"
                       id="submit"
                       value={button}
@@ -521,36 +530,38 @@ export default function ProductDetail() {
         </div>
 
         {/* Comment section */}
-        <div class="row">
+        <div className={"row"}>
           {reviews.length !== 0 ? (
-            <div class="col-12">
-              <div class="contact-form-area">
-                <div class="row">
-                  <div class="col-12">
+            <div className={"col-12"}>
+              <div className={"contact-form-area"}>
+                <div className={"row"}>
+                  <div className={"col-12"}>
                     {reviews.map((review) => (
-                      <div class="commented-section mt-2">
-                        <div class="d-flex flex-row align-items-center commented-user">
-                          <h5 class="mr-2">Rated by: {review.username}</h5>
-                          <span class="dot mb-1"></span>
+                      <div className={"commented-section mt-2"}>
+                        <div className={"d-flex flex-row align-items-center commented-user"}>
+                          <h5 className={"mr-2"}>Rated by: {review.username}</h5>
+                          <span className={"dot mb-1"}></span>
                           {review.updatedAt ? (
-                            <div class="mb-1 ml-2">
+                            <div className={"mb-1 ml-2"}>
                               Updated at {review.updatedAt.slice(0, 10)}{" "}
                               {review.updatedAt.slice(12, 19)}
                             </div>
                           ) : (
-                            <div class="mb-1 ml-2">
+                            <div className={"mb-1 ml-2"}>
                               Created at {review.createdAt.slice(0, 10)}{" "}
                               {review.createdAt.slice(12, 19)}
                             </div>
                           )}
                         </div>
-                        <div class="col-12">
-                          <h5>Rating: {review.rating}</h5>
+                        <div className={"col-12"}>
+                          <h5>Rating: {[1,2,3,4,5].map((num) => (
+                            review.rating >= num ? (<AiFillStar/>) : (<AiOutlineStar/>)
+                            ))}</h5>
                         </div>
-                        <div class="col-12">
+                        <div className={"col-12"}>
                           {review.content.split("\n").map((item, index) => (
-                            <blockquote class="blockquote">
-                              <p key={index} class="mb-0">
+                            <blockquote className={"blockquote"}>
+                              <p key={index} className={"mb-0"}>
                                 {item}
                                 <br />
                               </p>
@@ -579,7 +590,7 @@ export default function ProductDetail() {
               </div>
             </div>
           ) : (
-            <p>"Currently no review for this recipe"</p>
+            <p>Currently no comment for this recipe!</p>
           )}
         </div>
       </div>
