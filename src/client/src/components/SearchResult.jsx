@@ -9,7 +9,6 @@ export default function SearchResult() {
     const [results, setResults] = useState([]);
     const [page, setPage] = useState(1);
     const [pageList, setPageList] = useState([]);
-    const navigate = useNavigate();
     const params = useParams();
     const keyword = params.keyword || "";
 

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthToken } from "../AuthTokenContext";
 import NotFound from "./NotFound";
 import { FcDislike } from "react-icons/fc";
-import { IoScale } from "react-icons/io5";
+// import { IoScale } from "react-icons/io5";
 // import { useUser } from "../UserContext";
 
 export default function WishList() {
@@ -74,7 +74,7 @@ export default function WishList() {
 
   return (
     <div className="wishlistName">
-      <h3 style={{marginTop: "30px", marginBottom: "30px"}}>My Favorite Recipes</h3>
+      <h3 style={{marginTop: "30px", marginBottom: "30px"}}>My Favorite Recipe Box</h3>
       <Link to="/wishlists" > ⬅️ Back</Link>
       {notFound ? (<NotFound />) : 
       (<div>

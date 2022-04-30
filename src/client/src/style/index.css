@@ -54,11 +54,8 @@ th {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    line-height: 16px;
-    /* fallback */
-    max-height: 32px;
-    /* fallback */
+    line-height: 20px;
+    max-height: 40px;
     -webkit-line-clamp: 2;
-    /* number of lines to show */
     -webkit-box-orient: vertical;
 }

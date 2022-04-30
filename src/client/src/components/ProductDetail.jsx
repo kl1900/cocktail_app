@@ -426,7 +426,7 @@ export default function ProductDetail() {
                 <div className="ingredients">
                   <h4> Ingredients</h4>
                   {recipeDetail.extendedIngredients.map((ingredient, index) => (
-                    <div className="custom-control custom-checkbox">
+                    <div className="custom-control custom-checkbox" key={index}>
                       <input
                         type="checkbox"
                         className="custom-control-input"
@@ -537,7 +537,7 @@ export default function ProductDetail() {
                 <div className={"row"}>
                   <div className={"col-12"}>
                     {reviews.map((review) => (
-                      <div className={"commented-section mt-2"}>
+                      <div className={"commented-section mt-2"} key={review.id}>
                         <div className={"d-flex flex-row align-items-center commented-user"}>
                           <h5 className={"mr-2"}>Rated by: {review.username}</h5>
                           <span className={"dot mb-1"}></span>
