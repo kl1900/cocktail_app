@@ -135,7 +135,11 @@ app.get("/me", requireAuth, async (req, res) => {
           product: true,
         },
       },
-      review: true,
+      review: {
+        include: {
+          product: true,
+        },
+      },
     },
   });
 
@@ -210,13 +214,36 @@ app.get("/recipe/:id", async (req, res) => {
         externalId: id,
       },
       include: {
-        review: true,
+        review: {
+          include: {
+            user: true,
+          }
+        },
       },
     });
     if (recipe === null) {
       res.status(404).json(null);
     } else {
       res.json(recipe);
+    }
+  } catch (e) {
+    res.status(503).json(null);
+  }
+});
+
+app.get("/communityPicks", async (req, res) => {
+  try {
+    const recipes = await prisma.product.findMany({
+      include: {
+        review: true,
+      },
+    });
+    recipes.sort((a, b) => -(a.review.length - b.review.length));
+    if (recipes.length > 8) {
+      res.json(recipes.slice(0, 8));
+    }
+    else {
+      res.json(recipes);
     }
   } catch (e) {
     res.status(503).json(null);
@@ -537,7 +564,6 @@ app.post("/review", requireAuth, async (req, res) => {
       data: {
         product: { connect: { externalId: productId } },
         user: { connect: { id: user.id } },
-        username: user.name,
         content: content,
         rating: rating,
       },

@@ -2,47 +2,56 @@ import React, {useEffect, useState} from "react";
 import {useParams, Link} from "react-router-dom";
 import {GET_USER_URL} from "../constants";
 import {useNavigate} from "react-router-dom";
+import {useAuth0} from "@auth0/auth0-react";
+import {useAuthToken} from "../AuthTokenContext";
 
 const list = ["Appetizers and Snacks", "Bread Recipes", "Breakfast and Brunch", "Desserts", "Dinner Recipe",
     "Drinks", "Everyday", "Fruit", "Lunch Recipes"];
 
 export default function Home() {
-    const [joke, setJoke] = useState("");
-    // const [count, setCount] = useState(0);
     const navigate = useNavigate();
-    const cp = [
-        {name: 'Citrus-and-Chile-Braised Short Ribs',
-        id: 716589,
-        imgSrc: "/cp1.jpg"},
+    const { isAuthenticated } = useAuth0();
+    const { accessToken } = useAuthToken();
+    const [userFav, setUserFav] = useState([]);
+    const [communityPicks, setCommunityPicks] = useState([]);
 
-        {name: 'Farro & Fruit Salad',
-            id: 769527,
-            imgSrc: "/cp2.jpg"},
+    useEffect(() => {
+        async function getUser() {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/me`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+            const data = await res.json();
+            if (data) {
+                let reviews = data.review;
+                reviews.sort((a, b) => -(a.rating - b.rating));
+                if (reviews.length > 8) {
+                    reviews = reviews.slice(0, 8);
+                }
+                const products = []
+                for (let i = 0; i < reviews.length; i++) {
+                    products.push(reviews[i].product);
+                }
+                setUserFav(products);
+            }
+        }
+        if (accessToken) {
+            getUser();
+        }
+    }, [accessToken]);
 
-        {name: 'Homemade Apple Pie',
-            id: 1037693,
-            imgSrc: "/cp3.jpg"},
-
-        {name: 'Kale Smoothie',
-            id: 516662,
-            imgSrc: "/cp4.jpg"},
-
-        {name: 'Cinnamon pancakes with compote & maple syrup',
-            id: 224465,
-            imgSrc: "/cp5.jpg"},
-
-        {name: 'Banh Mi Burgers with Spicy Sriracha Mayo',
-            id: 864633,
-            imgSrc: "/cp6.jpg"},
-
-        {name: 'Chicken Saltimbocca',
-            id: 248884,
-            imgSrc: "/cp7.jpg"},
-
-        {name: 'Honey-Mustard Chicken',
-            id: 402577,
-            imgSrc: "/cp8.jpg"},
-    ]
+    useEffect(() => {
+        async function getCommunityPicks() {
+            const res = await fetch(`${GET_USER_URL}/communityPicks`);
+            const data = await res.json();
+            return data;
+        }
+        getCommunityPicks().then(data => {
+            setCommunityPicks(data);
+        }).catch(error => console.log(error));
+    }, []);
 
     async function getRandomRecipe() {
         const res = await fetch(`${GET_USER_URL}/getRandomRecipe`);
@@ -71,7 +80,7 @@ export default function Home() {
         <div>
             <div className="row" style={{justifyContent: "space-evenly", marginTop: "20px"}}>
                 {list.map((i, index) => (
-                    <Link to={"/search/" + i}>
+                    <Link key={i} to={"/search/" + i}>
                         <div key={index} style={{width: "70px"}}>
                             <img src={`/imgs/${index + 1}.png`} alt={i} style={{width: "70px", borderRadius: "50%"}}/>
                             <h6 style={{textAlign: "center"}}>{getName(i)}</h6>
@@ -80,12 +89,55 @@ export default function Home() {
                     </Link>
                 ))}
             </div>
+            {isAuthenticated ? (
+                <div style={{marginTop: "50px"}}>
+                    <h3>Your Highest Rated Recipes: </h3>
+                    <div style={{marginTop: "30px"}}>
+                        {userFav.length === 0 ? (
+                            <h4 style={{textAlign: "center"}}>
+                                Your highest rated recipes will be shown here.
+                            </h4>
+                        ) : ("")}
+                        <div className={"row justify-content-center"}>
+                            {userFav.map(item => (
+                                <div key={"user" + item.externalId} className={"col"} style={{flexGrow: 0}}>
+                                    <div className={"card zoom-hover"} style={{
+                                        width: "15rem", height: "18rem",
+                                        borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
+                                    }}>
+                                        <div className={"card-body text-center"}
+                                             style={{display: "flex", flexDirection: "column",
+                                                 justifyContent: "space-between"}}>
+                                            <img
+                                                src={item.imageURL}
+                                                className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
+                                                alt={item.productName}
+                                                style={{
+                                                    width: "180px", height: "180px", objectFit: "cover",
+                                                    textAlign: "center"
+                                                }}
+                                            />
+                                            <h6 className={"my-auto overflow-auto text-ellips"}
+                                                style={{textAlign: "center", fontWeight: "bold"}}
+                                                title={item.productName}>
+                                                <Link to={"/details/" + item.externalId.toString()}>
+                                                    {item.productName}
+                                                </Link>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            ) : ("")}
             <div style={{marginTop: "50px"}}>
                 <h3>Community Picks: </h3>
                 <div style={{marginTop: "30px"}}>
                     <div className={"row justify-content-center"}>
-                        {cp.map(item => (
-                            <div key={item.id} className={"col"} style={{flexGrow: 0}}>
+                        {communityPicks.map(item => (
+                            <div key={"community" + item.externalId} className={"col"} style={{flexGrow: 0}}>
                                 <div className={"card zoom-hover"} style={{
                                     width: "15rem", height: "18rem",
                                     borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
@@ -93,17 +145,19 @@ export default function Home() {
                                     <div className={"card-body text-center"}
                                          style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
                                         <img
-                                            src={item.imgSrc}
+                                            src={item.imageURL}
                                             className={"img-thumbnail rounded card-img-bottom my-auto mx-auto d-block"}
-                                            alt={item.name}
+                                            alt={item.productName}
                                             style={{
                                                 width: "180px", height: "180px", objectFit: "cover",
                                                 textAlign: "center"
                                             }}
                                         />
-                                        <h6 className={"my-auto overflow-auto text-ellips"} style={{textAlign: "center", fontWeight: "bold"}} title={item.name}>
-                                            <Link to={"/details/" + item.id.toString()}>
-                                                {item.name}
+                                        <h6 className={"my-auto overflow-auto text-ellips"}
+                                            style={{textAlign: "center", fontWeight: "bold"}}
+                                            title={item.productName}>
+                                            <Link to={"/details/" + item.externalId.toString()}>
+                                                {item.productName}
                                             </Link>
                                         </h6>
                                     </div>

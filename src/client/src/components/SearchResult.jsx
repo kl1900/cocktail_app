@@ -95,7 +95,8 @@ export default function SearchResult() {
                         style={{marginLeft: "10px"}}
                     >
                         {pageList.map((curr_page) => (
-                            <option value={curr_page} selected={page === curr_page}>{curr_page}</option>
+                            <option key={"page" + curr_page.toString()} value={curr_page}
+                                    selected={page === curr_page}>{curr_page}</option>
                         ))}
                     </select>
                 </li>

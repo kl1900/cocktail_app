@@ -6,6 +6,7 @@ import Creatable from "react-select/creatable";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthToken } from "../AuthTokenContext";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import RatingStar from "./RatingStar";
 
 export default function ProductDetail() {
   const [recipeDetails, setRecipeDetails] = useState([]);
@@ -67,7 +68,9 @@ export default function ProductDetail() {
             }
           }
         }
-        setReviews(data.review);
+        const tmp_reviews = data.review;
+        tmp_reviews.sort((a, b) => -(new Date(a.updatedAt) - new Date(b.updatedAt)));
+        setReviews(tmp_reviews);
       }
     }
     getReviews();
@@ -468,28 +471,7 @@ export default function ProductDetail() {
                 <div className={"row"}>
                   <div className={"col-12"}>
                     <span>Rating: </span>
-                    <div className="rating justify-content-end">
-                      <input type="radio" name="rating" value={5} id={"5"} checked={rating === 5}
-                             onClick={() => {
-                               setRating(5);
-                             }}/> <label htmlFor="5">☆</label>
-                      <input type="radio" name="rating" value={4} id={"4"} checked={rating === 4}
-                             onClick={() => {
-                               setRating(4);
-                             }}/> <label htmlFor="4">☆</label>
-                      <input type="radio" name="rating" value={3} id={"3"} checked={rating === 3}
-                             onClick={() => {
-                               setRating(3);
-                             }}/> <label htmlFor="3">☆</label>
-                      <input type="radio" name="rating" value={2} id={"2"} checked={rating === 2}
-                             onClick={() => {
-                               setRating(2);
-                             }}/> <label htmlFor="2">☆</label>
-                      <input type="radio" name="rating" value={1} id={"1"} checked={rating === 1}
-                             onClick={() => {
-                               setRating(1);
-                             }}/> <label htmlFor="1">☆</label>
-                    </div>
+                    <RatingStar rating={rating} setRating={setRating}/>
                   </div>
                   <div className={"col-12 form-group"}>
                     <label htmlFor={"comment"}>Comment:</label>
@@ -539,7 +521,7 @@ export default function ProductDetail() {
                     {reviews.map((review) => (
                       <div className={"commented-section mt-2"} key={review.id}>
                         <div className={"d-flex flex-row align-items-center commented-user"}>
-                          <h5 className={"mr-2"}>Rated by: {review.username}</h5>
+                          <h5 className={"mr-2"}>Rated by: {review.user.name}</h5>
                           <span className={"dot mb-1"}></span>
                           {review.updatedAt ? (
                             <div className={"mb-1 ml-2"}>
@@ -555,12 +537,14 @@ export default function ProductDetail() {
                         </div>
                         <div className={"col-12"}>
                           <h5>Rating: {[1,2,3,4,5].map((num) => (
-                            review.rating >= num ? (<AiFillStar/>) : (<AiOutlineStar/>)
+                              <span key={"star" + num.toString()}>
+                                {review.rating >= num ? (<AiFillStar/>) : (<AiOutlineStar/>)}
+                              </span>
                             ))}</h5>
                         </div>
                         <div className={"col-12"}>
                           {review.content.split("\n").map((item, index) => (
-                            <blockquote className={"blockquote"}>
+                            <blockquote key={"block" + item} className={"blockquote"}>
                               <p key={index} className={"mb-0"}>
                                 {item}
                                 <br />

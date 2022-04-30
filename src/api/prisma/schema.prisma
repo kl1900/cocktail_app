@@ -19,7 +19,6 @@ model review {
   id            Int       @id @default(autoincrement())
   productId     Int
   userId        Int
-  username      String?
   content       String    @default("") @db.VarChar(10000)
   rating        Int
   createdAt     DateTime  @default(now())
