@@ -109,7 +109,7 @@ export default function Profile() {
           />
         </div>
         <div className="ml-2">
-          <p className="name">
+          <div className="name" style={{marginBottom: "16px"}}>
             {name}{" "}
             {editMode ? (
               <div>
@@ -123,7 +123,7 @@ export default function Profile() {
                 Edit Name
               </button>
             )}
-          </p>
+          </div>
           <p className="mail">📧 Email: {user.email}</p>
           <p>✅ Email Verified: {user.email_verified.toString()}</p>
           <div className="recipe-border pt-2">
