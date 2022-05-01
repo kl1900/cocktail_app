@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Profile from "../components/UserProfile";
-import { enableFetchMocks } from "jest-fetch-mock";
-enableFetchMocks();
+import '@testing-library/jest-dom';
+
 
 let mockIsAuthenticated = false;
 
@@ -29,11 +29,6 @@ jest.mock("../AuthTokenContext", () => ({
     },
   }));
 
-fetch.mockResponse(
-    JSON.stringify([
-      { name: "liz"},
-    ])
-  );
 
 test("renders Profile", () => {
     render( 
@@ -42,8 +37,8 @@ test("renders Profile", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Name: liz")).toBeInTheDocument();
     expect(screen.getByText("📧 Email: liz@gmail.com")).toBeInTheDocument();
-    expect(screen.getByText("🔑 Auth0Id: subId")).toBeInTheDocument();
-    expect(screen.getByText("✅ Email verified: true")).toBeInTheDocument();
-});
+    expect(screen.getByText("✅ Email Verified: true")).toBeInTheDocument();
+    expect(screen.getByText("My Favorites (0)")).toBeInTheDocument();
+    expect(screen.getByText("My Reviews (0)")).toBeInTheDocument();
+});  

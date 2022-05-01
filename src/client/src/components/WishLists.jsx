@@ -83,7 +83,7 @@ export default function WishLists() {
 
   return (
     <div>
-      <h1 style={{textAlign:"center", marginTop:"60px", marginBottom: "30px", color: "#FDE79C", fontWeight: "bolder", fontSize: "3rem"}}>My Favorite Recipe Boxes</h1>
+      <h1 style={{textAlign:"center", marginTop:"60px", marginBottom: "30px", color: "black", fontWeight: "bolder", fontSize: "3rem"}}>My Favorite Recipe Boxes</h1>
       {accessToken && wishlists.length !== 0 ? (
           <div style={{height: "90px"}}>
             <div style={{textAlign:"right", marginRight: "30px"}}>

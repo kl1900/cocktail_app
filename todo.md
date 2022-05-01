@@ -2,5 +2,5 @@
 - [x] wishlist name max/min required
 - [x] user name max/min required
       comment required
-      unit tests - userprofile
-      reports
+- [x] unit tests - userprofile
+- [x] reports

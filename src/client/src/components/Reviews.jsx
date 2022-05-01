@@ -101,7 +101,7 @@ export default function Reviews() {
 
     return (
         <div>
-            <h1 style={{textAlign: "center", marginTop: "30px"}}>My Reviews</h1>
+            <h1 style={{textAlign: "center", marginTop: "60px", marginBottom: "10px", color: "black", fontWeight: "bolder", fontSize: "3rem"}}>My Reviews</h1>
             <div style={{height: "90px"}}></div>
             {accessToken && reviews.length === 0 ? (
                 <h2 style={{textAlign: "center"}}>Oops!<br/>You haven't commented on any recipes yet!</h2>
