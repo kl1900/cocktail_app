@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthToken } from "../AuthTokenContext";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
 import "../style/profile.css";
 
 export default function Profile() {
   const { user } = useAuth0();
-  const [userName, setUserName] = useState("");
+  const [name, setName] = useOutletContext();
+  // const [userName, setUserName] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [wishlistCount, setwishlistCount] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
@@ -23,7 +24,8 @@ export default function Profile() {
       });
       const data = await res.json();
       if (data) {
-        setUserName(data.name);
+        // setUserName(data.name);
+        setName(data.name);
         setwishlistCount(data.wishlist.length);
         setReviewCount(data.review.length);
       }
@@ -53,7 +55,8 @@ export default function Profile() {
             if (data === null) {
               alert("Duplicate name detected");
             } else {
-              setUserName(data.name);
+              // setUserName(data.name);
+              setName(data.name);
             }
           })
           .catch((error) => {
@@ -107,7 +110,7 @@ export default function Profile() {
         </div>
         <div className="ml-2">
           <p className="name">
-            {userName}{" "}
+            {name}{" "}
             {editMode ? (
               <div>
                 <EditName />

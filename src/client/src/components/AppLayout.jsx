@@ -105,7 +105,7 @@ export default function AppLayout() {
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand" style={{ paddingRight: "20px" }} to="/">
             <img
               src="/logo.png"
               width="37.34"
@@ -115,6 +115,9 @@ export default function AppLayout() {
             />
             Recipe Collection
           </Link>
+          <div className={"navbar-nav mr-auto ml-1"}>
+            <SearchBar />
+          </div>
           <button
             className="navbar-toggler"
             type="button"
@@ -131,7 +134,7 @@ export default function AppLayout() {
             className="collapse navbar-collapse "
             id="navbarSupportedContent"
           >
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav ml-auto mb-2 mb-lg-0" style={{ paddingRight: "40px" }}>
               <li className="nav-item">
                 <Link to="/" className="nav-link active">
                   Home
@@ -143,8 +146,9 @@ export default function AppLayout() {
                 </Link>
               </li>
             </ul>
-            <div className="ml-auto" style={{marginRight: "10px"}}>Hello, Foodie!</div>
           </div>
+
+          <div className="navbar-nav ml-auto" style={{marginRight: "10px"}}>Hello, Foodie!</div>
           
         </div>
       </nav>
@@ -303,7 +307,7 @@ export default function AppLayout() {
         </nav>
       </div>
       <div>
-        <Outlet />
+        <Outlet context={[name, setName]} />
       </div>
       <div>
         <Footer />
