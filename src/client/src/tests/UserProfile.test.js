@@ -30,6 +30,11 @@ jest.mock("../AuthTokenContext", () => ({
   }));
 
 
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useOutletContext: jest.fn().mockReturnValue("adb"),
+}));
+
 test("renders Profile", () => {
     render( 
       <MemoryRouter initialEntries = {["/"]} >
