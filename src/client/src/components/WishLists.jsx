@@ -119,7 +119,7 @@ export default function WishLists() {
                       </div>
                   ) : (
                       <div>
-                        <button className="btn " style={{backgroundColor:"#FBA827"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
+                        <button className="btn " style={{backgroundColor:"#FFE9B5"}} onClick={() => setCreateMode(true)}>Create New Recipe List</button>
                       </div>
                   )}
                 </div>
