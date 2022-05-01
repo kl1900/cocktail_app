@@ -1,4 +1,3 @@
-// npm install react-dropdown  --save
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Creatable from "react-select/creatable";
@@ -136,7 +135,6 @@ export default function ProductDetail() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
         if (data === null) {
           alert("You have already written a review for this product!");
         }
@@ -172,8 +170,7 @@ export default function ProductDetail() {
               body: JSON.stringify(product_data),
             })
               .then((response) => response.json())
-              .then((data) => {
-                console.log("Product Success:", data);
+              .then(() => {
                 submitReviewHelper();
               })
               .catch((error) => {
@@ -193,8 +190,7 @@ export default function ProductDetail() {
         body: JSON.stringify(data2),
       })
         .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
+        .then(() => {
           countNum();
           setButton("Submit");
         })
@@ -214,7 +210,6 @@ export default function ProductDetail() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
         setRecordId(null);
         if (data === null) {
           alert("Your review does not exist!");
@@ -238,7 +233,6 @@ export default function ProductDetail() {
         const data = {
           title: wishlistIndex,
         };
-        console.log(data);
         fetch(`${process.env.REACT_APP_API_URL}/wishlist/${params.productId}`, {
           method: "POST",
           headers: {
@@ -249,7 +243,6 @@ export default function ProductDetail() {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("Wishlist add Success:", data);
             countStep();
             setRoleValue("");
             alert("Successfully added recipe to " + data.title);
@@ -273,7 +266,6 @@ export default function ProductDetail() {
             if (data === null) {
               alert("Wishlist not exist");
             } else {
-              console.log("Wishlist add Success:", data);
               alert("Successfully added recipe to " + data.title);
             }
             countStep();
@@ -304,8 +296,7 @@ export default function ProductDetail() {
             body: JSON.stringify(product_data),
           })
             .then((response) => response.json())
-            .then((data) => {
-              console.log("Product Success:", data);
+            .then(() => {
               saveToWishlistHelper();
             })
             .catch((error) => {
@@ -347,13 +338,12 @@ export default function ProductDetail() {
               className={"img-fluid"}
               src={recipeDetail.image}
               alt={recipeDetail.title}
-              with="200"
             />
           </div>
           <div className="col-5 special">
             <div className="my-5">
               <h3>{recipeDetail.title}</h3>
-              <div className="receipe-duration">
+              <div className="recipe-duration">
                 <ul>
                   {recipeDetail.glutenFree ? (
                     <li key="glutenFree">glutenFree</li>
@@ -483,7 +473,6 @@ export default function ProductDetail() {
                     <textarea
                       className={"form-control"}
                       id="comment"
-                      type="text"
                       rows="5"
                       value={inputValue}
                       onChange={(e) => {
@@ -541,7 +530,6 @@ export default function ProductDetail() {
                           <h4 className={"mr-2"}>
                             Rated by: {review.user.name}
                           </h4>
-                          <span className={"dot mb-1"}></span>
                           {review.updatedAt ? (
                             <div className={"mb-1 ml-2"}>
                               Updated at {review.updatedAt.slice(0, 10)}{" "}

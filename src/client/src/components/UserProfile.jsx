@@ -10,7 +10,7 @@ export default function Profile() {
   const [name, setName] = useOutletContext();
   // const [userName, setUserName] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [wishlistCount, setwishlistCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
   const { accessToken } = useAuthToken();
 
@@ -26,7 +26,7 @@ export default function Profile() {
       if (data) {
         // setUserName(data.name);
         setName(data.name);
-        setwishlistCount(data.wishlist.length);
+        setWishlistCount(data.wishlist.length);
         setReviewCount(data.review.length);
       }
     }
@@ -76,7 +76,7 @@ export default function Profile() {
           placeholder="new username"
           aria-label="new username"
           aria-describedby="basic-addon2"
-          maxlength="20"
+          maxLength="20"
           minLength="1"
           required
         />

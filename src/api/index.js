@@ -60,7 +60,6 @@ app.get("/user/:id", async (req, res) => {
       res.json(user);
     }
   } catch (e) {
-    console.log(e);
     res.status(503).json(null);
   }
 });
@@ -80,7 +79,6 @@ app.get("/searchRecipe/:keyword", async (req, res) => {
     });
     res.json(response);
   } catch (error) {
-    console.log(error);
     res.status(parseInt(error.message)).json(null);
   }
 });
@@ -100,7 +98,6 @@ app.get("/getRecipeInfo/:id", async (req, res) => {
     });
     res.json(response);
   } catch (error) {
-    console.log(error);
     res.status(parseInt(error.message)).json(null);
   }
 });
@@ -117,7 +114,6 @@ app.get("/getRandomRecipe", async (req, res) => {
     });
     res.json(response);
   } catch (error) {
-    console.log(error);
     res.status(parseInt(error.message)).json(null);
   }
 });
@@ -200,8 +196,6 @@ app.post("/recipe", async (req, res) => {
     });
     res.json(recipe);
   } catch (e) {
-    // TODO: Identify different types of error, e.g. Bad input, Unique constraint violated, etc.
-    console.log(e);
     res.status(422).json(null);
   }
 });
@@ -267,8 +261,6 @@ app.post("/wishlist", requireAuth, async (req, res) => {
     });
     res.json(wishlist);
   } catch (e) {
-    // TODO: Identify different types of error, e.g. Bad input, Unique constraint violated, etc.
-    console.log(e);
     res.status(422).json(null);
   }
 });
@@ -301,8 +293,6 @@ app.post("/wishlist/:productId", requireAuth, async (req, res) => {
     });
     res.json(wishlist);
   } catch (e) {
-    // TODO: Identify different types of error, e.g. Bad input, Unique constraint violated, etc.
-    console.log(e);
     res.status(422).json(null);
   }
 });
@@ -456,7 +446,6 @@ app.put("/wishlist/:id/add_:productId", requireAuth, async (req, res) => {
       }
     }
   } catch (e) {
-    console.log(e);
     res.status(422).json(null);
   }
 });
@@ -512,7 +501,6 @@ app.put("/wishlist/:id/delete_:productId", requireAuth, async (req, res) => {
       res.json(updatedWishlist);
     }
   } catch (e) {
-    console.log(e);
     res.status(422).json(null);
   }
 });
@@ -570,8 +558,6 @@ app.post("/review", requireAuth, async (req, res) => {
     });
     res.json(review);
   } catch (e) {
-    // TODO: Identify different types of error, e.g. Bad input, Unique constraint violated, etc.
-    console.log(e);
     res.status(422).json(null);
   }
 });
@@ -589,7 +575,6 @@ app.put("/review/:id", requireAuth, async (req, res) => {
         review: true,
       },
     });
-    console.log(user);
     let found = false;
     for (let i = 0; i < user.review.length; i++) {
       if (user.review[i].id === id) {
@@ -612,8 +597,6 @@ app.put("/review/:id", requireAuth, async (req, res) => {
       res.json(review);
     }
   } catch (e) {
-    // TODO: Identify different types of error, e.g. Bad input, Unique constraint violated, etc.
-    console.log(e);
     res.status(422).json(null);
   }
 });

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import React, {useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
+import {IoChevronBack, IoChevronForward} from "react-icons/io5";
 
 export default function SearchResult() {
   const [results, setResults] = useState([]);
@@ -11,15 +11,13 @@ export default function SearchResult() {
 
   async function getSearchResults() {
     const res = await fetch(`${process.env.REACT_APP_API_URL}/searchRecipe/${keyword}`);
-    const data = await res.json();
-    return data;
+    return await res.json();
   }
 
   useEffect(() => {
     if (keyword !== "") {
       getSearchResults()
         .then((data) => {
-          console.log(data);
           setResults(data);
           const maxPageNum = Math.ceil(data.results.length / 12);
           const tmpList = [];

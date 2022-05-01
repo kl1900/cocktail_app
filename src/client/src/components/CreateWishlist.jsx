@@ -22,9 +22,6 @@ export default function CreateWishlist({changeCreate, accessToken, countNum}) {
                     if (data === null) {
                         alert("Duplicate name detected");
                     }
-                    else {
-                        console.log('Success:', data);
-                    }
                     changeCreate();
                     countNum();
                 })
@@ -44,7 +41,7 @@ export default function CreateWishlist({changeCreate, accessToken, countNum}) {
             <input 
                 value={wishlistName} 
                 onChange={e=>setWishlistName(e.target.value)}
-                maxlength="20"
+                maxLength="20"
                 minLength="1"
                 required
             />

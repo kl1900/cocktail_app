@@ -32,7 +32,6 @@ export default function Reviews() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Success:", data);
                 if (data === null) {
                     alert("This review does not exist!")
                 }
@@ -55,7 +54,6 @@ export default function Reviews() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Success:", data);
                 if (data === null) {
                     alert("This review does not exist!")
                 }
@@ -102,7 +100,7 @@ export default function Reviews() {
     return (
         <div>
             <h1 style={{textAlign: "center", marginTop: "60px", marginBottom: "10px", color: "black", fontWeight: "bolder", fontSize: "3rem"}}>My Reviews</h1>
-            <div style={{height: "90px"}}></div>
+            <div style={{height: "90px"}}/>
             {accessToken && reviews.length === 0 ? (
                 <h2 style={{textAlign: "center"}}>Oops!<br/>You haven't commented on any recipes yet!</h2>
             ) : (

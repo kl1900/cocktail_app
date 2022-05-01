@@ -70,7 +70,6 @@ export default function WishLists() {
       .then((response) => response.json())
       .then((data) => {
         alert("Successfully deleted " + data.title);
-        console.log("Success:", data);
         countNum();
       })
       .catch((error) => {

@@ -55,8 +55,6 @@ export default function WishList() {
         if (data === null) {
           alert("Operation failed");
           navigate("/wishlists");
-        } else {
-          console.log("Success:", data);
         }
         countNum();
       })

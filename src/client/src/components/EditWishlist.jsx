@@ -22,9 +22,6 @@ export default function EditWishlist({wishlistId, changeToFalse, countNum}) {
                     if (data === null) {
                         alert("Duplicate name detected");
                     }
-                    else {
-                        console.log('Success:', data);
-                    }
                     countNum();
                 })
                 .catch((error) => {
@@ -53,7 +50,7 @@ export default function EditWishlist({wishlistId, changeToFalse, countNum}) {
                         value={wishlistName} 
                         style={{height: "30px", width: "150px"}} 
                         onChange={e=>setWishlistName(e.target.value)}
-                        maxlength="20"
+                        maxLength="20"
                         minLength="1"
                         required
                     />
