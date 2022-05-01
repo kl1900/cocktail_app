@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { GET_USER_URL } from "../constants";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 export default function SearchResult() {
@@ -11,7 +10,7 @@ export default function SearchResult() {
   const keyword = params.keyword || "";
 
   async function getSearchResults() {
-    const res = await fetch(`${GET_USER_URL}/searchRecipe/${keyword}`);
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/searchRecipe/${keyword}`);
     const data = await res.json();
     return data;
   }

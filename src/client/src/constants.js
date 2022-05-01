@@ -1,1 +1,0 @@
-export const GET_USER_URL = 'http://localhost:8000'

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { GET_USER_URL } from "../constants";
 import CreateWishlist from "./CreateWishlist";
 import EditWishlist from "./EditWishlist";
 import { useAuthToken } from "../AuthTokenContext";
@@ -61,7 +60,7 @@ export default function WishLists() {
   }, [wishlists]);
 
   const deleteWishlist = (wishlistId) => {
-    fetch(`${GET_USER_URL}/wishlist/${wishlistId}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/wishlist/${wishlistId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,

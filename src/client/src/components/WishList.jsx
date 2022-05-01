@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { GET_USER_URL } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { useAuthToken } from "../AuthTokenContext";
 import NotFound from "./NotFound";
@@ -44,7 +43,7 @@ export default function WishList() {
   };
   
   const deleteRecipe = (wishlistId, recipeId) => {
-    fetch(`${GET_USER_URL}/wishlist/${wishlistId}/delete_${recipeId}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/wishlist/${wishlistId}/delete_${recipeId}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${accessToken}`,

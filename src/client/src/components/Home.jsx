@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import {GET_USER_URL} from "../constants";
 import {useNavigate} from "react-router-dom";
 import {useAuth0} from "@auth0/auth0-react";
 import {useAuthToken} from "../AuthTokenContext";
@@ -44,7 +43,7 @@ export default function Home() {
 
     useEffect(() => {
         async function getCommunityPicks() {
-            const res = await fetch(`${GET_USER_URL}/communityPicks`);
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/communityPicks`);
             const data = await res.json();
             return data;
         }
@@ -54,7 +53,7 @@ export default function Home() {
     }, []);
 
     async function getRandomRecipe() {
-        const res = await fetch(`${GET_USER_URL}/getRandomRecipe`);
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/getRandomRecipe`);
         const data = await res.json();
         return data;
     }

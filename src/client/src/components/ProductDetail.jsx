@@ -1,7 +1,6 @@
 // npm install react-dropdown  --save
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GET_USER_URL } from "../constants";
 import Creatable from "react-select/creatable";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthToken } from "../AuthTokenContext";
@@ -36,7 +35,7 @@ export default function ProductDetail() {
   useEffect(() => {
     async function getRecipeDetails() {
       const res = await fetch(
-        `${GET_USER_URL}/getRecipeInfo/${params.productId}`
+        `${process.env.REACT_APP_API_URL}/getRecipeInfo/${params.productId}`
       );
       var data = await res.json();
       if (data) {
@@ -49,7 +48,7 @@ export default function ProductDetail() {
   // get product's reviews
   useEffect(() => {
     async function getReviews() {
-      const res = await fetch(`${GET_USER_URL}/recipe/${params.productId}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/recipe/${params.productId}`);
       const data = await res.json();
       if (data) {
         if (accessToken) {
@@ -127,7 +126,7 @@ export default function ProductDetail() {
       content: inputValue,
       rating: rating,
     };
-    fetch(`${GET_USER_URL}/review`, {
+    fetch(`${process.env.REACT_APP_API_URL}/review`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -156,7 +155,7 @@ export default function ProductDetail() {
     };
 
     if (recordId === null) {
-      fetch(`${GET_USER_URL}/recipe/${params.productId}`)
+      fetch(`${process.env.REACT_APP_API_URL}/recipe/${params.productId}`)
         .then((response) => response.json())
         .then((data) => {
           if (data === null) {
@@ -165,7 +164,7 @@ export default function ProductDetail() {
               productName: recipeDetails[0].title,
               imageURL: recipeDetails[0].image,
             };
-            fetch(`${GET_USER_URL}/recipe`, {
+            fetch(`${process.env.REACT_APP_API_URL}/recipe`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -185,7 +184,7 @@ export default function ProductDetail() {
           }
         });
     } else {
-      fetch(`${GET_USER_URL}/review/${recordId}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/review/${recordId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -206,7 +205,7 @@ export default function ProductDetail() {
   }
 
   function deleteReview(reviewId) {
-    fetch(`${GET_USER_URL}/review/${reviewId}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/review/${reviewId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -240,7 +239,7 @@ export default function ProductDetail() {
           title: wishlistIndex,
         };
         console.log(data);
-        fetch(`${GET_USER_URL}/wishlist/${params.productId}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/wishlist/${params.productId}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -260,7 +259,7 @@ export default function ProductDetail() {
           });
       } else {
         fetch(
-          `${GET_USER_URL}/wishlist/${wishlistIndex}/add_${params.productId}`,
+          `${process.env.REACT_APP_API_URL}/wishlist/${wishlistIndex}/add_${params.productId}`,
           {
             method: "PUT",
             headers: {
@@ -288,7 +287,7 @@ export default function ProductDetail() {
   }
 
   function saveToWishlist() {
-    fetch(`${GET_USER_URL}/recipe/${params.productId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/recipe/${params.productId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data === null) {
@@ -297,7 +296,7 @@ export default function ProductDetail() {
             productName: recipeDetails[0].title,
             imageURL: recipeDetails[0].image,
           };
-          fetch(`${GET_USER_URL}/recipe`, {
+          fetch(`${process.env.REACT_APP_API_URL}/recipe`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

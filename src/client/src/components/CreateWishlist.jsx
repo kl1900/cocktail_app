@@ -1,5 +1,4 @@
 import React, { useState} from 'react';
-import { GET_USER_URL } from "../constants";
 import { AiOutlineRollback } from "react-icons/ai";
 
 export default function CreateWishlist({changeCreate, accessToken, countNum}) {
@@ -10,7 +9,7 @@ export default function CreateWishlist({changeCreate, accessToken, countNum}) {
             "title" : wishlistName,
         };
         if (data.title.length>0){
-            fetch(`${GET_USER_URL}/wishlist`, {
+            fetch(`${process.env.REACT_APP_API_URL}/wishlist`, {
                 method: 'POST', 
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
