@@ -104,7 +104,7 @@ export default function WishLists() {
       <div>
         {accessToken && wishlists.length === 0 ? (
             <div>
-              <div style={{height: "90px"}}></div>
+              <div style={{height: "90px"}}/>
               <h2 style={{textAlign: "center"}}>Oops!<br/>You haven't created any recipe boxes yet!</h2>
               <div style={{height: "90px"}}>
                 <div style={{textAlign:"center"}}>
@@ -133,8 +133,6 @@ export default function WishLists() {
               <div className={"card zoom-hover Green50"} 
                 style={{
                   width: "15rem", height: "18rem",
-                  // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#BCC747"
-                  // borderRadius: "20%", margin: "13px 15px", backgroundColor: "#D2C950"
                   borderRadius: "20%", margin: "13px 15px", backgroundColor: "wheat"
                 }}>
                 <div className={"card-body"}

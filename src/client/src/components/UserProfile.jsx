@@ -8,7 +8,6 @@ import "../style/profile.css";
 export default function Profile() {
   const { user } = useAuth0();
   const [name, setName] = useOutletContext();
-  // const [userName, setUserName] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
   const [reviewCount, setReviewCount] = useState(0);
